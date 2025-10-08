@@ -1,15 +1,56 @@
-.divider:after,
-.divider:before {
-content: "";
-flex: 1;
-height: 1px;
-background: #eee;
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f8f9fa;
+    height: 100vh;
+    overflow: hidden;
 }
-.h-custom {
-height: calc(100% - 73px);
+
+/* Asegura que las imágenes llenen su contenedor sin deformarse */
+.object-fit-cover {
+    object-fit: cover;
+    object-position: center;
 }
-@media (max-width: 450px) {
-.h-custom {
-height: 100%;
+
+/* Sección derecha */
+.right-section {
+    background-color: #ffffff;
 }
+
+/* Tarjeta de login */
+.login-card {
+    width: 80%;
+    max-width: 380px;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    background: #fff;
+}
+
+/* Logo */
+.logo {
+    width: 140px;
+    height: auto;
+}
+
+/* Botón personalizado */
+.btn-custom {
+    background-color: #004aad;
+    color: #fff;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-custom:hover {
+    background-color: #00337a;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+    body {
+        overflow: auto;
+    }
+    .login-card {
+        width: 90%;
+        margin-top: 40px;
+    }
 }
