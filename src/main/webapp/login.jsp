@@ -10,23 +10,23 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-        <link rel="stylesheet" href="styles/styles.css"/>
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/styles.css"/>
         <title>Banca web - Login</title>
     </head>
     <body>
         <div class="container-fluid h-100 g-0">
             <div class="row h-100 g-0">
                 <!-- Zona Izquierda (Imagen) -->
-                <div class="col-md-6 bg-image">
-                    <img src="images/portada.jpg" alt="Quantum Bank" class="img-fluid h-100 w-100 object-fit-cover">
+                <div class="col-md-6">
+                    <img src="img/portada.jpg" alt="Quantum Bank" class="img-fluid h-100 w-100 object-fit-cover">
                 </div>
 
                 <!-- Zona Derecha (Formulario) -->
                 <div class="col-md-6 right-section">
                     <div class="login-card">
                         <div class="d-flex justify-content-center align-items-center mb-3">
-                            <img src="images/logoQB.png" alt="alt" style="width:150px"/>
+                            <img src="img/logoQB.png" alt="alt" style="width:150px"/>
                         </div>
                         <div class="text-center">
                             <p>Inicie sesión para comenzar.</p>
@@ -51,6 +51,6 @@
                 </div>
             </div>
         </div>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+        <script src="js/bootstrap.bundle.min.js"></script>
     </body>
 </html>

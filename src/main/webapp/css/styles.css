@@ -14,6 +14,9 @@ body {
 /* Sección derecha */
 .right-section {
     background-color: #ffffff;
+    display: flex;
+    justify-content: center;  /* Centra horizontalmente */
+    align-items: center;      /* Centra verticalmente */
 }
 
 /* Tarjeta de login */
