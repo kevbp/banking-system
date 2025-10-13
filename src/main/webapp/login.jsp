@@ -3,7 +3,8 @@
     Created on : Oct 6, 2025, 12:32:20 PM
     Author     : broncake
 --%>
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -31,23 +32,22 @@
                         <div class="text-center">
                             <p>Inicie sesión para comenzar.</p>
                         </div>
-                        <form>
+                        <form action="${pageContext.request.contextPath}/ControlLogin" method="POST">
                             <div class="form-floating mb-3">
-                                <input type="text" class="form-control" id="formUsu" placeholder="Ingresa tu usuario">
-                                <label for="formUsu" class="form-label">Usuario</label>
+                                <input type="text" class="form-control" name="inpUsu" id="inpUsu" placeholder="Ingresa tu usuario">
+                                <label for="inpUsu" class="form-label">Usuario</label>
                             </div>
                             <div class="form-floating mb-3">
-                                <input type="password" class="form-control" id="formPwd" placeholder="Ingresa tu contraseña">
-                                <label for="formPwd" class="form-label">Contraseña</label>
+                                <input type="password" class="form-control" name="inpPwd" id="inpPwd" placeholder="Ingresa tu contraseña">
+                                <label for="inpPwd" class="form-label">Contraseña</label>
                             </div>
                             <div class="d-grid">
                                 <button type="submit" class="btn btn-custom">Iniciar Sesión</button>
-                                
                             </div>
-                            <div class="justify-content-center pt-1">
-                                <a class="btn btn-info" href="home.jsp">Ir a home (Activo hasta que se le dé funcionalidad al botón)</a>
-                            </div>
-                            
+                            <c:if test="${param.error == 1}">
+                                <div class="text-center mt-3 text-danger">Usuario o clave incorrecta</div>
+                            </c:if>
+
                             <!-- <div class="text-center mt-3">
                                 <a href="#" class="text-decoration-none small text-secondary">¿Olvidaste tu contraseña?</a>
                             </div> -->

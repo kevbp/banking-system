@@ -6,7 +6,8 @@
     Created on : Oct 8, 2025, 6:08:47 PM
     Author     : kevin
 --%>
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!doctype html>
 <html lang="en" data-bs-theme="auto">
@@ -28,9 +29,9 @@
     <body>
         <%@ include file="util/theme.jsp" %>
         <div class="d-flex">
-        <%@ include file="util/sidebar.jsp" %>
+            <%@ include file="util/sidebar.jsp" %>
         </div>
-        
+
         <script src="${pageContext.request.contextPath}/js/bootstrap.bundle.min.js"></script>
         <script src="${pageContext.request.contextPath}/js/sidebars.js"></script>
     </body>
