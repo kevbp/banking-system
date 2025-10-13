@@ -41,7 +41,7 @@
                         <p class="text-muted">Complete los datos del cliente. Los campos con <span class="text-danger">*</span> son obligatorios.</p>
                         <hr>
 
-                        <form action="${pageContext.request.contextPath}/ClientesServlet" method="post">
+                        <form action="../ControlCliente" method="post">
                             <!-- Tipo de documento -->
                             <div class="row mb-3">
                                 <div class="col-md-4">
@@ -63,37 +63,16 @@
                             </div>
                         </form>
 
-                        <form action="/ControlCliente" method="post">
-                            <!-- Tipo de documento -->
-                            <div class="row mb-3">
-                                <div class="col-md-4">
-                                    <label for="tipoDoc" class="form-label">Tipo de Documento <span class="text-danger">*</span></label>
-                                    <select class="form-select" id="tipoDoc" name="tipoDoc" required>
-                                        <option value="">Seleccione...</option>
-                                        <option value="DNI">DNI - Persona Natural</option>
-                                        <option value="RUC">RUC - Persona Jurídica</option>
-                                    </select>
-                                </div>
-
-                                <div class="col-md-4">
-                                    <label for="numDoc" class="form-label">Número de Documento <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="numDoc" name="numDoc" required>
-                                </div>
-
-                                <div class="col-md-4 d-flex align-items-end">
-                                    <button type="button" class="btn btn-secondary w-100" id="btnConsultarReniec">Consultar RENIEC</button>
-                                </div>
-                            </div>
-
+                        <form action="" method="post">
                             <!-- Nombres y apellidos / razón social -->
                             <div class="row mb-3">
                                 <div class="col-md-6">
                                     <label for="nom" class="form-label">Nombres / Razón Social <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="nom" name="nom" required>
+                                    <input type="text" class="form-control" id="nom" name="nom" value="<%= user.getNombres() %>" readonly>
                                 </div>
                                 <div class="col-md-6">
                                     <label for="ape" class="form-label">Apellidos</label>
-                                    <input type="text" class="form-control" id="ape" name="ape">
+                                    <input type="text" class="form-control" id="ape" name="ape" value="<%= user.getApellidos() %>" readonly>
                                 </div>
                             </div>
 

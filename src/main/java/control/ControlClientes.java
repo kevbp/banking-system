@@ -1,4 +1,4 @@
-package componente;
+package control;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -7,12 +7,12 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import negocio.ServicioLogin;
+import servicio.ServicioCliente;
 import servicio.Usuario;
 
 
-@WebServlet(name = "ClientesServlet", urlPatterns = {"/ClientesServlet"})
-public class ClientesServlet extends HttpServlet {
+@WebServlet(name = "ControlCliente", urlPatterns = {"/ControlCliente"})
+public class ControlClientes extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -44,7 +44,7 @@ public class ClientesServlet extends HttpServlet {
         String tipoDocumento = request.getParameter("tipoDoc");
         String nroDocumento = request.getParameter("numDoc");
         
-        Usuario usu = ServicioLogin.validacionReniec("",nroDocumento);
+        Usuario usu = ServicioCliente.validacionReniec(tipoDocumento, nroDocumento);
         if (usu != null) {
             request.getSession().setAttribute("usuario", usu);
         }
