@@ -77,4 +77,7 @@ public class Usuario {
         this.codVerificaLetra = codVerificaLetra;
     }
     
+    public String getApellidos(){
+        return getApellidoPaterno() + " " + getApellidoMaterno(); 
+    }
 }

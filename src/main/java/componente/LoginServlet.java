@@ -19,7 +19,7 @@ public class LoginServlet extends HttpServlet {
         //String contraseña = request.getParameter("clave");
         
         if (boton.equalsIgnoreCase("Ingresar")) {
-           Usuario usu = ServicioLogin.validacionReniec(usuario);
+           Usuario usu = ServicioLogin.validacionReniec("",usuario);
             if (usu != null) {
                 request.getSession().setAttribute("usuario", usu);
                 response.sendRedirect("menu.jsp"); 
