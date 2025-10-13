@@ -3,7 +3,7 @@
     Created on : Oct 12, 2025, 11:34:24 AM
     Author     : kevin
 --%>
-<%@page import="servicio.Usuario"%>
+<%@page import="entidad.ClienteReniec"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -20,15 +20,7 @@
         <title>Registrar nuevo cliente</title>
     </head>
     <body>
-        <%
-            Usuario user = (Usuario) session.getAttribute("usuario");
-            if (user == null) {
-                user = new Usuario();
-                user.setNombres("");
-                user.setApellidoPaterno("");
-                user.setApellidoMaterno("");
-            }
-        %>
+        
         <%@ include file="../util/theme.jsp" %>
         <div class="d-flex">
             <%@ include file="../util/sidebar.jsp" %>
@@ -41,7 +33,9 @@
                         <p class="text-muted">Complete los datos del cliente. Los campos con <span class="text-danger">*</span> son obligatorios.</p>
                         <hr>
 
-                        <form action="../ControlCliente" method="post">
+                        
+                        <c:set var="c" value="${sessionScope.cliReniec}"/>
+                        <form action="${pageContext.request.contextPath}/ControlClienteReniec" method="post">
                             <!-- Tipo de documento -->
                             <div class="row mb-3">
                                 <div class="col-md-4">
@@ -62,17 +56,18 @@
                                 </div>
                             </div>
                         </form>
-
+                        
+                        
                         <form action="" method="post">
                             <!-- Nombres y apellidos / razón social -->
                             <div class="row mb-3">
                                 <div class="col-md-6">
-                                    <label for="nom" class="form-label">Nombres / Razón Social <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="nom" name="nom" value="<%= user.getNombres() %>" readonly>
+                                    <label for="nom" class="form-label">Nombres <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="nom" name="nom" value="${c.nombres}" readonly>
                                 </div>
                                 <div class="col-md-6">
                                     <label for="ape" class="form-label">Apellidos</label>
-                                    <input type="text" class="form-control" id="ape" name="ape" value="<%= user.getApellidos() %>" readonly>
+                                    <input type="text" class="form-control" id="ape" name="ape" value="${c.apellidos}" readonly>
                                 </div>
                             </div>
 
@@ -83,9 +78,7 @@
                                     <input type="date" class="form-control" id="fecNac" name="fecNac">
                                 </div>
                             </div>
-
                             <hr>
-
                             <!-- Datos de contacto -->
                             <h5 class="mb-3">Datos de Contacto</h5>
 

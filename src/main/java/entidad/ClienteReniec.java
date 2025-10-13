@@ -2,15 +2,18 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package servicio;
+package entidad;
 
 /**
  *
  * @author crios
  */
-public class Usuario {
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-    public Usuario() {
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class ClienteReniec {
+
+    public ClienteReniec() {
     }
     
     private boolean success;

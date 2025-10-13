@@ -36,19 +36,26 @@
 
                         <!-- 🧍 Registro de usuario -->
                         <h5>Registrar Nuevo Usuario</h5>
-                        <form action="/ControlUsuarios" method="post" class="mb-4">
+                        <form action="${pageContext.request.contextPath}/ControlUsuario" method="post" class="mb-4">
                             <input type="hidden" name="accion" value="registrar">
                             <div class="row g-3">
                                 <div class="col-md-4">
-                                    <label for="nombreCompleto" class="form-label">Nombre Completo</label>
-                                    <input type="text" class="form-control" id="nombreCompleto" name="nombreCompleto" required>
+                                    <label for="nom" class="form-label">Nombres</label>
+                                    <input type="text" class="form-control" id="nom" name="nom" required>
                                 </div>
-
+                                
+                                <div class="col-md-4">
+                                    <label for="ape" class="form-label">Apellidos</label>
+                                    <input type="text" class="form-control" id="ape" name="ape" required>
+                                </div>
                                 <div class="col-md-3">
-                                    <label for="usuario" class="form-label">Nombre de Usuario</label>
-                                    <input type="text" class="form-control" id="usuario" name="usuario" required>
+                                    <label for="usn" class="form-label">Nombre de usuario</label>
+                                    <input type="text" class="form-control" id="usn" name="usn" required>
                                 </div>
-
+                                <div class="col-md-3">
+                                    <label for="car" class="form-label">Cargo</label>
+                                    <input type="text" class="form-control" id="car" name="car" required>
+                                </div>
                                 <div class="col-md-3">
                                     <label for="rol" class="form-label">Rol</label>
                                     <select class="form-select" id="rol" name="rol" required>
@@ -59,10 +66,9 @@
                                         <option value="Consulta">Consulta</option>
                                     </select>
                                 </div>
-
                                 <div class="col-md-2">
-                                    <label for="estado" class="form-label">Estado</label>
-                                    <select class="form-select" id="estado" name="estado" required>
+                                    <label for="est" class="form-label">Estado</label>
+                                    <select class="form-select" id="est" name="est" required>
                                         <option value="Activo">Activo</option>
                                         <option value="Inactivo">Inactivo</option>
                                     </select>
@@ -81,14 +87,12 @@
                                 </div>
 
                                 <div class="col-md-6 text-end align-self-end">
-                                    <button type="submit" class="btn btn-primary px-4">Registrar</button>
+                                    <button type="submit" class="btn btn-primary px-4" name="acc" value="crear">Registrar</button>
                                     <a href="../home.jsp" class="btn btn-secondary px-4">Cancelar</a>
                                 </div>
                             </div>
                         </form>
-
                         <hr>
-
                         <!-- 📋 Listado de usuarios -->
                         <h5>Usuarios Registrados</h5>
                         <div class="table-responsive mb-3">

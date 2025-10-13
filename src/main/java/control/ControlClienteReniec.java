@@ -7,12 +7,11 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import servicio.ServicioCliente;
-import servicio.Usuario;
+import servicio.ServicioClienteReniec;
+import entidad.ClienteReniec;
 
-
-@WebServlet(name = "ControlCliente", urlPatterns = {"/ControlCliente"})
-public class ControlClientes extends HttpServlet {
+@WebServlet(name = "ControlClienteReniec", urlPatterns = {"/ControlClienteReniec"})
+public class ControlClienteReniec extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -39,14 +38,14 @@ public class ControlClientes extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {   
-        
+            throws ServletException, IOException {
+
         String tipoDocumento = request.getParameter("tipoDoc");
         String nroDocumento = request.getParameter("numDoc");
-        
-        Usuario usu = ServicioCliente.validacionReniec(tipoDocumento, nroDocumento);
-        if (usu != null) {
-            request.getSession().setAttribute("usuario", usu);
+
+        ClienteReniec cliReniec = ServicioClienteReniec.validacionReniec(tipoDocumento, nroDocumento);
+        if (cliReniec != null) {
+            request.getSession().setAttribute("cliReniec", cliReniec);
         }
         request.getRequestDispatcher("clientes/registrar-cliente.jsp").forward(request, response);
     }

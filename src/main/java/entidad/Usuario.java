@@ -10,6 +10,7 @@ public class Usuario {
     private String car;
     private String rol;
     private String est;
+    private String intentos;
     private String codUsuCre;
     private String fecUsuCre;
     private String codUsuMod;
@@ -27,6 +28,30 @@ public class Usuario {
         this.username = username;
         this.rol = rol;
         this.est = est;
+    }
+
+    public Usuario(String codUsuario, String username, String pass, String nom, String ape, String car, String rol, String est, String intentos, String codUsuCre, String fecUsuCre) {
+        this.codUsuario = codUsuario;
+        this.username = username;
+        this.pass = pass;
+        this.nom = nom;
+        this.ape = ape;
+        this.car = car;
+        this.rol = rol;
+        this.est = est;
+        this.intentos = intentos;
+        this.codUsuCre = codUsuCre;
+        this.fecUsuCre = fecUsuCre;
+    }
+
+    
+    
+    public String getIntentos() {
+        return intentos;
+    }
+
+    public void setIntentos(String intentos) {
+        this.intentos = intentos;
     }
 
     public String getCodUsuario() {
