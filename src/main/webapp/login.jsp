@@ -42,7 +42,12 @@
                             </div>
                             <div class="d-grid">
                                 <button type="submit" class="btn btn-custom">Iniciar Sesión</button>
+                                
                             </div>
+                            <div class="justify-content-center pt-1">
+                                <a class="btn btn-info" href="home.jsp">Ir a home (Activo hasta que se le dé funcionalidad al botón)</a>
+                            </div>
+                            
                             <!-- <div class="text-center mt-3">
                                 <a href="#" class="text-decoration-none small text-secondary">¿Olvidaste tu contraseña?</a>
                             </div> -->
