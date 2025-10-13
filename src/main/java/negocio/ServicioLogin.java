@@ -14,14 +14,14 @@ import servicio.Usuario;
 
 public class ServicioLogin {
     
-    public static Usuario validacionReniec(String dni){
+    public static Usuario validacionReniec(String tipo, String documento){
         // La URL del endpoint de la API que quieres consumir
-        String API_URL_BASE = "https://dniruc.apisperu.com/api/v1/dni/";
+        String API_URL_BASE = "https://dniruc.apisperu.com/api/v1/"+tipo+"/";
         String TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImNhcmxvc2VkdWFyZG8xMjkzQGdtYWlsLmNvbSJ9.9u9vycOXxx0pKH2ONaFg3l_7I7dpEGC8CZg94vBPh0w"; 
         Usuario usuario = null;
         
         // 1. Construir la URL con parámetros de consulta (Query Params)
-        String finalUrl = API_URL_BASE + dni + "?token=" + TOKEN;
+        String finalUrl = API_URL_BASE + documento + "?token=" + TOKEN;
         
         try {
             SSLContext sslContext = SSLContext.getInstance("TLS");

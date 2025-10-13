@@ -3,6 +3,7 @@
     Created on : Oct 12, 2025, 11:34:24 AM
     Author     : kevin
 --%>
+<%@page import="servicio.Usuario"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -19,6 +20,15 @@
         <title>Registrar nuevo cliente</title>
     </head>
     <body>
+        <% 
+            Usuario user = (Usuario)session.getAttribute("usuario"); 
+            if (user == null) {
+                user = new Usuario();
+                user.setNombres("");  
+                user.setApellidoPaterno(""); 
+                user.setApellidoMaterno("");      
+            }
+        %>
         <%@ include file="../util/theme.jsp" %>
         <div class="d-flex">
             <%@ include file="../util/sidebar.jsp" %>
