@@ -47,12 +47,12 @@ public class ServicioLogin {
             int intentosActuales = Integer.parseInt(usuExis.getIntentos());
             int nuevosIntentos = intentosActuales + 1;
 
-            if (nuevosIntentos >= 4) {
+            if (nuevosIntentos >= 3) {
                 DaoLogin.bloquearUsuario(username);
-                return new LoginRespuesta(null, "Cuenta bloqueada por múltiples intentos fallidos.");
+                return new LoginRespuesta(null, "Tu cuenta está bloqueada. Contacta al administrador.");
             } else {
                 DaoLogin.actualizarIntentos(username, nuevosIntentos);
-                return new LoginRespuesta(null, "Contraseña incorrecta. \n Intento " + nuevosIntentos + " de 3.");
+                return new LoginRespuesta(null, "Nombre de usuarion o contraseña incorrecto.");
             }
         }
     }
