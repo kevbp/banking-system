@@ -72,19 +72,21 @@
                     </ul>
                 </div>
             </li>
-            <li class="mb-1">
-                <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
-                        data-bs-toggle="collapse" data-bs-target="#admin-collapse" aria-expanded="false">
-                    Administración
-                </button>
-                <div class="collapse" id="admin-collapse">
-                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                        <li><a href="${pageContext.request.contextPath}/Administracion/gestion-usuarios.jsp" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Usuarios</a></li>
-                        <li><a href="${pageContext.request.contextPath}/Administracion/gestion-parametros.jsp" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Parámetros</a></li>
-                        <li><a href="${pageContext.request.contextPath}/Administracion/gestion-accesos.jsp" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Control de accesoa</a></li>
-                    </ul>
-                </div>
-            </li>
+            <c:if test="${sessionScope.usuAut.rol == 'R0001'}">
+                <li class="mb-1">
+                    <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
+                            data-bs-toggle="collapse" data-bs-target="#admin-collapse" aria-expanded="false">
+                        Administración
+                    </button>
+                    <div class="collapse" id="admin-collapse">
+                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                            <li><a href="${pageContext.request.contextPath}/Administracion/gestion-usuarios.jsp" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Usuarios</a></li>
+                            <li><a href="${pageContext.request.contextPath}/Administracion/gestion-parametros.jsp" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Parámetros</a></li>
+                            <li><a href="${pageContext.request.contextPath}/Administracion/gestion-accesos.jsp" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Control de accesoa</a></li>
+                        </ul>
+                    </div>
+                </li>
+            </c:if>
             <li class="border-top my-3"></li>
             <li class="mb-1">
                 <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
@@ -96,10 +98,10 @@
                         <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Mi perfil</a></li>
                         <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Ajustes</a></li>
                         <li>
-                            <c:url var="urlLogout" value="/ControlUsuario"><c:param name="op" value="CerrarSesion"/></c:url>
-                            <a href="${urlLogout}" class="link-body-emphasis d-inline-flex text-decoration-none rounded">
-                                Cerrar sesión
-                            </a>
+                        <c:url var="urlLogout" value="/ControlUsuario"><c:param name="op" value="CerrarSesion"/></c:url>
+                        <a href="${urlLogout}" class="link-body-emphasis d-inline-flex text-decoration-none rounded">
+                            Cerrar sesión
+                        </a>
                         </li>
                     </ul>
                 </div>

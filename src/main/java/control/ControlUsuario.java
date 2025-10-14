@@ -4,6 +4,7 @@
  */
 package control;
 
+import entidad.Usuario;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -11,6 +12,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import servicio.ServicioUsuario;
 
@@ -29,7 +31,33 @@ public class ControlUsuario extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        String op = request.getParameter("op");
+        System.out.println("Mensaje de get srvlet: " + op);
+
+        switch (op) {
+//            case "Listar":
+//                List lista = ServicioUsuario.listarUsuario();
+//                request.getSession().setAttribute("lista", lista);
+//                response.sendRedirect(request.getContextPath() + "/GestionUsuarios/listadoUsuarios.jsp");
+//                break;
+//            case "Consultar":
+//                String cod = request.getParameter("cod");
+//                Usuario usu = ServicioUsuario.consultarUsuario(cod);
+//                request.getSession().setAttribute("usu", usu);
+//                System.out.println(usu.getPerfil());
+//                response.sendRedirect(request.getContextPath() + "/GestionUsuarios/actualizarUsuario.jsp");
+//                break;
+//            case "Nuevo":
+//                response.sendRedirect(request.getContextPath() + "/GestionUsuarios/registrarUsuario.jsp");
+//                break;
+            case "CerrarSesion":
+                HttpSession session = request.getSession(false);
+                if (session != null) {    
+                    session.invalidate();
+                }
+                response.sendRedirect("login.jsp");
+                break;
+        }
     }
 
     @Override
@@ -47,10 +75,10 @@ public class ControlUsuario extends HttpServlet {
 //        List lista;
 
         switch (acc) {
-            case "Crear":
+//            case "Crear":
                 //msg = ServicioUsuario.crearUsuario(username, nom, pass, rol);
                 //response.sendRedirect(request.getContextPath() + "/GestionUsuarios/registrarUsuario.jsp?msg=" + msg + "");
-                break;
+//                break;
 //            case "Actualizar":
 //                msg = ServicioUsuario.actualizarUsuario(cod, username, nom, pass, rol, est);
 //                request.getSession().setAttribute("usu", ServicioUsuario.consultarUsuario(cod));
