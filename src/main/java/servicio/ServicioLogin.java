@@ -12,7 +12,7 @@ public class ServicioLogin {
         // 1️⃣ Verificar si el usuario existe
         Object[] u = DaoLogin.validarUsuario(username);
         if (u == null) {
-            return new LoginRespuesta(null, "Usuario no encontrado.");
+            return new LoginRespuesta(null, "Usuario y/o clave incorrecta!");
         }
 
         // 2️⃣ Cargar los datos del usuario existente
