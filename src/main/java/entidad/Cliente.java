@@ -99,4 +99,72 @@ public class Cliente{
         return fechaUsuarioCre;
     }
     
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
+    }
+
+    public void setTipoDoc(String tipoDoc) {
+        this.tipoDoc = tipoDoc;
+    }
+
+    public void setNumDocumento(String numDocumento) {
+        this.numDocumento = numDocumento;
+    }
+
+    public void setFechaNac(String fechaNac) {
+        this.fechaNac = fechaNac;
+    }
+
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
+    }
+
+    public void setCodUbigeo(String codUbigeo) {
+        this.codUbigeo = codUbigeo;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+
+    public void setCelular(String celular) {
+        this.celular = celular;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setFechaReg(String fechaReg) {
+        this.fechaReg = fechaReg;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    public void setCodUsuarioCre(String codUsuarioCre) {
+        this.codUsuarioCre = codUsuarioCre;
+    }
+
+    public void setFechaUsuarioCre(String fechaUsuarioCre) {
+        this.fechaUsuarioCre = fechaUsuarioCre;
+    }
+    
+    public void setCodUsuMod(String codUsuarioCre) {
+        this.codUsuarioCre = codUsuarioCre;
+    }
+
+    public void setFecUsuMod(String fechaUsuarioCre) {
+        this.fechaUsuarioCre = fechaUsuarioCre;
+    }
+
 }
