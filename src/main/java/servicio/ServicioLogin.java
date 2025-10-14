@@ -52,7 +52,7 @@ public class ServicioLogin {
                 return new LoginRespuesta(null, "Tu cuenta está bloqueada. Contacta al administrador.");
             } else {
                 DaoLogin.actualizarIntentos(username, nuevosIntentos);
-                return new LoginRespuesta(null, "Nombre de usuarion o contraseña incorrecto.");
+                return new LoginRespuesta(null, "Nombre de usuario o contraseña incorrecto.");
             }
         }
     }
