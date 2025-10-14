@@ -19,12 +19,16 @@ public class Usuario {
     public Usuario() {
     }
 
+    public Usuario(String codUsuario) {
+        this.codUsuario = codUsuario;
+    }
+    
     public Usuario(String username, String pass) {
         this.username = username;
         this.pass = pass;
     }
 
-    public Usuario(String username, String rol, String est) {
+    public Usuario(String username, String rol, String est, String intentos) {
         this.username = username;
         this.rol = rol;
         this.est = est;

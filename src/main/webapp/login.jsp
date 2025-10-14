@@ -44,10 +44,10 @@
                             <div class="d-grid">
                                 <button type="submit" class="btn btn-custom">Iniciar Sesión</button>
                             </div>
-                            <c:if test="${param.error == 1}">
-                                <div class="text-center mt-3 text-danger">Usuario o clave incorrecta</div>
-                            </c:if>
 
+                            <c:if test="${not empty mensaje}">
+                                <div class="alert alert-warning text-center">${mensaje}</div>
+                            </c:if>
                             <!-- <div class="text-center mt-3">
                                 <a href="#" class="text-decoration-none small text-secondary">¿Olvidaste tu contraseña?</a>
                             </div> -->

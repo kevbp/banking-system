@@ -1,6 +1,6 @@
 package control;
 
-import entidad.Usuario;
+import entidad.LoginRespuesta;
 import servicio.ServicioLogin;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
@@ -19,16 +19,16 @@ public class ControlLogin extends HttpServlet {
         String usuario = request.getParameter("inpUsu");
         String pass = request.getParameter("inpPwd");
         System.out.println(usuario + " " + pass);
-        Usuario usuAut = ServicioLogin.loginUsuario(usuario, pass);
+        LoginRespuesta resultado = ServicioLogin.loginUsuario(usuario, pass);
 
-        if (usuAut != null){
+        if (resultado.getUsuario() != null) {
             HttpSession session = request.getSession();
             session.setMaxInactiveInterval(300);
-            session.setAttribute("usuAut", usuAut);
+            session.setAttribute("usuAut", resultado.getUsuario());
             response.sendRedirect("home.jsp");
-            System.out.println("Sesión iniciada correctamente");
         } else {
-            response.sendRedirect("login.jsp?error=1");
+            request.setAttribute("mensaje", resultado.getMensaje());
+            request.getRequestDispatcher("login.jsp").forward(request, response);
         }
     }
 
