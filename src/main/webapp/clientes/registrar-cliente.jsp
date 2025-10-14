@@ -8,7 +8,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html>
+<html lang="es-ES">
     <head>
         <script src="${pageContext.request.contextPath}/js/color-modes.js"></script>
         <meta charset="utf-8">
@@ -52,13 +52,11 @@
                                     <input type="text" class="form-control" id="numDoc" name="numDoc" required>
                                 </div>
                                 <div class="col-md-4 d-flex align-items-end">                                  
-                                    <button type="submit" class="btn btn-secondary w-100" id="btnConsultarReniec">Consultar RENIEC</button>
+                                    <input type="submit" class="btn btn-secondary w-100" name="accion" value="Consultar RENIEC">
                                 </div>
                             </div>
                         </form>
-                        
-                        
-                        <form action="" method="post">
+                        <form action="${pageContext.request.contextPath}/ControlClienteReniec" method="post">    
                             <!-- Nombres y apellidos / razón social -->
                             <div class="row mb-3">
                                 <div class="col-md-6">
@@ -114,25 +112,25 @@
                                     <label for="departamento" class="form-label">Departamento <span class="text-danger">*</span></label>
                                     <select class="form-select" id="departamento" name="departamento" required>
                                         <option value="">Seleccione...</option>
-                                        <option>Lima</option>
-                                        <option>Arequipa</option>
-                                        <option>La Libertad</option>
+                                        <option value="Lima">Lima</option>
+                                        <option value="Arequipa">Arequipa</option>
+                                        <option value="La Libertad">La Libertad</option>
                                     </select>
                                 </div>
                                 <div class="col-md-4">
                                     <label for="provincia" class="form-label">Provincia <span class="text-danger">*</span></label>
                                     <select class="form-select" id="provincia" name="provincia" required>
                                         <option value="">Seleccione...</option>
-                                        <option>Lima</option>
-                                        <option>Camaná</option>
+                                        <option value="Lima">Lima</option>
+                                        <option value="Camaná">Camaná</option>
                                     </select>
                                 </div>
                                 <div class="col-md-4">
                                     <label for="distrito" class="form-label">Distrito <span class="text-danger">*</span></label>
                                     <select class="form-select" id="distrito" name="distrito" required>
                                         <option value="">Seleccione...</option>
-                                        <option>Miraflores</option>
-                                        <option>Cercado</option>
+                                        <option value="Miraflores">Miraflores</option>
+                                        <option value="Cercado">Cercado</option>
                                     </select>
                                 </div>
                             </div>
@@ -141,15 +139,15 @@
 
                             <!-- Datos del sistema -->
                             <h5 class="mb-3">Datos del Sistema</h5>
-
+                            <c:set var="fechaActual" value="<%= new java.util.Date() %>" />
                             <div class="row mb-3">
                                 <div class="col-md-6">
                                     <label for="codCliente" class="form-label">Código del Cliente</label>
-                                    <input type="text" class="form-control" id="codCliente" name="codCliente" placeholder="Se generará automáticamente" readonly>
+                                    <input type="text" class="form-control" id="codCliente" name="codCliente" placeholder="Se generará automáticamente">
                                 </div>
                                 <div class="col-md-6">
                                     <label for="fecReg" class="form-label">Fecha de Registro</label>
-                                    <input type="date" class="form-control" id="fecReg" name="fecReg" readonly>
+                                    <input type="date" class="form-control" id="fecReg" name="fecReg" value="<fmt:formatDate value="${fechaActual}" pattern="yyyy-MM-dd" />" readonly>
                                 </div>
                             </div>
 
@@ -157,7 +155,7 @@
 
                             <!-- Botones -->
                             <div class="text-center mt-4">
-                                <button type="submit" class="btn btn-success px-4">Registrar Cliente</button>
+                                <input type="submit" class="btn btn-success px-4" name="accion" value="Registrar Cliente">
                                 <button type="reset" class="btn btn-warning px-4">Limpiar</button>
                                 <a href="../home.jsp" class="btn btn-danger px-4">Cancelar</a>
                             </div>

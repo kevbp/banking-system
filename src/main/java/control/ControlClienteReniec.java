@@ -12,22 +12,11 @@ import entidad.ClienteReniec;
 
 @WebServlet(name = "ControlClienteReniec", urlPatterns = {"/ControlClienteReniec"})
 public class ControlClienteReniec extends HttpServlet {
-
+    String tipoDocumento = "";
+    String nroDocumento = "";
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet ClientesServlet</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet ClientesServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
+        
     }
 
     @Override
@@ -40,14 +29,38 @@ public class ControlClienteReniec extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String tipoDocumento = request.getParameter("tipoDoc");
-        String nroDocumento = request.getParameter("numDoc");
-
-        ClienteReniec cliReniec = ServicioClienteReniec.validacionReniec(tipoDocumento, nroDocumento);
-        if (cliReniec != null) {
-            request.getSession().setAttribute("cliReniec", cliReniec);
+        tipoDocumento = request.getParameter("tipoDoc");
+        nroDocumento = request.getParameter("numDoc");
+        String accion = request.getParameter("accion");
+        
+        if (accion.startsWith("Consultar")) {
+            
+            request.getSession().setAttribute("tipoDocumento", tipoDocumento);
+            request.getSession().setAttribute("nroDocumento", nroDocumento);
+            
+            ClienteReniec cliReniec = ServicioClienteReniec.validacionReniec(tipoDocumento, nroDocumento);
+            if (cliReniec != null) {
+                request.getSession().setAttribute("cliReniec", cliReniec);
+            }
+            request.getRequestDispatcher("clientes/registrar-cliente.jsp").forward(request, response);
+        }else if(accion.startsWith("Registrar")){
+            String codigo = request.getParameter("codCliente");
+            String nombre = request.getParameter("nom");
+            String apellido = request.getParameter("ape");
+            String fecNac = request.getParameter("fecNac");
+            String dir = request.getParameter("dir");
+            String tel = request.getParameter("tel");
+            String cel = request.getParameter("cel");
+            String email = request.getParameter("email");
+            String fecReg = request.getParameter("fecReg");
+            
+            tipoDocumento = (String)request.getSession().getAttribute("tipoDocumento");
+            nroDocumento = (String)request.getSession().getAttribute("nroDocumento");
+            String msg = ServicioClienteReniec.crearCliente(codigo, nombre, apellido, tipoDocumento, nroDocumento, fecNac, dir, tel, cel, email, fecReg);
+            if (msg!="") {
+                response.sendRedirect("home.jsp");                
+            }
         }
-        request.getRequestDispatcher("clientes/registrar-cliente.jsp").forward(request, response);
     }
 
     @Override

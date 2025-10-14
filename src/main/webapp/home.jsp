@@ -10,7 +10,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!doctype html>
-<html lang="en" data-bs-theme="auto">
+<html lang="es-ES" data-bs-theme="auto">
 
     <head>
         <script src="js/color-modes.js"></script>

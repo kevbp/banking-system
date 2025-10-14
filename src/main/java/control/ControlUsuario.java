@@ -48,8 +48,8 @@ public class ControlUsuario extends HttpServlet {
 
         switch (acc) {
             case "Crear":
-                msg = ServicioUsuario.crearUsuario(username, nom, pass, rol);
-                response.sendRedirect(request.getContextPath() + "/GestionUsuarios/registrarUsuario.jsp?msg=" + msg + "");
+                //msg = ServicioUsuario.crearUsuario(username, nom, pass, rol);
+                //response.sendRedirect(request.getContextPath() + "/GestionUsuarios/registrarUsuario.jsp?msg=" + msg + "");
                 break;
 //            case "Actualizar":
 //                msg = ServicioUsuario.actualizarUsuario(cod, username, nom, pass, rol, est);

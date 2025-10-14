@@ -3,11 +3,15 @@ package servicio;
 
 import entidad.ClienteReniec;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Date;
+import conexion.DaoCliente;
+import entidad.Cliente;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.security.SecureRandom;
+import java.time.LocalDate;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 
@@ -62,4 +66,22 @@ public class ServicioClienteReniec {
         }
         return usuario;
     }
+    
+    public static String crearCliente(String codigo, String nombre, String apellido, String tipoDoc, String numDocumento, String fechaNac, String direccion, 
+                                    String telefono, String celular, String email, String fechaReg){
+        
+        Cliente cliente = new Cliente(codigo, nombre, apellido, tipoDoc, numDocumento, fechaNac, direccion, "150142", telefono, celular, email, fechaReg, "S0001", "U0001", fechaReg);
+        String msg = DaoCliente.crear(cliente);
+        if(msg==null){
+            msg="Cliente registrado!";
+        }
+        return msg;
+    }
+    /*
+    
+       
+        if(msg==null){
+            msg="Articulo Grabado";
+        }
+    */
 }

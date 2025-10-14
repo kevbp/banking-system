@@ -12,7 +12,7 @@ import entidad.Usuario;
  */
 public class ServicioUsuario {
     
-        public static String crearUsuario(String username, String pass, String nom, String ape, String car, String rol, String est, String codUsuCre, String fecUsuCre) {
+        /*public static String crearUsuario(String username, String pass, String nom, String ape, String car, String rol, String est, String codUsuCre, String fecUsuCre) {
         
             
         Usuario usu = new Usuario("",username, pass, nom, ape, car, rol, est, 0, codUsuCre, fecUsuCre); //Ultimos 3: intentos, codUsuCre, fecUsuCre
@@ -21,5 +21,5 @@ public class ServicioUsuario {
             msg = "1";
         }
         return msg;
-    }
+    }*/
 }
