@@ -14,6 +14,7 @@ public class ServicioLogin {
             for (int i = 0; i < ua.length; i++) {
                 System.out.println("i = "+ i + "info:" + ua[i]);
             }
+            //Genera el usuario con el usn, el perfil y el estado para usar en la sesión
             usuAut = new Usuario(ua[1].toString(), ua[6].toString(), ua[7].toString());
         } else {
             usuAut = null;

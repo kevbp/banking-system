@@ -14,8 +14,22 @@
                 </button>
                 <div class="collapse" id="clientes-collapse">
                     <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                        <li><a href="${pageContext.request.contextPath}/clientes/registrar-cliente.jsp" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Registro de clientes</a></li>
-                        <li><a href="${pageContext.request.contextPath}/clientes/consulta-clientes.jsp" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Consulta de clientes</a></li>
+                        <c:url var="urlRegistroCliente" value="/ControlClienteReniec">
+                            <c:param name="op" value="RegistrarCliente"/>
+                        </c:url>
+                        <li>
+                            <a href="${urlRegistroCliente}" class="link-body-emphasis d-inline-flex text-decoration-none rounded">
+                                Registro de clientes
+                            </a>
+                        </li>
+                        <c:url var="urlListarCliente" value="/ControlClienteReniec">
+                            <c:param name="op" value="ListaClientes"/>
+                        </c:url>
+                        <li>
+                            <a href="${urlListarCliente}" class="link-body-emphasis d-inline-flex text-decoration-none rounded">
+                                Consulta de clientes
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </li>
@@ -81,7 +95,12 @@
                     <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
                         <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Mi perfil</a></li>
                         <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Ajustes</a></li>
-                        <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Cerrar sesión</a></li>
+                        <li>
+                            <c:url var="urlLogout" value="/ControlUsuario"><c:param name="op" value="CerrarSesion"/></c:url>
+                            <a href="${urlLogout}" class="link-body-emphasis d-inline-flex text-decoration-none rounded">
+                                Cerrar sesión
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </li>

@@ -16,7 +16,7 @@ public class ControlLogin extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        /*String usuario = request.getParameter("inpUsu");
+        String usuario = request.getParameter("inpUsu");
         String pass = request.getParameter("inpPwd");
         System.out.println(usuario + " " + pass);
         Usuario usuAut = ServicioLogin.loginUsuario(usuario, pass);
@@ -29,8 +29,7 @@ public class ControlLogin extends HttpServlet {
             System.out.println("Sesión iniciada correctamente");
         } else {
             response.sendRedirect("login.jsp?error=1");
-        }*/
-            response.sendRedirect("home.jsp");
+        }
     }
 
     @Override

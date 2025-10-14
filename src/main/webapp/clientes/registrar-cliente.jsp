@@ -7,6 +7,9 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<c:if test="${sessionScope.usuAut == null}">
+    <c:redirect url="login.jsp" />
+</c:if>
 <!DOCTYPE html>
 <html lang="es-ES">
     <head>
@@ -20,7 +23,7 @@
         <title>Registrar nuevo cliente</title>
     </head>
     <body>
-        
+
         <%@ include file="../util/theme.jsp" %>
         <div class="d-flex">
             <%@ include file="../util/sidebar.jsp" %>
@@ -33,7 +36,7 @@
                         <p class="text-muted">Complete los datos del cliente. Los campos con <span class="text-danger">*</span> son obligatorios.</p>
                         <hr>
 
-                        
+
                         <c:set var="c" value="${sessionScope.cliReniec}"/>
                         <form action="${pageContext.request.contextPath}/ControlClienteReniec" method="post">
                             <!-- Tipo de documento -->
@@ -106,31 +109,27 @@
 
                             <!-- Ubigeo -->
                             <h5 class="mb-3">Ubicación (Ubigeo)</h5>
-
+                            <c:set var="d" value="${sessionScope.region}"/>
                             <div class="row mb-3">
                                 <div class="col-md-4">
-                                    <label for="departamento" class="form-label">Departamento <span class="text-danger">*</span></label>
-                                    <select class="form-select" id="departamento" name="departamento" required>
+                                    <label for="region" class="form-label">Región <span class="text-danger">*</span></label>
+                                    <select id="region" name="region" class="form-select" required>
                                         <option value="">Seleccione...</option>
-                                        <option value="Lima">Lima</option>
-                                        <option value="Arequipa">Arequipa</option>
-                                        <option value="La Libertad">La Libertad</option>
+                                        <c:forEach var="reg" items="${d}">
+                                            <option value="${reg}">${reg}</option>
+                                        </c:forEach>
                                     </select>
                                 </div>
                                 <div class="col-md-4">
                                     <label for="provincia" class="form-label">Provincia <span class="text-danger">*</span></label>
-                                    <select class="form-select" id="provincia" name="provincia" required>
+                                    <select id="provincia" name="provincia" class="form-select" required>
                                         <option value="">Seleccione...</option>
-                                        <option value="Lima">Lima</option>
-                                        <option value="Camaná">Camaná</option>
                                     </select>
                                 </div>
                                 <div class="col-md-4">
                                     <label for="distrito" class="form-label">Distrito <span class="text-danger">*</span></label>
-                                    <select class="form-select" id="distrito" name="distrito" required>
+                                    <select id="distrito" name="distrito" class="form-select" required>
                                         <option value="">Seleccione...</option>
-                                        <option value="Miraflores">Miraflores</option>
-                                        <option value="Cercado">Cercado</option>
                                     </select>
                                 </div>
                             </div>
@@ -139,7 +138,7 @@
 
                             <!-- Datos del sistema -->
                             <h5 class="mb-3">Datos del Sistema</h5>
-                            <c:set var="fechaActual" value="<%= new java.util.Date() %>" />
+                            <c:set var="fechaActual" value="<%= new java.util.Date()%>" />
                             <div class="row mb-3">
                                 <div class="col-md-6">
                                     <label for="codCliente" class="form-label">Código del Cliente</label>
@@ -167,5 +166,9 @@
         </div>
         <script src="${pageContext.request.contextPath}/js/bootstrap.bundle.min.js"></script>
         <script src="${pageContext.request.contextPath}/js/sidebars.js"></script>
+        <script>
+            const contextPath = "${pageContext.request.contextPath}";
+        </script>
+        <script src="${pageContext.request.contextPath}/js/ubigeo.js"></script>
     </body>
 </html>
