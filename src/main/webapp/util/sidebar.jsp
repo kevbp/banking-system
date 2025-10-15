@@ -80,7 +80,14 @@
                     </button>
                     <div class="collapse" id="admin-collapse">
                         <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                            <li><a href="${pageContext.request.contextPath}/Administracion/gestion-usuarios.jsp" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Usuarios</a></li>
+                            <c:url var="urlRegistroUsuario" value="/ControlUsuario">
+                                <c:param name="op" value="RegistrarUsuario"/>
+                            </c:url>
+                            <li>
+                                <a href="${urlRegistroUsuario}" class="link-body-emphasis d-inline-flex text-decoration-none rounded">
+                                    Usuarios
+                                </a>
+                            </li>
                             <li><a href="${pageContext.request.contextPath}/Administracion/gestion-parametros.jsp" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Parámetros</a></li>
                             <li><a href="${pageContext.request.contextPath}/Administracion/gestion-accesos.jsp" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Control de accesoa</a></li>
                         </ul>

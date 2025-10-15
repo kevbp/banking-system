@@ -46,168 +46,188 @@
                                     <label for="nom" class="form-label">Nombres</label>
                                     <input type="text" class="form-control" id="nom" name="nom" required>
                                 </div>
-                                
+
                                 <div class="col-md-4">
                                     <label for="ape" class="form-label">Apellidos</label>
                                     <input type="text" class="form-control" id="ape" name="ape" required>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-4">
                                     <label for="usn" class="form-label">Nombre de usuario</label>
                                     <input type="text" class="form-control" id="usn" name="usn" required>
                                 </div>
-                                <div class="col-md-3">
+                            </div>
+                            <div class="row g-3 mt-2">
+                                <div class="col-md-4">
                                     <label for="car" class="form-label">Cargo</label>
                                     <input type="text" class="form-control" id="car" name="car" required>
                                 </div>
-                                <div class="col-md-3">
+                                <c:set var="roles" value="${sessionScope.roles}"/>
+                                <div class="col-md-4">
                                     <label for="rol" class="form-label">Rol</label>
-                                    <select class="form-select" id="rol" name="rol" required>
+                                    <select id="roles" name="roles" class="form-select" required>
                                         <option value="">Seleccione...</option>
-                                        <option value="Administrador">Administrador</option>
-                                        <option value="Cajero">Cajero</option>
-                                        <option value="Soporte">Soporte</option>
-                                        <option value="Consulta">Consulta</option>
+                                        <c:forEach var="rol" items="${roles}">
+                                            <option value="${rol.codRol}">${rol.des}</option>
+                                        </c:forEach>
                                     </select>
                                 </div>
-                                <div class="col-md-2">
+                                <c:set var="estUsu" value="${sessionScope.estUsu}"/>
+                                <div class="col-md-4">
                                     <label for="est" class="form-label">Estado</label>
-                                    <select class="form-select" id="est" name="est" required>
-                                        <option value="Activo">Activo</option>
-                                        <option value="Inactivo">Inactivo</option>
+                                    <select id="est" name="est" class="form-select" required>
+                                        <option value="">Seleccione...</option>
+                                        <c:forEach var="eu" items="${estUsu}">
+                                            <option value="${eu.codEstado}">${eu.des}</option>
+                                        </c:forEach>
                                     </select>
                                 </div>
                             </div>
+                    </div>
 
-                            <div class="row g-3 mt-1">
-                                <div class="col-md-3">
-                                    <label for="clave" class="form-label">Contraseña</label>
-                                    <input type="password" class="form-control" id="clave" name="clave" required>
-                                </div>
-
-                                <div class="col-md-3">
-                                    <label for="confirmarClave" class="form-label">Confirmar Contraseña</label>
-                                    <input type="password" class="form-control" id="confirmarClave" name="confirmarClave" required>
-                                </div>
-
-                                <div class="col-md-6 text-end align-self-end">
-                                    <button type="submit" class="btn btn-primary px-4" name="acc" value="crear">Registrar</button>
-                                    <a href="../home.jsp" class="btn btn-secondary px-4">Cancelar</a>
-                                </div>
-                            </div>
-                        </form>
-                        <hr>
-                        <!-- 📋 Listado de usuarios -->
-                        <h5>Usuarios Registrados</h5>
-                        <div class="table-responsive mb-3">
-                            <table class="table table-bordered table-striped align-middle">
-                                <thead class="table-dark text-center">
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Nombre Completo</th>
-                                        <th>Usuario</th>
-                                        <th>Rol</th>
-                                        <th>Estado</th>
-                                        <th>Acciones</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <!-- Ejemplo de datos -->
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Juan Pérez</td>
-                                        <td>jperez</td>
-                                        <td>Administrador</td>
-                                        <td>Activo</td>
-                                        <td class="text-center">
-                                            <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#modalEditarUsuario1">Editar</button>
-                                            <button class="btn btn-sm btn-danger">Eliminar</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>María López</td>
-                                        <td>mlopez</td>
-                                        <td>Cajero</td>
-                                        <td>Inactivo</td>
-                                        <td class="text-center">
-                                            <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#modalEditarUsuario2">Editar</button>
-                                            <button class="btn btn-sm btn-danger">Eliminar</button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                    <div class="row g-3 mt-1 align-content-around">
+                        <div class="col-md-4">
+                            <label for="clave" class="form-label">Contraseña</label>
+                            <input type="password" class="form-control" id="clave" name="clave" required>
                         </div>
 
-                        <div class="text-center mt-4">
-                            <a href="../home.jsp" class="btn btn-secondary px-4">Volver</a>
+                        <div class="col-md-4">
+                            <label for="confirmarClave" class="form-label">Confirmar Contraseña</label>
+                            <input type="password" class="form-control" id="confirmarClave" name="confirmarClave" required>
                         </div>
                     </div>
-                </div>
-            </div>
+                    <div class="row g-3 justify-content-center mt-2">
+                        <c:if test="${param.msg == '1'}">
+                            <div class="col-md-12 text-center text-danger fw-bold">
+                                Usuario creado con éxito.
+                            </div>
+                        </c:if>
+                        <c:if test="${param.msg == '2'}">
+                            <div class="col-md-12 text-center text-danger fw-bold">
+                                Las contraseñas no coinciden.
+                            </div>
+                        </c:if>
 
-            <!-- 🪟 Modal Editar Usuario 1 -->
-            <div class="modal fade" id="modalEditarUsuario1" tabindex="-1" aria-labelledby="modalEditarUsuario1Label" aria-hidden="true">
-                <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
-                        <div class="modal-header bg-dark text-light">
-                            <h5 class="modal-title" id="modalEditarUsuario1Label">Editar Usuario: Juan Pérez</h5>
-                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 text-center align-self-center m-2">
+                            <button type="submit" class="btn btn-primary px-4" name="acc" value="CrearUsuario">Registrar</button>
+                            <a href="../home.jsp" class="btn btn-secondary px-4">Cancelar</a>
                         </div>
-                        <form action="/ControlUsuarios" method="post">
-                            <input type="hidden" name="accion" value="actualizar">
-                            <input type="hidden" name="idUsuario" value="1">
-                            <div class="modal-body">
-                                <div class="row g-3">
-                                    <div class="col-md-6">
-                                        <label for="nombreEditar1" class="form-label">Nombre Completo</label>
-                                        <input type="text" class="form-control" id="nombreEditar1" name="nombreCompleto" value="Juan Pérez">
-                                    </div>
+                    </div>
+                    </form>
+                    <hr>
+                    <!-- 📋 Listado de usuarios -->
+                    <h5>Usuarios Registrados</h5>
+                    <div class="table-responsive mb-3">
+                        <table class="table table-bordered table-striped align-middle">
+                            <thead class="table-dark text-center">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nombre Completo</th>
+                                    <th>Usuario</th>
+                                    <th>Rol</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Ejemplo de datos -->
+                                <tr>
+                                    <td>1</td>
+                                    <td>Juan Pérez</td>
+                                    <td>jperez</td>
+                                    <td>Administrador</td>
+                                    <td>Activo</td>
+                                    <td class="text-center">
+                                        <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#modalEditarUsuario1">Editar</button>
+                                        <button class="btn btn-sm btn-danger">Eliminar</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>María López</td>
+                                    <td>mlopez</td>
+                                    <td>Cajero</td>
+                                    <td>Inactivo</td>
+                                    <td class="text-center">
+                                        <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#modalEditarUsuario2">Editar</button>
+                                        <button class="btn btn-sm btn-danger">Eliminar</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
 
-                                    <div class="col-md-6">
-                                        <label for="usuarioEditar1" class="form-label">Usuario</label>
-                                        <input type="text" class="form-control" id="usuarioEditar1" name="usuario" value="jperez">
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <label for="rolEditar1" class="form-label">Rol</label>
-                                        <select class="form-select" id="rolEditar1" name="rol">
-                                            <option>Administrador</option>
-                                            <option>Cajero</option>
-                                            <option>Soporte</option>
-                                            <option>Consulta</option>
-                                        </select>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <label for="estadoEditar1" class="form-label">Estado</label>
-                                        <select class="form-select" id="estadoEditar1" name="estado">
-                                            <option>Activo</option>
-                                            <option>Inactivo</option>
-                                        </select>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <label for="claveNueva1" class="form-label">Nueva Contraseña (opcional)</label>
-                                        <input type="password" class="form-control" id="claveNueva1" name="claveNueva" placeholder="Dejar en blanco si no cambia">
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <label for="confirmarClaveNueva1" class="form-label">Confirmar Nueva Contraseña</label>
-                                        <input type="password" class="form-control" id="confirmarClaveNueva1" name="confirmarClaveNueva">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="submit" class="btn btn-primary">Guardar Cambios</button>
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                            </div>
-                        </form>
+                    <div class="text-center mt-4">
+                        <a href="../home.jsp" class="btn btn-secondary px-4">Volver</a>
                     </div>
                 </div>
             </div>
         </div>
-        <script src="${pageContext.request.contextPath}/js/bootstrap.bundle.min.js"></script>
-        <script src="${pageContext.request.contextPath}/js/sidebars.js"></script>
-    </body>
+
+        <!-- 🪟 Modal Editar Usuario 1 -->
+        <div class="modal fade" id="modalEditarUsuario1" tabindex="-1" aria-labelledby="modalEditarUsuario1Label" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header bg-dark text-light">
+                        <h5 class="modal-title" id="modalEditarUsuario1Label">Editar Usuario: Juan Pérez</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form action="/ControlUsuarios" method="post">
+                        <input type="hidden" name="accion" value="actualizar">
+                        <input type="hidden" name="idUsuario" value="1">
+                        <div class="modal-body">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="nombreEditar1" class="form-label">Nombre Completo</label>
+                                    <input type="text" class="form-control" id="nombreEditar1" name="nombreCompleto" value="Juan Pérez">
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="usuarioEditar1" class="form-label">Usuario</label>
+                                    <input type="text" class="form-control" id="usuarioEditar1" name="usuario" value="jperez">
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="rolEditar1" class="form-label">Rol</label>
+                                    <select class="form-select" id="rolEditar1" name="rol">
+                                        <option>Administrador</option>
+                                        <option>Cajero</option>
+                                        <option>Soporte</option>
+                                        <option>Consulta</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="estadoEditar1" class="form-label">Estado</label>
+                                    <select class="form-select" id="estadoEditar1" name="estado">
+                                        <option>Activo</option>
+                                        <option>Inactivo</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="claveNueva1" class="form-label">Nueva Contraseña (opcional)</label>
+                                    <input type="password" class="form-control" id="claveNueva1" name="claveNueva" placeholder="Dejar en blanco si no cambia">
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="confirmarClaveNueva1" class="form-label">Confirmar Nueva Contraseña</label>
+                                    <input type="password" class="form-control" id="confirmarClaveNueva1" name="confirmarClaveNueva">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="${pageContext.request.contextPath}/js/bootstrap.bundle.min.js"></script>
+    <script src="${pageContext.request.contextPath}/js/sidebars.js"></script>
+</body>
 </html>
 

@@ -24,7 +24,7 @@ public class DaoUtilitarios {
         String sql = "SELECT DISTINCT nomDis FROM bancodb.t_ubigeo WHERE nomPro = '" + nomPro + "' ORDER BY nomDis";
         return extraerLista(sql);
     }
-    
+
     private static List<String> extraerLista(String sql) {
         List<String> lista = new ArrayList<>();
         for (Object filaObj : Acceso.listar(sql)) {
@@ -33,13 +33,23 @@ public class DaoUtilitarios {
         }
         return lista;
     }
-    
-    public static Object[] obtenerUbigeo(Ubigeo ubi){
+
+    public static Object[] obtenerUbigeo(Ubigeo ubi) {
         String sql = "SELECT codUbigeo FROM bancodb.t_ubigeo "
                 + "WHERE "
-                + "nomDep='"+ ubi.getReg() +"' and "
-                + "nomPro='"+ ubi.getPro() +"' and "
-                + "nomDis='"+ ubi.getDis() +"'";
+                + "nomDep='" + ubi.getReg() + "' and "
+                + "nomPro='" + ubi.getPro() + "' and "
+                + "nomDis='" + ubi.getDis() + "'";
         return Acceso.buscar(sql);
+    }
+
+    public static List listarRoles() {
+        String sql = "SELECT DISTINCT codRol, des FROM bancodb.t_rol ORDER BY codRol";
+        return Acceso.listar(sql);
+    }
+
+    public static List listarEstadoUsuario() {
+        String sql = "SELECT * FROM bancodb.t_estado WHERE tipoEntidad='General' or tipoEntidad='Usuario'";
+        return Acceso.listar(sql);
     }
 }

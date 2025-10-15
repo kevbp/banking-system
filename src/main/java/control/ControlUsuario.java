@@ -15,6 +15,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import servicio.ServicioUsuario;
+import servicio.ServicioUtilitarios;
 
 /**
  *
@@ -25,7 +26,7 @@ public class ControlUsuario extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
     }
 
     @Override
@@ -47,12 +48,17 @@ public class ControlUsuario extends HttpServlet {
 //                System.out.println(usu.getPerfil());
 //                response.sendRedirect(request.getContextPath() + "/GestionUsuarios/actualizarUsuario.jsp");
 //                break;
-//            case "Nuevo":
-//                response.sendRedirect(request.getContextPath() + "/GestionUsuarios/registrarUsuario.jsp");
-//                break;
+            case "RegistrarUsuario":
+                List roles = ServicioUtilitarios.listarRoles();
+                request.getSession().setAttribute("roles", roles);
+                List estUsu = ServicioUtilitarios.listarEstadoUsuario();
+                request.getSession().setAttribute("estUsu", estUsu);
+                response.sendRedirect(request.getContextPath() + "/Administracion/gestion-usuarios.jsp");
+                break;
+
             case "CerrarSesion":
                 HttpSession session = request.getSession(false);
-                if (session != null) {    
+                if (session != null) {
                     session.invalidate();
                 }
                 response.sendRedirect("login.jsp");
@@ -63,22 +69,29 @@ public class ControlUsuario extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String cod = request.getParameter("txtCod");
-        String username = request.getParameter("txtUsn");
-        String nom = request.getParameter("txtNom");
-        String pass = request.getParameter("txtPass");
-        String rol = request.getParameter("txtRol");
-        String est = request.getParameter("selEst");
+
+        String nom = request.getParameter("nom");
+        String ape = request.getParameter("ape");
+        String usn = request.getParameter("usn");
+        String car = request.getParameter("car");
+        String roles = request.getParameter("roles");
+        String est = request.getParameter("est");
+        String clave = request.getParameter("clave");
+        String confClave = request.getParameter("confirmarClave");
 
         String acc = request.getParameter("acc");
         String msg;
 //        List lista;
 
+        HttpSession session = request.getSession(false); // false para no crear una nueva sesión si no existe
+        Usuario usuAut = (Usuario) session.getAttribute("usuAut");
+
         switch (acc) {
-//            case "Crear":
-                //msg = ServicioUsuario.crearUsuario(username, nom, pass, rol);
-                //response.sendRedirect(request.getContextPath() + "/GestionUsuarios/registrarUsuario.jsp?msg=" + msg + "");
-//                break;
+            case "CrearUsuario":
+                System.out.println("Ingresando al case CREAR USUARIO");
+                msg = ServicioUsuario.crearUsuario(usn, clave, confClave, nom, ape, car, roles, est, usuAut.getUsername(), new java.util.Date().toString());
+                response.sendRedirect(request.getContextPath() + "/Administracion/gestion-usuarios.jsp?msg=" + msg + "");
+                break;
 //            case "Actualizar":
 //                msg = ServicioUsuario.actualizarUsuario(cod, username, nom, pass, rol, est);
 //                request.getSession().setAttribute("usu", ServicioUsuario.consultarUsuario(cod));

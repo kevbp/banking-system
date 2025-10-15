@@ -4,22 +4,50 @@
  */
 package servicio;
 
+import conexion.Acceso;
+import conexion.DaoUsuario;
 import entidad.Usuario;
+import java.util.List;
+import utilitarios.Utiles;
 
 /**
  *
  * @author broncake
  */
 public class ServicioUsuario {
-    
-        /*public static String crearUsuario(String username, String pass, String nom, String ape, String car, String rol, String est, String codUsuCre, String fecUsuCre) {
+
+    public static String crearUsuario(String username,
+            String pass,
+            String confPass,
+            String nom,
+            String ape,
+            String car,
+            String rol,
+            String est,
+            String codUsuCre,
+            String fecUsuCre) {
         
+        String msg = null;
+        if (pass.equals(confPass)) {
+            List lista = DaoUsuario.ultCod();
+            Object[] ultCod = null;
+            for (int i = 0; i < lista.size(); i++) {
+                ultCod = (Object[]) lista.get(i);
+            }
+            System.out.println(ultCod[0].toString());
+            String codUsuario = Utiles.newCod(ultCod[0].toString());
             
-        Usuario usu = new Usuario("",username, pass, nom, ape, car, rol, est, 0, codUsuCre, fecUsuCre); //Ultimos 3: intentos, codUsuCre, fecUsuCre
-        String msg = DaoUsuario.crear(usu);
-        if (msg == null) {
-            msg = "1";
+            Usuario usu = new Usuario(codUsuario, username, pass, nom, ape, car, rol, est, "0", codUsuCre, fecUsuCre);
+            msg = DaoUsuario.crear(usu);
+            if (msg == null) {
+                msg = "1";
+            }
+        } else {
+            msg = "2";
         }
+
         return msg;
-    }*/
+    }
+
+
 }
