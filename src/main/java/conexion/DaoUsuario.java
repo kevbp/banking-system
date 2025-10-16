@@ -1,16 +1,9 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package conexion;
 
 import entidad.Usuario;
 import java.util.List;
 
-/**
- *
- * @author broncake
- */
 public class DaoUsuario {
 
     public static String crear(Usuario usu) {
@@ -42,5 +35,12 @@ public class DaoUsuario {
     public static Object[] ultCod() {
         String sql = "select max(codUsuario) codUsuario from t_usuario";
         return Acceso.buscar(sql);
+    }
+
+    public static List listar() {
+        String sql = "SELECT codUsuario, nom, ape, usn, e.codEstado, e.des, r.codRol, r.des FROM t_usuario AS U " +
+                    "INNER JOIN t_estado AS E on u.codEstado = e.codEstado " +
+                    "INNER JOIN t_rol AS R on u.idRol = r.codRol;";
+        return Acceso.listar(sql);
     }
 }

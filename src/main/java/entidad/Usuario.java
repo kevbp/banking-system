@@ -15,6 +15,8 @@ public class Usuario {
     private String fecUsuCre;
     private String codUsuMod;
     private String fecUsuMod;
+    private Estado estado;
+    private Rol roll;
 
     public Usuario() {
     }
@@ -47,9 +49,7 @@ public class Usuario {
         this.intentos = intentos;
         this.codUsuCre = codUsuCre;
         this.fecUsuCre = fecUsuCre;
-    }
-
-    
+    }    
     
     public String getIntentos() {
         return intentos;
@@ -154,5 +154,20 @@ public class Usuario {
     public void setFecUsuMod(String fecUsuMod) {
         this.fecUsuMod = fecUsuMod;
     }  
-    
+
+    public Estado getEstado() {
+        return estado;
+    }
+
+    public void setEstado(Estado estado) {
+        this.estado = estado;
+    }
+
+    public Rol getRoll() {
+        return roll;
+    }
+
+    public void setRoll(Rol roll) {
+        this.roll = roll;
+    }    
 }

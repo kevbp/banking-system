@@ -38,7 +38,7 @@
                         <h5>Registrar Nuevo Usuario</h5>
                         <form action="${pageContext.request.contextPath}/ControlUsuario" method="post" class="mb-4">
                             <input type="hidden" name="accion" value="registrar">
-                            <div class="row g-3">
+                            <div class="row g-3 mt-2"">
                                 <div class="col-md-4">
                                     <label for="nom" class="form-label">Nombres</label>
                                     <input type="text" class="form-control" id="nom" name="nom" required>
@@ -79,39 +79,38 @@
                                     </select>
                                 </div>
                             </div>
-                    </div>
+                            <div class="row g-3 mt-1 align-content-around">
+                                <div class="col-md-4">
+                                    <label for="clave" class="form-label">Contraseña</label>
+                                    <input type="password" class="form-control" id="clave" name="clave" required>
+                                </div>
 
-                    <div class="row g-3 mt-1 align-content-around">
-                        <div class="col-md-4">
-                            <label for="clave" class="form-label">Contraseña</label>
-                            <input type="password" class="form-control" id="clave" name="clave" required>
-                        </div>
-
-                        <div class="col-md-4">
-                            <label for="confirmarClave" class="form-label">Confirmar Contraseña</label>
-                            <input type="password" class="form-control" id="confirmarClave" name="confirmarClave" required>
-                        </div>
-                    </div>
-                    <div class="row g-3 justify-content-center mt-2">
-                        <c:if test="${param.msg == '1'}">
-                            <div class="col-md-12 text-center text-danger fw-bold">
-                                Usuario creado con éxito.
+                                <div class="col-md-4">
+                                    <label for="confirmarClave" class="form-label">Confirmar Contraseña</label>
+                                    <input type="password" class="form-control" id="confirmarClave" name="confirmarClave" required>
+                                </div>
                             </div>
-                        </c:if>
-                        <c:if test="${param.msg == '2'}">
-                            <div class="col-md-12 text-center text-danger fw-bold">
-                                Las contraseñas no coinciden.
-                            </div>
-                        </c:if>
+                            <div class="row g-3 justify-content-center mt-2">
+                                <c:if test="${param.msg == '1'}">
+                                    <div class="col-md-12 text-center text-danger fw-bold">
+                                        Usuario creado con éxito.
+                                    </div>
+                                </c:if>
+                                <c:if test="${param.msg == '2'}">
+                                    <div class="col-md-12 text-center text-danger fw-bold">
+                                        Las contraseñas no coinciden.
+                                    </div>
+                                </c:if>
 
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 text-center align-self-center m-2">
+                                    <button type="submit" class="btn btn-primary px-4" name="acc" value="CrearUsuario">Registrar</button>
+                                    <a href="../home.jsp" class="btn btn-secondary px-4">Cancelar</a>
+                                </div>
+                            </div>
+                        </form>
                     </div>
-                    <div class="row">
-                        <div class="col-md-12 text-center align-self-center m-2">
-                            <button type="submit" class="btn btn-primary px-4" name="acc" value="CrearUsuario">Registrar</button>
-                            <a href="../home.jsp" class="btn btn-secondary px-4">Cancelar</a>
-                        </div>
-                    </div>
-                    </form>
                     <hr>
                     <!-- 📋 Listado de usuarios -->
                     <h5>Usuarios Registrados</h5>
@@ -127,30 +126,22 @@
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
+                            <c:set var="usuarios" value="${sessionScope.usuarios}"/>
                             <tbody>
-                                <!-- Ejemplo de datos -->
+                                <!-- Ejemplo de datos -->                                
+                                <c:forEach var="usu" items="${usuarios}">
                                 <tr>
-                                    <td>1</td>
-                                    <td>Juan Pérez</td>
-                                    <td>jperez</td>
-                                    <td>Administrador</td>
-                                    <td>Activo</td>
+                                    <td>${usu.codUsuario}</td>
+                                    <td>${usu.nom}</td>
+                                    <td>${usu.username}</td>
+                                    <td>${usu.roll.des}</td>
+                                    <td>${usu.estado.des}</td>
                                     <td class="text-center">
                                         <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#modalEditarUsuario1">Editar</button>
                                         <button class="btn btn-sm btn-danger">Eliminar</button>
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>María López</td>
-                                    <td>mlopez</td>
-                                    <td>Cajero</td>
-                                    <td>Inactivo</td>
-                                    <td class="text-center">
-                                        <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#modalEditarUsuario2">Editar</button>
-                                        <button class="btn btn-sm btn-danger">Eliminar</button>
-                                    </td>
-                                </tr>
+                                </c:forEach>
                             </tbody>
                         </table>
                     </div>

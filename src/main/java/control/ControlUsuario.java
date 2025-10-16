@@ -1,6 +1,7 @@
 
 package control;
 
+import com.google.gson.Gson;
 import entidad.Usuario;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
@@ -9,6 +10,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.util.List;
 import servicio.ServicioUsuario;
@@ -74,7 +76,6 @@ public class ControlUsuario extends HttpServlet {
 
         String acc = request.getParameter("acc");
         String msg;
-//        List lista;
 
         HttpSession session = request.getSession(false); // false para no crear una nueva sesión si no existe
         Usuario usuAut = (Usuario) session.getAttribute("usuAut");
@@ -84,6 +85,11 @@ public class ControlUsuario extends HttpServlet {
                 System.out.println("Ingresando al case CREAR USUARIO");
                 LocalDate hoy = LocalDate.now();
                 msg = ServicioUsuario.crearUsuario(usn, clave, confClave, nom, ape, car, roles, est, usuAut.getCodUsuario(), hoy.toString());
+                
+                
+                List usuarios = ServicioUsuario.listarUsuarios();
+                request.getSession().setAttribute("usuarios", usuarios);
+                
                 response.sendRedirect(request.getContextPath() + "/Administracion/gestion-usuarios.jsp?msg=" + msg + "");
                 break;
 //            case "Actualizar":

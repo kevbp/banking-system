@@ -1,20 +1,15 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package servicio;
 
-import conexion.Acceso;
 import conexion.DaoUsuario;
+import entidad.Estado;
+import entidad.Rol;
 import entidad.Usuario;
+import java.util.ArrayList;
 import java.util.List;
 import utilitarios.Encriptacion;
 import utilitarios.Utiles;
 
-/**
- *
- * @author broncake
- */
 public class ServicioUsuario {
 
     public static String crearUsuario(String username,
@@ -46,5 +41,26 @@ public class ServicioUsuario {
         return msg;
     }
 
-
+    public static List listarUsuarios() {
+        List<Usuario> lista = new ArrayList<>();
+        List list = DaoUsuario.listar();
+        
+        for (int i = 0; i < list.size(); i++) {
+            Object[] s = (Object[])list.get(i);
+            Usuario usuario = new Usuario();
+            usuario.setCodUsuario(s[0].toString());
+            usuario.setNom(s[1].toString());
+            usuario.setApe(s[2].toString());
+            usuario.setUsername(s[3].toString());
+                        
+            Estado estado = new Estado(s[4].toString(), s[5].toString());
+            usuario.setEstado(estado);
+            
+            Rol rol = new Rol(s[6].toString(), s[7].toString());
+            usuario.setRoll(rol);
+            
+            lista.add(usuario);
+        }
+        return lista;
+    }
 }
