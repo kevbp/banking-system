@@ -48,6 +48,8 @@ public class ControlUsuario extends HttpServlet {
                 request.getSession().setAttribute("roles", roles);
                 List estUsu = ServicioUtilitarios.listarEstadoUsuario();
                 request.getSession().setAttribute("estUsu", estUsu);
+                List usuarios = ServicioUsuario.listarUsuarios();
+                request.getSession().setAttribute("usuarios", usuarios);
                 response.sendRedirect(request.getContextPath() + "/Administracion/gestion-usuarios.jsp");
                 break;
 
@@ -85,8 +87,7 @@ public class ControlUsuario extends HttpServlet {
                 System.out.println("Ingresando al case CREAR USUARIO");
                 LocalDate hoy = LocalDate.now();
                 msg = ServicioUsuario.crearUsuario(usn, clave, confClave, nom, ape, car, roles, est, usuAut.getCodUsuario(), hoy.toString());
-                
-                
+                                
                 List usuarios = ServicioUsuario.listarUsuarios();
                 request.getSession().setAttribute("usuarios", usuarios);
                 

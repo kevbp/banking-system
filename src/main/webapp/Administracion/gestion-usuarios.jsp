@@ -126,7 +126,6 @@
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
-                            <c:set var="usuarios" value="${sessionScope.usuarios}"/>
                             <tbody>
                                 <!-- Ejemplo de datos -->                                
                                 <c:forEach var="usu" items="${usuarios}">
