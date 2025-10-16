@@ -25,7 +25,7 @@ public class DaoUsuario {
                 + "`intentos`, "
                 + "`codUsuCre`, "
                 + "`fecUsuCre`) "
-                + "VALUES ('U0003', "
+                + "VALUES ('" + usu.getCodUsuario() + "', "
                 + "'" + usu.getUsername() + "', "
                 + "'" + usu.getPass() + "', "
                 + "'" + usu.getNom() + "', "
