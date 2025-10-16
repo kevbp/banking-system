@@ -28,7 +28,8 @@ public class Usuario {
         this.pass = pass;
     }
 
-    public Usuario(String username, String rol, String est, String intentos) {
+    public Usuario(String codUsuario, String username, String rol, String est, String intentos) {
+        this.codUsuario = codUsuario;
         this.username = username;
         this.rol = rol;
         this.est = est;

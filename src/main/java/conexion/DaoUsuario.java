@@ -39,8 +39,8 @@ public class DaoUsuario {
         return Acceso.ejecutar(sql);
     }
 
-    public static List ultCod() {
+    public static Object[] ultCod() {
         String sql = "select max(codUsuario) codUsuario from t_usuario";
-        return Acceso.listar(sql);
+        return Acceso.buscar(sql);
     }
 }

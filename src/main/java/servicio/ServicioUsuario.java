@@ -8,6 +8,7 @@ import conexion.Acceso;
 import conexion.DaoUsuario;
 import entidad.Usuario;
 import java.util.List;
+import utilitarios.Encriptacion;
 import utilitarios.Utiles;
 
 /**
@@ -29,15 +30,11 @@ public class ServicioUsuario {
         
         String msg = null;
         if (pass.equals(confPass)) {
-            List lista = DaoUsuario.ultCod();
-            Object[] ultCod = null;
-            for (int i = 0; i < lista.size(); i++) {
-                ultCod = (Object[]) lista.get(i);
-            }
+            Object[] ultCod = DaoUsuario.ultCod();
             System.out.println(ultCod[0].toString());
             String codUsuario = Utiles.newCod(ultCod[0].toString());
             
-            Usuario usu = new Usuario(codUsuario, username, pass, nom, ape, car, rol, est, "0", codUsuCre, fecUsuCre);
+            Usuario usu = new Usuario(codUsuario, username, Encriptacion.encriptar(pass), nom, ape, car, rol, est, "0", codUsuCre, fecUsuCre);
             msg = DaoUsuario.crear(usu);
             if (msg == null) {
                 msg = "1";

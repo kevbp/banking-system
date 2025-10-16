@@ -7,6 +7,7 @@ import java.util.Base64;
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 public class Encriptacion {
     private static String  ENCRYPT_KEY = "clave-compartida-no-reveloar-nunca";
@@ -45,5 +46,32 @@ public class Encriptacion {
             System.out.println(e.getMessage());
         }
         return desencriptacion;
+    }
+    
+    public static String encriptar(String cadena){
+        String encriptacion = "";
+        try {
+            //Inicializa el codificador con un factor de trabajo predeterminado
+            BCryptPasswordEncoder password = new BCryptPasswordEncoder();
+            
+            //1. Hashear (Encriptar) la contraseña
+            encriptacion = password.encode(cadena);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return encriptacion;
+    }
+    
+    public static boolean validar(String cadena, String encriptado){
+        boolean validado = false;
+        try {
+            //Inicializa el codificador con un factor de trabajo predeterminado
+            BCryptPasswordEncoder password = new BCryptPasswordEncoder();
+            
+            validado = password.matches(cadena, encriptado);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return validado;
     }
 }

@@ -29,19 +29,14 @@ public class ServicioLogin {
             return new LoginRespuesta(null, "Tu cuenta está bloqueada. Contacta al administrador.");
         }
 
-        // 4️⃣ Encriptar la contraseña ingresada
-//        String passEnc = Encriptacion.encriptar(pass);
+        // 5️⃣ Validar login (usuario + contraseña encriptada)        
+        boolean validado = Encriptacion.validar(pass, usuExis.getPass());
 
-        // 5️⃣ Validar login (usuario + contraseña encriptada)
-        Usuario log = new Usuario(username, pass);
-        Object[] ua = DaoLogin.validarLogin(log);
-
-        if (ua != null) {
+        if (validado) {
             // ✅ Login exitoso → reiniciar intentos
             DaoLogin.reiniciarIntentos(username);
-            Usuario usuAut = new Usuario(ua[1].toString(), ua[6].toString(), ua[7].toString(), ua[8].toString());
-            usuAut.setPass(null);
-            return new LoginRespuesta(usuAut, "Inicio de sesión exitoso.");
+            usuExis.setPass(null);
+            return new LoginRespuesta(usuExis, "Inicio de sesión exitoso.");
         } else {
             // ❌ Contraseña incorrecta → incrementar intentos
             int intentosActuales = Integer.parseInt(usuExis.getIntentos());

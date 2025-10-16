@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.time.LocalDate;
 import java.util.List;
 import servicio.ServicioUsuario;
 import servicio.ServicioUtilitarios;
@@ -89,7 +90,8 @@ public class ControlUsuario extends HttpServlet {
         switch (acc) {
             case "CrearUsuario":
                 System.out.println("Ingresando al case CREAR USUARIO");
-                msg = ServicioUsuario.crearUsuario(usn, clave, confClave, nom, ape, car, roles, est, usuAut.getUsername(), new java.util.Date().toString());
+                LocalDate hoy = LocalDate.now();
+                msg = ServicioUsuario.crearUsuario(usn, clave, confClave, nom, ape, car, roles, est, usuAut.getCodUsuario(), hoy.toString());
                 response.sendRedirect(request.getContextPath() + "/Administracion/gestion-usuarios.jsp?msg=" + msg + "");
                 break;
 //            case "Actualizar":
