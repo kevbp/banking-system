@@ -29,8 +29,8 @@ public class ServicioLogin {
             return new LoginRespuesta(null, "Tu cuenta está bloqueada. Contacta al administrador.");
         }
 
-        // 5️⃣ Validar login (usuario + contraseña encriptada)        
-        boolean validado = Encriptacion.validar(pass, usuExis.getPass());
+        // ️⃣ Validar login (usuario + contraseña encriptada) 
+        boolean validado = Encriptacion.validar(pass, usuExis.getPass());               
 
         if (validado) {
             // ✅ Login exitoso → reiniciar intentos

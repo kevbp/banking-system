@@ -7,9 +7,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
-<c:if test="${sessionScope.usuAut == null}">
-    <c:redirect url="login.jsp" />
-</c:if>
 <!doctype html>
 <html lang="es-ES" data-bs-theme="auto">
 
