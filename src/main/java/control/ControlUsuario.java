@@ -1,7 +1,6 @@
 
 package control;
 
-import com.google.gson.Gson;
 import entidad.Usuario;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
@@ -10,7 +9,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.util.List;
 import servicio.ServicioUsuario;
@@ -27,6 +25,7 @@ public class ControlUsuario extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
         String op = request.getParameter("op");
         System.out.println("Mensaje de get srvlet: " + op);
 
@@ -66,7 +65,7 @@ public class ControlUsuario extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        request.setCharacterEncoding("UTF-8");
         String nom = request.getParameter("nom");
         String ape = request.getParameter("ape");
         String usn = request.getParameter("usn");
@@ -88,23 +87,25 @@ public class ControlUsuario extends HttpServlet {
                 LocalDate hoy = LocalDate.now();
                 msg = ServicioUsuario.crearUsuario(usn, clave, confClave, nom, ape, car, roles, est, usuAut.getCodUsuario(), hoy.toString());
                                 
-                List usuarios = ServicioUsuario.listarUsuarios();
-                request.getSession().setAttribute("usuarios", usuarios);
-                
-                response.sendRedirect(request.getContextPath() + "/Administracion/gestion-usuarios.jsp?msg=" + msg + "");
+                request.getSession().setAttribute("msg", msg);
+                request.getSession().setAttribute("tipoAlerta", "success");
                 break;
 //            case "Actualizar":
 //                msg = ServicioUsuario.actualizarUsuario(cod, username, nom, pass, rol, est);
 //                request.getSession().setAttribute("usu", ServicioUsuario.consultarUsuario(cod));
 //                response.sendRedirect(request.getContextPath() + "/GestionUsuarios/actualizarUsuario.jsp?msg=" + msg + "");
 //                break;
-//            case "Eliminar":
-//                msg = ServicioUsuario.eliminarUsuario(cod);
-//                lista = ServicioUsuario.listarUsuario();
-//                request.getSession().setAttribute("lista", lista);
-//                response.sendRedirect(request.getContextPath() + "/GestionUsuarios/listadoUsuarios.jsp?msg=" + msg + "");
-//                break;
+            case "Eliminar":
+                String codigo = request.getParameter("id");
+                msg = ServicioUsuario.eliminarUsuario(codigo);
+                
+                request.getSession().setAttribute("msg", msg);
+                request.getSession().setAttribute("tipoAlerta", "success");                
+                break;
         }
+        List usuarios = ServicioUsuario.listarUsuarios();
+        request.getSession().setAttribute("usuarios", usuarios);
+        response.sendRedirect(request.getContextPath() + "/Administracion/gestion-usuarios.jsp");
     }
 
     @Override

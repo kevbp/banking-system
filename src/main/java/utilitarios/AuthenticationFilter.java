@@ -26,6 +26,12 @@ public class AuthenticationFilter implements Filter{
         // Conversión a objetos HTTP para acceder a sesiones y redirecciones
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
+        
+        // 1. **INYECCIÓN DE ENCABEZADOS DE NO-CACHÉ**
+        // Esto obliga al navegador a revalidar la página con el servidor.
+        res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
+        res.setHeader("Pragma", "no-cache"); // HTTP 1.0
+        res.setDateHeader("Expires", 0); // Proxies
 
         // Rutas que no requieren login
         String loginURI = req.getContextPath() + "/login.jsp";

@@ -5,7 +5,7 @@
 --%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 <!DOCTYPE html>
 <html>
@@ -23,6 +23,11 @@
         <div class="d-flex">
             <%@ include file="../util/sidebar.jsp" %>
             <div class="container mt-5 mb-4">
+                <c:if test="${not empty msg}">
+                    <div id="myAlert" class="alert alert-${tipoAlerta} alert-dismissible fade show" role="alert">
+                        <strong>${msg}</strong> 
+                    </div>
+                </c:if>
                 <div class="card shadow-sm">
                     <div class="card-header bg-dark text-light text-center">
                         <h4 class="mb-0">Administración de Usuarios</h4>
@@ -90,19 +95,6 @@
                                     <input type="password" class="form-control" id="confirmarClave" name="confirmarClave" required>
                                 </div>
                             </div>
-                            <div class="row g-3 justify-content-center mt-2">
-                                <c:if test="${param.msg == '1'}">
-                                    <div class="col-md-12 text-center text-danger fw-bold">
-                                        Usuario creado con éxito.
-                                    </div>
-                                </c:if>
-                                <c:if test="${param.msg == '2'}">
-                                    <div class="col-md-12 text-center text-danger fw-bold">
-                                        Las contraseñas no coinciden.
-                                    </div>
-                                </c:if>
-
-                            </div>
                             <div class="row">
                                 <div class="col-md-12 text-center align-self-center m-2">
                                     <button type="submit" class="btn btn-primary px-4" name="acc" value="CrearUsuario">Registrar</button>
@@ -137,9 +129,9 @@
                                     <td>${usu.estado.des}</td>
                                     <td class="text-center">
                                         <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#modalEditarUsuario1">Editar</button>
-                                        <form method="post" action="${pageContext.request.contextPath}/ControlUsuario">
+                                        <form method="post" action="${pageContext.request.contextPath}/ControlUsuario" style="display: inline;">
                                             <input type="hidden" name="id" value="${usu.codUsuario}">
-                                            <input type="submit" name="accion" value="Eliminar" class="btn btn-sm btn-danger">
+                                            <input type="submit" name="acc" value="Eliminar" class="btn btn-sm btn-danger">
                                         </form>
                                     </td>
                                 </tr>
@@ -218,6 +210,23 @@
     </div>
     <script src="${pageContext.request.contextPath}/js/bootstrap.bundle.min.js"></script>
     <script src="${pageContext.request.contextPath}/js/sidebars.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Verifica si el elemento del alert existe en la página
+            if ($('#myAlert').length) {
+                
+                // 1. Establece el tiempo en milisegundos (ej: 5000 ms = 5 segundos)
+                var tiempoVisible = 5000; 
+                
+                // 2. Ocultar el alert después del tiempo especificado
+                setTimeout(function() {
+                    // Cierra el alert con el método 'alert('close')' de Bootstrap
+                    $('#myAlert').alert('close');
+                }, tiempoVisible);
+            }
+        });
+    </script>
 </body>
 </html>
 

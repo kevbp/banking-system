@@ -32,10 +32,10 @@ public class ServicioUsuario {
             Usuario usu = new Usuario(codUsuario, username, Encriptacion.encriptar(pass), nom, ape, car, rol, est, "0", codUsuCre, fecUsuCre);
             msg = DaoUsuario.crear(usu);
             if (msg == null) {
-                msg = "1";
+                msg = "Usuario creado con éxito.";
             }
         } else {
-            msg = "2";
+            msg = "Las contraseñas no coinciden.";
         }
 
         return msg;
@@ -62,5 +62,15 @@ public class ServicioUsuario {
             lista.add(usuario);
         }
         return lista;
+    }
+    
+    public static String eliminarUsuario(String codigo) 
+    {                         
+        Usuario usu = new Usuario(codigo);
+        String msg = DaoUsuario.eliminar(usu);
+        if (msg == null) {
+            msg = "El usuario fue eliminado!";
+        }
+        return msg;
     }
 }

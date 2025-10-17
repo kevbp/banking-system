@@ -19,7 +19,10 @@
   <class-loader delegate="true"/>
   <jsp-config>
     <property name="keepgenerated" value="true">
-      <description>Keep a copy of the generated servlet class' java code.</description>
-    </property>
-  </jsp-config>
+        <description>Keep a copy of the generated servlet class' java code.</description>      
+    </property> 
+    <property name="pageEncoding" value="UTF-8">
+        <description>Default character encoding for JSPs</description>
+    </property>   
+  </jsp-config>  
 </glassfish-web-app>
