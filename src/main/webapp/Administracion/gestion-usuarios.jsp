@@ -128,7 +128,7 @@
                             </thead>
                             <tbody>
                                 <!-- Ejemplo de datos -->                                
-                                <c:forEach var="usu" items="${usuarios}">
+                                <c:forEach var="usu" items="${usuarios}">                                    
                                 <tr>
                                     <td>${usu.codUsuario}</td>
                                     <td>${usu.nom}</td>
@@ -137,7 +137,10 @@
                                     <td>${usu.estado.des}</td>
                                     <td class="text-center">
                                         <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#modalEditarUsuario1">Editar</button>
-                                        <button class="btn btn-sm btn-danger">Eliminar</button>
+                                        <form method="post" action="${pageContext.request.contextPath}/ControlUsuario">
+                                            <input type="hidden" name="id" value="${usu.codUsuario}">
+                                            <input type="submit" name="accion" value="Eliminar" class="btn btn-sm btn-danger">
+                                        </form>
                                     </td>
                                 </tr>
                                 </c:forEach>

@@ -43,4 +43,9 @@ public class DaoUsuario {
                     "INNER JOIN t_rol AS R on u.idRol = r.codRol;";
         return Acceso.listar(sql);
     }
+    
+    public static String eliminar(Usuario usu) {
+        String sql = "delete from t_usuario where codUsuario='"+usu.getCodUsuario()+"';";
+        return Acceso.ejecutar(sql);
+    }
 }
