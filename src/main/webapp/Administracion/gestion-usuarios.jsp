@@ -172,7 +172,6 @@
                                 </div>
 
                                 <div class="col-md-6">
-                                    <c:set var="roles1" value="${sessionScope.roles}"/>
                                     <label for="rolEditar1" class="form-label">Rol</label>
                                     <select class="form-select" id="rolEditar1" name="rol">                                        
                                         <c:forEach var="rol1" items="${roles1}">
