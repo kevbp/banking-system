@@ -15,6 +15,10 @@ public class Rol {
     public Rol() {
     }
 
+    public Rol(String codRol) {
+        this.codRol = codRol;
+    }
+
     public Rol(String codRol, String des) {
         this.codRol = codRol;
         this.des = des;

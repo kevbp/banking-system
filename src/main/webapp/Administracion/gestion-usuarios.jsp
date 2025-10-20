@@ -128,7 +128,9 @@
                                     <td>${usu.roll.des}</td>
                                     <td>${usu.estado.des}</td>
                                     <td class="text-center">
-                                        <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#modalEditarUsuario1">Editar</button>
+                                        <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#modalEditarUsuario1" 
+                                                data-nombre="${usu.nom}" data-rol="${usu.roll.codRol}" data-estado="${usu.estado.codEstado}"
+                                                data-usuario="${usu.username}" data-id="${usu.codUsuario}" >Editar</button>
                                         <form method="post" action="${pageContext.request.contextPath}/ControlUsuario" style="display: inline;">
                                             <input type="hidden" name="id" value="${usu.codUsuario}">
                                             <input type="submit" name="acc" value="Eliminar" class="btn btn-sm btn-danger">
@@ -156,8 +158,7 @@
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <form action="/ControlUsuarios" method="post">
-                        <input type="hidden" name="accion" value="actualizar">
-                        <input type="hidden" name="idUsuario" value="1">
+                        <input type="hidden" id="idUsuario" name="idUsuario" value="1">
                         <div class="modal-body">
                             <div class="row g-3">
                                 <div class="col-md-6">
@@ -171,20 +172,21 @@
                                 </div>
 
                                 <div class="col-md-6">
+                                    <c:set var="roles1" value="${sessionScope.roles}"/>
                                     <label for="rolEditar1" class="form-label">Rol</label>
-                                    <select class="form-select" id="rolEditar1" name="rol">
-                                        <option>Administrador</option>
-                                        <option>Cajero</option>
-                                        <option>Soporte</option>
-                                        <option>Consulta</option>
-                                    </select>
+                                    <select class="form-select" id="rolEditar1" name="rol">                                        
+                                        <c:forEach var="rol1" items="${roles1}">
+                                            <option value="${rol1.codRol}">${rol1.des}</option>
+                                        </c:forEach>
+                                    </select>                                    
                                 </div>
 
                                 <div class="col-md-6">
                                     <label for="estadoEditar1" class="form-label">Estado</label>
                                     <select class="form-select" id="estadoEditar1" name="estado">
-                                        <option>Activo</option>
-                                        <option>Inactivo</option>
+                                        <c:forEach var="eu" items="${estUsu}">
+                                            <option value="${eu.codEstado}">${eu.des}</option>
+                                        </c:forEach>
                                     </select>
                                 </div>
 
@@ -200,7 +202,7 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                            <input type="submit" name="acc" value="Actualizar" class="btn btn-primary">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                         </div>
                     </form>
@@ -225,6 +227,28 @@
                     $('#myAlert').alert('close');
                 }, tiempoVisible);
             }
+            
+            $('#modalEditarUsuario1').on('show.bs.modal', function (event) {
+                // 2. Elemento Disparador: 'button' que fue clickeado para abrir el modal
+                var button = $(event.relatedTarget);
+
+                // 3. Extracción de Datos: Recupera los valores de los atributos data-* del botón
+                var codUsuario = button.data('codUsuario');
+                var nombre = button.data('nombre');
+                var usuario = button.data('usuario');
+                var rol = button.data('rol');
+                var estado = button.data('estado');
+
+                // 4. Inyección: Selecciona los campos de entrada del modal por su ID
+                // y les asigna los valores extraídos
+                var modal = $(this);
+                modal.find('#modalEditarUsuario1Label').text('Editar Usuario: ' + nombre);
+                modal.find('#idUsuario').val(codUsuario);
+                modal.find('#nombreEditar1').val(nombre);
+                modal.find('#usuarioEditar1').val(usuario);
+                modal.find('#rolEditar1').val(rol);
+                modal.find('#estadoEditar1').val(estado);
+            });
         });
     </script>
 </body>

@@ -50,6 +50,20 @@ public class Usuario {
         this.codUsuCre = codUsuCre;
         this.fecUsuCre = fecUsuCre;
     }    
+
+    public Usuario(String codUsuario, String username, String pass, String nom, String ape, String car, Rol rol, Estado est, String intentos, String codUsuCre, String fecUsuCre) {
+        this.codUsuario = codUsuario;
+        this.username = username;
+        this.pass = pass;
+        this.nom = nom;
+        this.ape = ape;
+        this.car = car;
+        this.roll = rol;
+        this.estado = est;
+        this.intentos = intentos;
+        this.codUsuCre = codUsuCre;
+        this.fecUsuCre = fecUsuCre;
+    }  
     
     public String getIntentos() {
         return intentos;

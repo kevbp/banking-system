@@ -16,6 +16,10 @@ public class Estado {
     public Estado() {
     }
 
+    public Estado(String codEstado) {
+        this.codEstado = codEstado;
+    }
+
     public Estado(String codEstado, String des) {
         this.codEstado = codEstado;
         this.des = des;

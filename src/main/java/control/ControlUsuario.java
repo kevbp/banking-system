@@ -66,6 +66,7 @@ public class ControlUsuario extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
+        
         String nom = request.getParameter("nom");
         String ape = request.getParameter("ape");
         String usn = request.getParameter("usn");
@@ -77,6 +78,7 @@ public class ControlUsuario extends HttpServlet {
 
         String acc = request.getParameter("acc");
         String msg;
+        LocalDate hoy = LocalDate.now();
 
         HttpSession session = request.getSession(false); // false para no crear una nueva sesión si no existe
         Usuario usuAut = (Usuario) session.getAttribute("usuAut");
@@ -84,17 +86,24 @@ public class ControlUsuario extends HttpServlet {
         switch (acc) {
             case "CrearUsuario":
                 System.out.println("Ingresando al case CREAR USUARIO");
-                LocalDate hoy = LocalDate.now();
                 msg = ServicioUsuario.crearUsuario(usn, clave, confClave, nom, ape, car, roles, est, usuAut.getCodUsuario(), hoy.toString());
                                 
                 request.getSession().setAttribute("msg", msg);
                 request.getSession().setAttribute("tipoAlerta", "success");
                 break;
-//            case "Actualizar":
-//                msg = ServicioUsuario.actualizarUsuario(cod, username, nom, pass, rol, est);
-//                request.getSession().setAttribute("usu", ServicioUsuario.consultarUsuario(cod));
-//                response.sendRedirect(request.getContextPath() + "/GestionUsuarios/actualizarUsuario.jsp?msg=" + msg + "");
-//                break;
+            case "Actualizar":
+                String id = request.getParameter("idUsuario");
+                String nombre = request.getParameter("nombreCompleto");
+                String apellido = request.getParameter("ape");
+                String user = request.getParameter("usuario");
+                String cargo = request.getParameter("car");
+                String rol = request.getParameter("rol");
+                String estado = request.getParameter("estado");
+                String pass = request.getParameter("claveNueva");
+                String confPass = request.getParameter("confirmarClaveNueva");
+                msg = ServicioUsuario.actualizarUsuario(id, user, pass, confPass, nombre, apellido, cargo, rol, estado, usuAut.getCodUsuario(), hoy.toString());
+                request.getSession().setAttribute("msg", msg);                
+                break;
             case "Eliminar":
                 String codigo = request.getParameter("id");
                 msg = ServicioUsuario.eliminarUsuario(codigo);
