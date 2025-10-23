@@ -10,7 +10,7 @@ public class Usuario {
     private String car;
     private String rol;
     private String est;
-    private String intentos;
+    private int intentos;
     private String codUsuCre;
     private String fecUsuCre;
     private String codUsuMod;
@@ -30,14 +30,15 @@ public class Usuario {
         this.pass = pass;
     }
 
-    public Usuario(String codUsuario, String username, String rol, String est, String intentos) {
+    public Usuario(String codUsuario, String username, String rol, String est, int intentos) {
         this.codUsuario = codUsuario;
         this.username = username;
         this.rol = rol;
         this.est = est;
+        this.intentos = intentos;
     }
 
-    public Usuario(String codUsuario, String username, String pass, String nom, String ape, String car, String rol, String est, String intentos, String codUsuCre, String fecUsuCre) {
+    public Usuario(String codUsuario, String username, String pass, String nom, String ape, String car, String rol, String est, int intentos, String codUsuCre, String fecUsuCre) {
         this.codUsuario = codUsuario;
         this.username = username;
         this.pass = pass;
@@ -51,7 +52,7 @@ public class Usuario {
         this.fecUsuCre = fecUsuCre;
     }    
 
-    public Usuario(String codUsuario, String username, String pass, String nom, String ape, String car, Rol rol, Estado est, String intentos, String codUsuCre, String fecUsuCre) {
+    public Usuario(String codUsuario, String username, String pass, String nom, String ape, String car, Rol rol, Estado est, int intentos, String codUsuCre, String fecUsuCre) {
         this.codUsuario = codUsuario;
         this.username = username;
         this.pass = pass;
@@ -64,12 +65,25 @@ public class Usuario {
         this.codUsuCre = codUsuCre;
         this.fecUsuCre = fecUsuCre;
     }  
+
+    public Usuario(String codUsuario, String pass, String nom, String ape, String car, Rol rol, Estado est, int intentos, String codUsuCre, String fecUsuCre) {
+        this.codUsuario = codUsuario;
+        this.pass = pass;
+        this.nom = nom;
+        this.ape = ape;
+        this.car = car;
+        this.roll = rol;
+        this.estado = est;
+        this.intentos = intentos;
+        this.codUsuCre = codUsuCre;
+        this.fecUsuCre = fecUsuCre;
+    }  
     
-    public String getIntentos() {
+    public int getIntentos() {
         return intentos;
     }
 
-    public void setIntentos(String intentos) {
+    public void setIntentos(int intentos) {
         this.intentos = intentos;
     }
 

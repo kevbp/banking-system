@@ -38,7 +38,7 @@ public class DaoUsuario {
     }
 
     public static List listar() {
-        String sql = "SELECT codUsuario, nom, ape, usn, e.codEstado, e.des, r.codRol, r.des FROM t_usuario AS U " +
+        String sql = "SELECT codUsuario, nom, ape, usn, e.codEstado, e.des, r.codRol, r.des, carg FROM t_usuario AS U " +
                     "INNER JOIN t_estado AS E on u.codEstado = e.codEstado " +
                     "INNER JOIN t_rol AS R on u.idRol = r.codRol order by codUsuario;";
         return Acceso.listar(sql);
@@ -51,7 +51,6 @@ public class DaoUsuario {
 
     public static String actualizar(Usuario usu) {
         String sql = "UPDATE t_usuario SET " +
-                    "usn = '"+usu.getUsername()+"', " +
                     "psw = '"+usu.getPass()+"', " +
                     "nom = '"+usu.getNom()+"', " +
                     "ape = '"+usu.getApe()+"', " +

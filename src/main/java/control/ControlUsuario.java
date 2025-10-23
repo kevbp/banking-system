@@ -93,15 +93,14 @@ public class ControlUsuario extends HttpServlet {
                 break;
             case "Actualizar":
                 String id = request.getParameter("idUsuario");
-                String nombre = request.getParameter("nombreCompleto");
-                String apellido = request.getParameter("ape");
-                String user = request.getParameter("usuario");
-                String cargo = request.getParameter("car");
-                String rol = request.getParameter("rol");
-                String estado = request.getParameter("estado");
+                String nombre = request.getParameter("nombreEditar");
+                String apellido = request.getParameter("apEditar");
+                String cargo = request.getParameter("cargoEditar");
+                String rol = request.getParameter("rolEditar");
+                String estado = request.getParameter("estadoEditar");
                 String pass = request.getParameter("claveNueva");
                 String confPass = request.getParameter("confirmarClaveNueva");
-                msg = ServicioUsuario.actualizarUsuario(id, user, pass, confPass, nombre, apellido, cargo, rol, estado, usuAut.getCodUsuario(), hoy.toString());
+                msg = ServicioUsuario.actualizarUsuario(id, pass, confPass, nombre, apellido, cargo, rol, estado, usuAut.getCodUsuario(), hoy.toString());
                 request.getSession().setAttribute("msg", msg);                
                 break;
             case "Eliminar":

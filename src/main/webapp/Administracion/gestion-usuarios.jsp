@@ -110,9 +110,10 @@
                         <table class="table table-bordered table-striped align-middle">
                             <thead class="table-dark text-center">
                                 <tr>
-                                    <th>ID</th>
-                                    <th>Nombre Completo</th>
+                                    <th>Nombres</th>
+                                    <th>Apellidos</th>
                                     <th>Usuario</th>
+                                    <th>Cargo</th>
                                     <th>Rol</th>
                                     <th>Estado</th>
                                     <th>Acciones</th>
@@ -122,15 +123,16 @@
                                 <!-- Ejemplo de datos -->                                
                                 <c:forEach var="usu" items="${usuarios}">                                    
                                 <tr>
-                                    <td>${usu.codUsuario}</td>
                                     <td>${usu.nom}</td>
+                                    <td>${usu.ape}</td>
                                     <td>${usu.username}</td>
+                                    <td>${usu.car}</td>
                                     <td>${usu.roll.des}</td>
                                     <td>${usu.estado.des}</td>
                                     <td class="text-center">
                                         <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#modalEditarUsuario1" 
                                                 data-nombre="${usu.nom}" data-rol="${usu.roll.codRol}" data-estado="${usu.estado.codEstado}"
-                                                data-usuario="${usu.username}" data-id="${usu.codUsuario}" >Editar</button>
+                                                data-id="${usu.codUsuario}" data-apellido="${usu.ape}" data-cargo="${usu.car}">Editar</button>
                                         <form method="post" action="${pageContext.request.contextPath}/ControlUsuario" style="display: inline;">
                                             <input type="hidden" name="id" value="${usu.codUsuario}">
                                             <input type="submit" name="acc" value="Eliminar" class="btn btn-sm btn-danger">
@@ -157,32 +159,37 @@
                         <h5 class="modal-title" id="modalEditarUsuario1Label">Editar Usuario: Juan Pérez</h5>
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form action="/ControlUsuarios" method="post">
+                    <form action="${pageContext.request.contextPath}/ControlUsuario" method="post">
                         <input type="hidden" id="idUsuario" name="idUsuario" value="1">
                         <div class="modal-body">
                             <div class="row g-3">
                                 <div class="col-md-6">
-                                    <label for="nombreEditar1" class="form-label">Nombre Completo</label>
-                                    <input type="text" class="form-control" id="nombreEditar1" name="nombreCompleto" value="Juan Pérez">
+                                    <label for="nombreEditar" class="form-label">Nombres</label>
+                                    <input type="text" class="form-control" id="nombreEditar" name="nombreEditar" value="Juan Pérez">
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <label for="apEditar" class="form-label">Apellidos</label>
+                                    <input type="text" class="form-control" id="apEditar" name="apEditar">
+                                </div>
+                                
+                                <div class="col-md-5">
+                                    <label for="cargoEditar" class="form-label">Cargo</label>
+                                    <input type="text" class="form-control" id="cargoEditar" name="cargoEditar">
                                 </div>
 
-                                <div class="col-md-6">
-                                    <label for="usuarioEditar1" class="form-label">Usuario</label>
-                                    <input type="text" class="form-control" id="usuarioEditar1" name="usuario" value="jperez">
-                                </div>
-
-                                <div class="col-md-6">
-                                    <label for="rolEditar1" class="form-label">Rol</label>
-                                    <select class="form-select" id="rolEditar1" name="rol">                                        
-                                        <c:forEach var="rol1" items="${roles1}">
-                                            <option value="${rol1.codRol}">${rol1.des}</option>
+                                <div class="col-md-4">
+                                    <label for="rolEditar" class="form-label">Rol</label>
+                                    <select class="form-select" id="rolEditar" name="rolEditar">                                        
+                                        <c:forEach var="rol" items="${roles}">
+                                            <option value="${rol.codRol}">${rol.des}</option>
                                         </c:forEach>
                                     </select>                                    
                                 </div>
 
-                                <div class="col-md-6">
-                                    <label for="estadoEditar1" class="form-label">Estado</label>
-                                    <select class="form-select" id="estadoEditar1" name="estado">
+                                <div class="col-md-3">
+                                    <label for="estadoEditar" class="form-label">Estado</label>
+                                    <select class="form-select" id="estadoEditar" name="estadoEditar">
                                         <c:forEach var="eu" items="${estUsu}">
                                             <option value="${eu.codEstado}">${eu.des}</option>
                                         </c:forEach>
@@ -190,13 +197,13 @@
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label for="claveNueva1" class="form-label">Nueva Contraseña (opcional)</label>
-                                    <input type="password" class="form-control" id="claveNueva1" name="claveNueva" placeholder="Dejar en blanco si no cambia">
+                                    <label for="claveNueva" class="form-label">Nueva Contraseña (opcional)</label>
+                                    <input type="password" class="form-control" id="claveNueva" name="claveNueva" placeholder="Dejar en blanco si no cambia">
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label for="confirmarClaveNueva1" class="form-label">Confirmar Nueva Contraseña</label>
-                                    <input type="password" class="form-control" id="confirmarClaveNueva1" name="confirmarClaveNueva">
+                                    <label for="confirmarClaveNueva" class="form-label">Confirmar Nueva Contraseña</label>
+                                    <input type="password" class="form-control" id="confirmarClaveNueva" name="confirmarClaveNueva">
                                 </div>
                             </div>
                         </div>
@@ -234,19 +241,21 @@
                 // 3. Extracción de Datos: Recupera los valores de los atributos data-* del botón
                 var codUsuario = button.data('codUsuario');
                 var nombre = button.data('nombre');
-                var usuario = button.data('usuario');
+                var apellido = button.data('apellido');
                 var rol = button.data('rol');
                 var estado = button.data('estado');
-
+                var cargo = button.data('cargo');
+                
                 // 4. Inyección: Selecciona los campos de entrada del modal por su ID
                 // y les asigna los valores extraídos
                 var modal = $(this);
                 modal.find('#modalEditarUsuario1Label').text('Editar Usuario: ' + nombre);
                 modal.find('#idUsuario').val(codUsuario);
-                modal.find('#nombreEditar1').val(nombre);
-                modal.find('#usuarioEditar1').val(usuario);
-                modal.find('#rolEditar1').val(rol);
-                modal.find('#estadoEditar1').val(estado);
+                modal.find('#nombreEditar').val(nombre);
+                modal.find('#apEditar').val(apellido);
+                modal.find('#cargoEditar').val(cargo);                
+                modal.find('#rolEditar').val(rol);
+                modal.find('#estadoEditar').val(estado);
             });
         });
     </script>

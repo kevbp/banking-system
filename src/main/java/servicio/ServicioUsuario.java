@@ -29,7 +29,7 @@ public class ServicioUsuario {
             System.out.println(ultCod[0].toString());
             String codUsuario = Utiles.newCod(ultCod[0].toString());
             
-            Usuario usu = new Usuario(codUsuario, username, Encriptacion.encriptar(pass), nom, ape, car, rol, est, "0", codUsuCre, fecUsuCre);
+            Usuario usu = new Usuario(codUsuario, username, Encriptacion.encriptar(pass), nom, ape, car, rol, est, 0, codUsuCre, fecUsuCre);
             msg = DaoUsuario.crear(usu);
             if (msg == null) {
                 msg = "Usuario creado con éxito.";
@@ -59,6 +59,8 @@ public class ServicioUsuario {
             Rol rol = new Rol(s[6].toString(), s[7].toString());
             usuario.setRoll(rol);
             
+            usuario.setCar(s[8].toString());
+            
             lista.add(usuario);
         }
         return lista;
@@ -75,7 +77,6 @@ public class ServicioUsuario {
     }
 
     public static String actualizarUsuario(String codUsuario,
-                                            String username,
                                             String pass,
                                             String confPass,
                                             String nom,
@@ -90,7 +91,7 @@ public class ServicioUsuario {
         if (pass.equals(confPass)) {         
             Rol r = new Rol(rol);
             Estado e = new Estado(est);
-            Usuario usu = new Usuario(codUsuario, username, Encriptacion.encriptar(pass), nom, ape, car, r, e, "0", codUsuCre, fecUsuCre);
+            Usuario usu = new Usuario(codUsuario, Encriptacion.encriptar(pass), nom, ape, car, r, e, 0, codUsuCre, fecUsuCre);
             msg = DaoUsuario.actualizar(usu);
             if (msg == null) {
                 msg = "Usuario actualizado.";

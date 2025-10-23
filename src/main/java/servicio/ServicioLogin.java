@@ -22,7 +22,7 @@ public class ServicioLogin {
         usuExis.setPass(u[2].toString());
         usuExis.setRol(u[6].toString());
         usuExis.setEst(u[7].toString());
-        usuExis.setIntentos(u[8].toString());
+        usuExis.setIntentos(Integer.parseInt(u[8].toString()));
 
         // 3️⃣ Validar si está bloqueado
         if (usuExis.getEst().equalsIgnoreCase("S0003")) {
@@ -39,7 +39,7 @@ public class ServicioLogin {
             return new LoginRespuesta(usuExis, "Inicio de sesión exitoso.");
         } else {
             // ❌ Contraseña incorrecta → incrementar intentos
-            int intentosActuales = Integer.parseInt(usuExis.getIntentos());
+            int intentosActuales = usuExis.getIntentos();
             int nuevosIntentos = intentosActuales + 1;
 
             if (nuevosIntentos >= 3) {
