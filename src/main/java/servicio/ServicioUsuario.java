@@ -77,8 +77,6 @@ public class ServicioUsuario {
     }
 
     public static String actualizarUsuario(String codUsuario,
-                                            String pass,
-                                            String confPass,
                                             String nom,
                                             String ape,
                                             String car,
@@ -87,19 +85,14 @@ public class ServicioUsuario {
                                             String codUsuCre,
                                             String fecUsuCre) 
     {        
-        String msg = null;
-        if (pass.equals(confPass)) {         
-            Rol r = new Rol(rol);
-            Estado e = new Estado(est);
-            Usuario usu = new Usuario(codUsuario, Encriptacion.encriptar(pass), nom, ape, car, r, e, 0, codUsuCre, fecUsuCre);
-            msg = DaoUsuario.actualizar(usu);
-            if (msg == null) {
-                msg = "Usuario actualizado.";
-            }
-        } else {
-            msg = "Las contraseñas no coinciden.";
+        String msg = null;        
+        Rol r = new Rol(rol);
+        Estado e = new Estado(est);
+        Usuario usu = new Usuario(codUsuario, nom, ape, car, r, e, 0, codUsuCre, fecUsuCre);
+        msg = DaoUsuario.actualizar(usu);
+        if (msg == null) {
+            msg = "Usuario actualizado.";
         }
-
         return msg;
     }
 }

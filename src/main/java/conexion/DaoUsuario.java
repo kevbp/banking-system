@@ -51,7 +51,6 @@ public class DaoUsuario {
 
     public static String actualizar(Usuario usu) {
         String sql = "UPDATE t_usuario SET " +
-                    "psw = '"+usu.getPass()+"', " +
                     "nom = '"+usu.getNom()+"', " +
                     "ape = '"+usu.getApe()+"', " +
                     "carg = '"+usu.getCar()+"', " +

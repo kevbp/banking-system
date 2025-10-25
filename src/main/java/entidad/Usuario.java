@@ -66,9 +66,8 @@ public class Usuario {
         this.fecUsuCre = fecUsuCre;
     }  
 
-    public Usuario(String codUsuario, String pass, String nom, String ape, String car, Rol rol, Estado est, int intentos, String codUsuCre, String fecUsuCre) {
+    public Usuario(String codUsuario, String nom, String ape, String car, Rol rol, Estado est, int intentos, String codUsuCre, String fecUsuCre) {
         this.codUsuario = codUsuario;
-        this.pass = pass;
         this.nom = nom;
         this.ape = ape;
         this.car = car;

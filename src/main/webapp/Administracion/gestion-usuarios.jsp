@@ -194,17 +194,8 @@
                                             <option value="${eu.codEstado}">${eu.des}</option>
                                         </c:forEach>
                                     </select>
-                                </div>
-
-                                <div class="col-md-6">
-                                    <label for="claveNueva" class="form-label">Nueva Contraseña (opcional)</label>
-                                    <input type="password" class="form-control" id="claveNueva" name="claveNueva" placeholder="Dejar en blanco si no cambia">
-                                </div>
-
-                                <div class="col-md-6">
-                                    <label for="confirmarClaveNueva" class="form-label">Confirmar Nueva Contraseña</label>
-                                    <input type="password" class="form-control" id="confirmarClaveNueva" name="confirmarClaveNueva">
-                                </div>
+                                </div>                                
+                                
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -239,7 +230,7 @@
                 var button = $(event.relatedTarget);
 
                 // 3. Extracción de Datos: Recupera los valores de los atributos data-* del botón
-                var codUsuario = button.data('codUsuario');
+                var codUsuario = button.data('id');
                 var nombre = button.data('nombre');
                 var apellido = button.data('apellido');
                 var rol = button.data('rol');

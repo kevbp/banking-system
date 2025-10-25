@@ -9,7 +9,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import servicio.ServicioUsuario;
 import servicio.ServicioUtilitarios;
@@ -78,7 +78,7 @@ public class ControlUsuario extends HttpServlet {
 
         String acc = request.getParameter("acc");
         String msg;
-        LocalDate hoy = LocalDate.now();
+        LocalDateTime hoy = LocalDateTime.now();
 
         HttpSession session = request.getSession(false); // false para no crear una nueva sesión si no existe
         Usuario usuAut = (Usuario) session.getAttribute("usuAut");
@@ -100,8 +100,10 @@ public class ControlUsuario extends HttpServlet {
                 String estado = request.getParameter("estadoEditar");
                 String pass = request.getParameter("claveNueva");
                 String confPass = request.getParameter("confirmarClaveNueva");
-                msg = ServicioUsuario.actualizarUsuario(id, pass, confPass, nombre, apellido, cargo, rol, estado, usuAut.getCodUsuario(), hoy.toString());
+                msg = ServicioUsuario.actualizarUsuario(id, nombre, apellido, cargo, rol, estado, usuAut.getCodUsuario(), hoy.toString());
+                
                 request.getSession().setAttribute("msg", msg);                
+                request.getSession().setAttribute("tipoAlerta", "success");  
                 break;
             case "Eliminar":
                 String codigo = request.getParameter("id");
