@@ -1,22 +1,20 @@
 package control;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import servicio.ServicioClienteReniec;
-import entidad.ClienteReniec;
+import servicio.ServicioCliente;
 import entidad.Usuario;
 import jakarta.servlet.http.HttpSession;
+import java.time.LocalDateTime;
 import java.util.List;
-import servicio.ServicioUsuario;
 import servicio.ServicioUtilitarios;
 
-@WebServlet(name = "ControlClienteReniec", urlPatterns = {"/ControlClienteReniec"})
-public class ControlClienteReniec extends HttpServlet {
+@WebServlet(name = "ControlCliente", urlPatterns = {"/ControlCliente"})
+public class ControlCliente extends HttpServlet {
 
     String tipoDocumento = "";
     String nroDocumento = "";
@@ -35,8 +33,6 @@ public class ControlClienteReniec extends HttpServlet {
 
         switch (op) {
             case "ListaClientes":
-//                List listaCliente = ServicioClienteReniec.listarCliente();
-//                request.getSession().setAttribute("listaCliente", listaCliente);
                 response.sendRedirect(request.getContextPath() + "/clientes/consulta-clientes.jsp");
                 break;
 //            case "Consultar":
@@ -50,9 +46,10 @@ public class ControlClienteReniec extends HttpServlet {
                 //Llamada al dropdown
                 List<String> region = ServicioUtilitarios.listarRegion();
                 request.getSession().setAttribute("region", region);
-//                request.setAttribute("departamentos", departamentos);
-//                request.getRequestDispatcher("clientes/registrar-cliente.jsp").forward(request, response);
-//                
+                
+                String codigo = ServicioCliente.nuevoCodigo();
+                request.getSession().setAttribute("codigo", codigo);
+                
                 response.sendRedirect(request.getContextPath() + "/clientes/registrar-cliente.jsp");
                 break;
         }
@@ -66,18 +63,21 @@ public class ControlClienteReniec extends HttpServlet {
         tipoDocumento = request.getParameter("tipoDoc");
         nroDocumento = request.getParameter("numDoc");
         String accion = request.getParameter("accion");
+        
+        HttpSession session = request.getSession(false); // false para no crear una nueva sesión si no existe
+        Usuario usuAut = (Usuario) session.getAttribute("usuAut");
 
         if (accion.startsWith("Consultar")) {
 
-            request.getSession().setAttribute("tipoDocumento", tipoDocumento);
-            request.getSession().setAttribute("nroDocumento", nroDocumento);
+            String nombre = request.getParameter("nombre");
 
-            ClienteReniec cliReniec = ServicioClienteReniec.validacionReniec(tipoDocumento, nroDocumento);
-            if (cliReniec != null) {
-                request.getSession().setAttribute("cliReniec", cliReniec);
+            List lista = ServicioCliente.listarClientes(tipoDocumento, nroDocumento, nombre);
+            if (lista != null) {
+                request.setAttribute("lista", lista);
             }
-            request.getRequestDispatcher("clientes/registrar-cliente.jsp").forward(request, response);
+            request.getRequestDispatcher("clientes/consulta-clientes.jsp").forward(request, response);
         } else if (accion.startsWith("Registrar")) {
+            
             String codigo = request.getParameter("codCliente");
             String nombre = request.getParameter("nom");
             String apellido = request.getParameter("ape");
@@ -88,22 +88,12 @@ public class ControlClienteReniec extends HttpServlet {
             String email = request.getParameter("email");
             String region = request.getParameter("region");
             String provincia = request.getParameter("provincia");
-            String distrito = request.getParameter("distrito");
-            String fecReg = request.getParameter("fecReg");
+            String distrito = request.getParameter("distrito");            
+            LocalDateTime hoy = LocalDateTime.now();
             
-//          Co esto obtendremos el usuario que inició la sesión
-            HttpSession session = request.getSession(false); // false para no crear una nueva sesión si no existe
-            Usuario usuAut = (Usuario)session.getAttribute("usuAut");
-                if (usuAut != null) {
-                    // Ya tienes el usuario autenticado
-                    System.out.println("Usuario en sesión: " + usuAut.getUsername());
-                } else {
-                    System.out.println("No hay usuario en sesión.");
-                }
-
             tipoDocumento = (String) request.getSession().getAttribute("tipoDocumento");
             nroDocumento = (String) request.getSession().getAttribute("nroDocumento");
-            String msg = ServicioClienteReniec.crearCliente(codigo, nombre, apellido, tipoDocumento, nroDocumento, fecNac, dir, tel, cel, email, region, provincia, distrito, usuAut.getUsername(), fecReg);
+            String msg = ServicioCliente.crearCliente(codigo, nombre, apellido, tipoDocumento, nroDocumento, fecNac, dir, tel, cel, email, region, provincia, distrito, usuAut.getCodUsuario(), hoy.toString());
             if (msg != "") {
                 response.sendRedirect("home.jsp");
             }

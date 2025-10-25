@@ -33,7 +33,8 @@
                         <hr>
 
                         <!-- Formulario de búsqueda -->
-                        <form action="/ControlCliente" method="get" class="mb-4">
+                        <form action="${pageContext.request.contextPath}/ControlCliente" method="post" class="mb-4">
+                            <input type="hidden" name="accion" value="Consultar">
                             <div class="row g-3 align-items-end">
 
                                 <div class="col-md-3">
@@ -83,41 +84,29 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    <c:forEach var="item" items="${requestScope.lista}">
                                     <!-- Ejemplo de datos estáticos (se reemplaza por datos del servlet o JSTL) -->
                                     <tr>
-                                        <td>CLI001</td>
-                                        <td>DNI</td>
-                                        <td>74125896</td>
-                                        <td>Juan Carlos</td>
-                                        <td>Pérez Ramos</td>
-                                        <td>987654321</td>
-                                        <td>juanperez@email.com</td>
-                                        <td>Activo</td>
+                                        <td>${item[0]}</td>
+                                        <td>${item[1]}</td>
+                                        <td>${item[2]}</td>
+                                        <td>${item[3]}</td>
+                                        <td>${item[4]}</td>
+                                        <td>${item[5]}</td>
+                                        <td>${item[6]}</td>
+                                        <td>${item[8]}</td>
                                         <td class="text-center">
                                             <a href="verCliente.jsp?cod=CLI001" class="btn btn-sm btn-info">Ver</a>
                                             <a href="editarCliente.jsp?cod=CLI001" class="btn btn-sm btn-warning">Editar</a>
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td>CLI002</td>
-                                        <td>RUC</td>
-                                        <td>20658473915</td>
-                                        <td>Importadora San Luis S.A.</td>
-                                        <td>-</td>
-                                        <td>4456789</td>
-                                        <td>contacto@sanluis.com</td>
-                                        <td>Activo</td>
-                                        <td class="text-center">
-                                            <a href="verCliente.jsp?cod=CLI002" class="btn btn-sm btn-info">Ver</a>
-                                            <a href="editarCliente.jsp?cod=CLI002" class="btn btn-sm btn-warning">Editar</a>
-                                        </td>
-                                    </tr>
+                                    </c:forEach>
                                 </tbody>
                             </table>
                         </div>
 
                         <div class="text-center mt-3">
-                            <a href="../home.jsp" class="btn btn-secondary px-4">Volver al Panel</a>
+                            <a href="${pageContext.request.contextPath}/home.jsp" class="btn btn-secondary px-4">Volver al Panel</a>
                         </div>
 
                     </div>

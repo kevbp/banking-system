@@ -14,7 +14,7 @@
                 </button>
                 <div class="collapse" id="clientes-collapse">
                     <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                        <c:url var="urlRegistroCliente" value="/ControlClienteReniec">
+                        <c:url var="urlRegistroCliente" value="/ControlCliente">
                             <c:param name="op" value="RegistrarCliente"/>
                         </c:url>
                         <li>
@@ -22,7 +22,7 @@
                                 Registro de clientes
                             </a>
                         </li>
-                        <c:url var="urlListarCliente" value="/ControlClienteReniec">
+                        <c:url var="urlListarCliente" value="/ControlCliente">
                             <c:param name="op" value="ListaClientes"/>
                         </c:url>
                         <li>

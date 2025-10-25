@@ -1,9 +1,7 @@
-
 package servicio;
 
 import entidad.ClienteReniec;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.Date;
 import conexion.DaoCliente;
 import entidad.Cliente;
 import java.net.URI;
@@ -11,12 +9,12 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.security.SecureRandom;
-import java.time.LocalDate;
 import java.util.List;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
+import utilitarios.Utiles;
 
-public class ServicioClienteReniec {
+public class ServicioCliente {
     public static ClienteReniec validacionReniec(String tipo, String documento){
         // La URL del endpoint de la API que quieres consumir
         String API_URL_BASE = "https://dniruc.apisperu.com/api/v1/"+tipo+"/";
@@ -86,10 +84,34 @@ public class ServicioClienteReniec {
         return msg;
     }
     
-    public static List listarCliente(){
-    
-        return null;
+    public static List listarClientes(String tipoDoc, String numDoc, String nomb)
+    {
+        String condicion = "Where ";
+        if (!tipoDoc.isEmpty()) {
+            condicion = condicion + "tipoDoc = '"+tipoDoc+"' and numDoc = '"+numDoc+"'";
+        }
+        
+        if (!tipoDoc.isEmpty() && !nomb.isEmpty()) {
+            condicion = condicion + " and nom like '%"+nomb+"%'";
+        }else if(tipoDoc.isEmpty() && !nomb.isEmpty()){
+            condicion = condicion + "nom like '%"+nomb+"%'";
+        }
+        
+        if (tipoDoc.isEmpty() && nomb.isEmpty()){
+            condicion = "";
+        }
+        
+        List list = DaoCliente.listar(condicion);          
+        return list;
     }
+    
+    public static String nuevoCodigo(){
+        Object[] ultCod = DaoCliente.ultCod();
+        System.out.println(ultCod[0].toString());
+        String codigo = Utiles.newCod(ultCod[0].toString());
+        return codigo;
+    }
+    
     /*
     
        

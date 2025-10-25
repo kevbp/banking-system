@@ -36,7 +36,7 @@
 
 
                         <c:set var="c" value="${sessionScope.cliReniec}"/>
-                        <form action="${pageContext.request.contextPath}/ControlClienteReniec" method="post">
+                        <form action="${pageContext.request.contextPath}/ControlCliente" method="post">
                             <!-- Tipo de documento -->
                             <div class="row mb-3">
                                 <div class="col-md-4">
@@ -57,7 +57,7 @@
                                 </div>
                             </div>
                         </form>
-                        <form action="${pageContext.request.contextPath}/ControlClienteReniec" method="post">    
+                        <form action="${pageContext.request.contextPath}/ControlCliente" method="post">    
                             <!-- Nombres y apellidos / razón social -->
                             <div class="row mb-3">
                                 <div class="col-md-6">
@@ -140,7 +140,8 @@
                             <div class="row mb-3">
                                 <div class="col-md-6">
                                     <label for="codCliente" class="form-label">Código del Cliente</label>
-                                    <input type="text" class="form-control" id="codCliente" name="codCliente" placeholder="Se generará automáticamente">
+                                    <input type="text" class="form-control" id="codCliente" name="codCliente" value="${sessionScope.codigo}" readonly>
+                                    <c:remove var="codigo" scope="session"/>
                                 </div>
                                 <div class="col-md-6">
                                     <label for="fecReg" class="form-label">Fecha de Registro</label>
@@ -152,7 +153,8 @@
 
                             <!-- Botones -->
                             <div class="text-center mt-4">
-                                <input type="submit" class="btn btn-success px-4" name="accion" value="Registrar Cliente">
+                                <input type="hidden" name="accion" value="Registrar">
+                                <button type="submit" class="btn btn-success px-4">Registrar Cliente</button>
                                 <button type="reset" class="btn btn-warning px-4">Limpiar</button>
                                 <a href="../home.jsp" class="btn btn-danger px-4">Cancelar</a>
                             </div>
