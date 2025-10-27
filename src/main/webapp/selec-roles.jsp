@@ -20,7 +20,7 @@
                         <img src="img/logoQB.png" alt="Quantum Bank Logo" style="width:120px" class="mb-3"/>
                     </div>
                     
-                    <h2>¿Con qué rol deseas ingresar?</h2>
+                    <h2>Seleccione su tipo de Ingreso</h2>
                     
                     <form id="rolForm" action="" method="post"> 
                         <input type="hidden" id="rolSeleccionado" name="rol" value="">
