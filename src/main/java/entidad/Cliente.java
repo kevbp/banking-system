@@ -39,6 +39,19 @@ public class Cliente{
         this.fechaUsuarioCre = fechaUsuarioCre;
     }
 
+    public Cliente(String codigo, String fechaNac, String direccion, String codUbigeo, String telefono, String celular, String email, String estado, String codUsuarioCre, String fechaUsuarioCre) {
+        this.codigo = codigo;
+        this.fechaNac = fechaNac;
+        this.direccion = direccion;
+        this.codUbigeo = codUbigeo;
+        this.telefono = telefono;
+        this.celular = celular;
+        this.email = email;
+        this.estado = estado;
+        this.codUsuarioCre = codUsuarioCre;
+        this.fechaUsuarioCre = fechaUsuarioCre;
+    }
+
     public String getCodigo() {
         return codigo;
     }

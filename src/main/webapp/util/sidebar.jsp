@@ -14,20 +14,20 @@
                 </button>
                 <div class="collapse" id="clientes-collapse">
                     <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                        <c:url var="urlRegistroCliente" value="/ControlCliente">
-                            <c:param name="op" value="RegistrarCliente"/>
-                        </c:url>
-                        <li>
-                            <a href="${urlRegistroCliente}" class="link-body-emphasis d-inline-flex text-decoration-none rounded">
-                                Registro de clientes
-                            </a>
-                        </li>
                         <c:url var="urlListarCliente" value="/ControlCliente">
                             <c:param name="op" value="ListaClientes"/>
                         </c:url>
                         <li>
                             <a href="${urlListarCliente}" class="link-body-emphasis d-inline-flex text-decoration-none rounded">
                                 Consulta de clientes
+                            </a>
+                        </li>
+                        <c:url var="urlRegistroCliente" value="/ControlCliente">
+                            <c:param name="op" value="RegistrarCliente"/>
+                        </c:url>
+                        <li>
+                            <a href="${urlRegistroCliente}" class="link-body-emphasis d-inline-flex text-decoration-none rounded">
+                                Registro de clientes
                             </a>
                         </li>
                     </ul>

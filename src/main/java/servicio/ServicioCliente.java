@@ -101,8 +101,8 @@ public class ServicioCliente {
             condicion = "";
         }
         
-        List list = DaoCliente.listar(condicion);          
-        return list;
+        List lista = DaoCliente.listar(condicion);          
+        return lista;
     }
     
     public static String nuevoCodigo(){
@@ -111,4 +111,25 @@ public class ServicioCliente {
         String codigo = Utiles.newCod(ultCod[0].toString());
         return codigo;
     }
+    
+    public static String actualizarCliente(String codigo, String fechaNac, 
+                                        String direccion, String telefono, 
+                                        String celular, String email,
+                                        String estado, String region, 
+                                        String provincia, String distrito, 
+                                        String codUsuCre, String fechaReg){
+        
+        String codUbigeo = ServicioUtilitarios.obtenerUbigeo(region, provincia, distrito);
+        
+        Cliente cliente = new Cliente(codigo, fechaNac, direccion, codUbigeo, telefono, celular, email, estado, codUsuCre, fechaReg);
+        String msg = DaoCliente.actualizar(cliente);
+        if(msg == null){
+            msg = "Cliente actualizado!";
+        }
+        return msg;
+    }
+    
+    public static Object[] buscarCliente(String codigo){
+        return DaoCliente.buscar(codigo);
+    }    
 }
