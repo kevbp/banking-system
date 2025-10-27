@@ -1,0 +1,89 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f8f9fa;
+    height: 100vh;
+    overflow: hidden; 
+}
+
+.container-fluid, .row {
+    height: 100%; 
+}
+
+/* CLAVE: Asegura que la imagen dentro del div.col-md-6 se estire y cubra */
+.object-fit-cover {
+    object-fit: cover;
+    object-position: center;
+    height: 100%;
+    width: 100%;
+}
+
+.right-section {
+    min-height: 100vh;
+    background-color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-card, 
+.login-card-cliente { 
+    width: 90%;
+    max-width: 420px;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    background: #fff;
+    margin: 40px auto; 
+}
+
+.login-card p,
+.login-card-cliente p {
+    color: #555;
+    font-size: 1.1rem;
+    margin-bottom: 25px;
+}
+
+.btn-custom {
+    background-color: #004aad;
+    color: #fff;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border: none;
+    padding: 10px 20px;
+}
+
+.btn-custom:hover {
+    background-color: #00337a;
+}
+
+.text-secondary {
+    color: #6c757d !important;
+}
+.text-secondary:hover {
+    text-decoration: underline !important;
+}
+
+.btn-outline-secondary {
+    color: #6c757d;
+    border-color: #6c757d;
+    font-weight: 500;
+}
+
+.btn-outline-secondary:hover {
+    color: #fff;
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+
+@media (max-width: 768px) {
+    body {
+        overflow: auto;
+    }
+    .login-card, 
+    .login-card-cliente {
+        max-width: 90%;
+        margin-top: 40px;
+        margin-bottom: 40px;
+    }
+}
+

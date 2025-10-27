@@ -1,0 +1,140 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    margin: 0;
+    height: 100vh; 
+    display: flex;
+}
+
+.container {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+}
+
+.left {
+    flex: 1;
+    background: url('img/portada.jpg') no-repeat center center; 
+    background-size: cover;
+}
+
+.right {
+    flex: 1;
+    background-color: #ffffff;
+    display: flex; 
+    justify-content: center;   
+    align-items: center;       
+    padding: 40px; 
+}
+
+.role-card {
+    width: 100%;
+    max-width: 400px; 
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); 
+    background: #fff;
+    text-align: center; 
+}
+
+.role-card h2 {
+    color: #222;
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 25px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.d-grid {
+    width: 100%;
+}
+
+.roles-container {
+    display: flex;
+    gap: 15px; 
+    width: 100%;
+    justify-content: center; 
+}
+
+.rol {
+    border: 1px solid #ddd; 
+    border-radius: 8px; 
+    text-align: center;
+    padding: 20px 10px;
+    width: 100%; 
+    max-width: 150px;
+    cursor: pointer;
+    background-color: white;
+    transition: all 0.2s ease;
+}
+
+.rol:hover {
+    border-color: #004aad; 
+    box-shadow: 0 0 10px rgba(0, 74, 173, 0.2);
+}
+
+.rol img {
+    
+    width: 50px; 
+    height: 50px;
+    margin-bottom: 10px;
+}
+
+.rol.seleccionado {
+    border-color: #004aad; 
+    background-color: #e6f0ff;
+    box-shadow: 0 0 10px rgba(0, 74, 173, 0.4);
+}
+
+button {
+    background-color: #004aad; 
+    color: white;
+    border: none;
+    padding: 12px 35px;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+    width: 100%; 
+    font-weight: 500;
+}
+
+button:hover {
+    background-color: #00337a;
+}
+
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+
+    .left {
+        height: 30vh;
+    }
+
+    .right {
+        height: 70vh;
+        padding: 20px;
+    }
+    
+    .roles-container {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .rol {
+        max-width: 100%; 
+    }
+}
+
