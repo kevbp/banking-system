@@ -76,7 +76,7 @@
                             <!-- Fecha de nacimiento -->
                             <div class="row mb-3">
                                 <div class="col-md-4">
-                                    <label for="fecNac" class="form-label">Fecha de Nacimiento</label>
+                                    <label for="fecNac" class="form-label">Fecha de Nacimiento <span class="text-danger">*</span></label>
                                     <input type="date" class="form-control" id="fecNac" name="fecNac" required>
                                 </div>
                             </div>
@@ -98,11 +98,11 @@
                             <div class="row mb-3">
                                 <div class="col-md-4">
                                     <label for="tel" class="form-label">Teléfono</label>
-                                    <input type="text" class="form-control" id="tel" name="tel">
+                                    <input type="text" class="form-control" id="tel" name="tel" maxlength="7">
                                 </div>
                                 <div class="col-md-4">
                                     <label for="cel" class="form-label">Celular <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="cel" name="cel" required>
+                                    <input type="text" class="form-control" id="cel" name="cel" maxlength="9" required>
                                 </div>
                             </div>
 
