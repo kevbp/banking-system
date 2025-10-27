@@ -1,5 +1,6 @@
 package control;
 
+import entidad.ClienteReniec;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -18,6 +19,7 @@ public class ControlCliente extends HttpServlet {
 
     String tipoDocumento = "";
     String nroDocumento = "";
+    String codigo = "";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -33,7 +35,11 @@ public class ControlCliente extends HttpServlet {
 
         switch (op) {
             case "ListaClientes":
-                response.sendRedirect(request.getContextPath() + "/clientes/consulta-clientes.jsp");
+                List lista = ServicioCliente.listarClientes("", "", "");
+                if (lista != null) {
+                    request.setAttribute("lista", lista);
+                }
+                request.getRequestDispatcher("clientes/consulta-clientes.jsp").forward(request, response);
                 break;
 //            case "Consultar":
 //                String cod = request.getParameter("cod");
@@ -47,10 +53,10 @@ public class ControlCliente extends HttpServlet {
                 List<String> region = ServicioUtilitarios.listarRegion();
                 request.getSession().setAttribute("region", region);
                 
-                String codigo = ServicioCliente.nuevoCodigo();
-                request.getSession().setAttribute("codigo", codigo);
-                
-                response.sendRedirect(request.getContextPath() + "/clientes/registrar-cliente.jsp");
+                codigo = ServicioCliente.nuevoCodigo();
+                request.setAttribute("codigo", codigo);
+                request.getRequestDispatcher("clientes/registrar-cliente.jsp").forward(request, response);
+                //response.sendRedirect(request.getContextPath() + "/clientes/registrar-cliente.jsp");
                 break;
         }
 
@@ -59,6 +65,7 @@ public class ControlCliente extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
 
         tipoDocumento = request.getParameter("tipoDoc");
         nroDocumento = request.getParameter("numDoc");
@@ -68,7 +75,6 @@ public class ControlCliente extends HttpServlet {
         Usuario usuAut = (Usuario) session.getAttribute("usuAut");
 
         if (accion.startsWith("Consultar")) {
-
             String nombre = request.getParameter("nombre");
 
             List lista = ServicioCliente.listarClientes(tipoDocumento, nroDocumento, nombre);
@@ -76,11 +82,12 @@ public class ControlCliente extends HttpServlet {
                 request.setAttribute("lista", lista);
             }
             request.getRequestDispatcher("clientes/consulta-clientes.jsp").forward(request, response);
-        } else if (accion.startsWith("Registrar")) {
-            
+        } else if (accion.startsWith("Registrar")) {            
             String codigo = request.getParameter("codCliente");
             String nombre = request.getParameter("nom");
             String apellido = request.getParameter("ape");
+            String tipoDoc = request.getParameter("tipoDoc");
+            String nroDoc = request.getParameter("nroDoc");
             String fecNac = request.getParameter("fecNac");
             String dir = request.getParameter("dir");
             String tel = request.getParameter("tel");
@@ -91,12 +98,21 @@ public class ControlCliente extends HttpServlet {
             String distrito = request.getParameter("distrito");            
             LocalDateTime hoy = LocalDateTime.now();
             
-            tipoDocumento = (String) request.getSession().getAttribute("tipoDocumento");
-            nroDocumento = (String) request.getSession().getAttribute("nroDocumento");
-            String msg = ServicioCliente.crearCliente(codigo, nombre, apellido, tipoDocumento, nroDocumento, fecNac, dir, tel, cel, email, region, provincia, distrito, usuAut.getCodUsuario(), hoy.toString());
+            String msg = ServicioCliente.crearCliente(codigo, nombre, apellido, tipoDoc, nroDoc, fecNac, dir, tel, cel, email, region, provincia, distrito, usuAut.getCodUsuario(), hoy.toString());
             if (msg != "") {
-                response.sendRedirect("home.jsp");
+                List lista = ServicioCliente.listarClientes(tipoDocumento, nroDocumento, nombre);
+                if (lista != null) {
+                    request.setAttribute("lista", lista);
+                }
+                response.sendRedirect("clientes/consulta-clientes.jsp");
             }
+        } else if (accion.equalsIgnoreCase("Reniec")){
+            ClienteReniec clienteReniec = ServicioCliente.validacionReniec(tipoDocumento, nroDocumento);
+            request.setAttribute("cliente", clienteReniec);
+            request.setAttribute("tipoDoc", tipoDocumento);
+            request.setAttribute("nroDoc", nroDocumento);
+            request.setAttribute("codigo", codigo);
+            request.getRequestDispatcher("clientes/registrar-cliente.jsp").forward(request, response);
         }
     }
 

@@ -6,7 +6,7 @@
 <%@page import="entidad.ClienteReniec"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 <!DOCTYPE html>
 <html lang="es-ES">
@@ -35,22 +35,23 @@
                         <hr>
 
 
-                        <c:set var="c" value="${sessionScope.cliReniec}"/>
+                        <c:set var="c" value="${requestScope.cliente}"/>
                         <form action="${pageContext.request.contextPath}/ControlCliente" method="post">
+                            <input type="hidden" name="accion" value="Reniec">
                             <!-- Tipo de documento -->
                             <div class="row mb-3">
                                 <div class="col-md-4">
                                     <label for="tipoDoc" class="form-label">Tipo de Documento <span class="text-danger">*</span></label>
                                     <select class="form-select" id="tipoDoc" name="tipoDoc" required>
                                         <option value="">Seleccione...</option>
-                                        <option value="dni">DNI - Persona Natural</option>
-                                        <option value="ruc">RUC - Persona Jurídica</option>
+                                        <option value="dni" <c:if test="${tipoDoc == 'dni'}"> selected </c:if>>DNI - Persona Natural</option>
+                                        <option value="ruc" <c:if test="${tipoDoc == 'ruc'}"> selected </c:if>>RUC - Persona Jurídica</option>
                                     </select>
                                 </div>
 
                                 <div class="col-md-4">
                                     <label for="numDoc" class="form-label">Número de Documento <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="numDoc" name="numDoc" required>
+                                    <input type="text" class="form-control" id="numDoc" name="numDoc" value="${nroDoc}" required>
                                 </div>
                                 <div class="col-md-4 d-flex align-items-end">                                  
                                     <input type="submit" class="btn btn-secondary w-100" name="accion" value="Consultar RENIEC">
@@ -58,6 +59,8 @@
                             </div>
                         </form>
                         <form action="${pageContext.request.contextPath}/ControlCliente" method="post">    
+                            <input type="hidden" name="tipoDoc" value="${tipoDoc}">
+                            <input type="hidden" name="nroDoc" value="${nroDoc}">
                             <!-- Nombres y apellidos / razón social -->
                             <div class="row mb-3">
                                 <div class="col-md-6">
@@ -74,7 +77,7 @@
                             <div class="row mb-3">
                                 <div class="col-md-4">
                                     <label for="fecNac" class="form-label">Fecha de Nacimiento</label>
-                                    <input type="date" class="form-control" id="fecNac" name="fecNac">
+                                    <input type="date" class="form-control" id="fecNac" name="fecNac" required>
                                 </div>
                             </div>
                             <hr>
@@ -140,8 +143,7 @@
                             <div class="row mb-3">
                                 <div class="col-md-6">
                                     <label for="codCliente" class="form-label">Código del Cliente</label>
-                                    <input type="text" class="form-control" id="codCliente" name="codCliente" value="${sessionScope.codigo}" readonly>
-                                    <c:remove var="codigo" scope="session"/>
+                                    <input type="text" class="form-control" id="codCliente" name="codCliente" value="${codigo}" readonly>
                                 </div>
                                 <div class="col-md-6">
                                     <label for="fecReg" class="form-label">Fecha de Registro</label>

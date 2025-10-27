@@ -14,7 +14,7 @@ public class DaoCliente {
     }
 
     public static List listar(String condicion) {
-        String sql = "SELECT codCliente, tipoDoc, numDoc, nom, ape, tel, email, c.codEstado, e.des FROM t_cliente as c " +
+        String sql = "SELECT codCliente, tipoDoc, numDoc, nom, ape, cel, email, c.codEstado, e.des FROM t_cliente as c " +
                     "inner join t_estado as e on c.codEstado = e.codEstado " +condicion+";";
         return Acceso.listar(sql);
     }

@@ -76,10 +76,10 @@ public class ServicioCliente {
         
         String codUbigeo = ServicioUtilitarios.obtenerUbigeo(region, provincia, distrito);
         
-        Cliente cliente = new Cliente(codigo, nombre, apellido, tipoDoc, numDocumento, fechaNac, direccion, codUbigeo, telefono, celular, email, fechaReg, "S0001", "U0001", fechaReg);
+        Cliente cliente = new Cliente(codigo, nombre, apellido, tipoDoc, numDocumento, fechaNac, direccion, codUbigeo, telefono, celular, email, fechaReg, "S0001", codUsuCre, fechaReg);
         String msg = DaoCliente.crear(cliente);
-        if(msg==null){
-            msg="Cliente registrado!";
+        if(msg == null){
+            msg = "Cliente registrado!";
         }
         return msg;
     }
@@ -111,12 +111,4 @@ public class ServicioCliente {
         String codigo = Utiles.newCod(ultCod[0].toString());
         return codigo;
     }
-    
-    /*
-    
-       
-        if(msg==null){
-            msg="Articulo Grabado";
-        }
-    */
 }

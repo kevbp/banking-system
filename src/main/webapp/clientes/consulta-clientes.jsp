@@ -77,7 +77,7 @@
                                         <th>Número Doc</th>
                                         <th>Nombre / Razón Social</th>
                                         <th>Apellidos</th>
-                                        <th>Teléfono</th>
+                                        <th>Celular</th>
                                         <th>Correo</th>
                                         <th>Estado</th>
                                         <th>Acciones</th>
