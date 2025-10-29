@@ -42,6 +42,12 @@ public class ControlLogin extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
+        String rol = request.getParameter("rol");
+        if ("empleado".equals(rol)) {
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+        } else if ("cliente".equals(rol)) {
+            request.getRequestDispatcher("clientes/login-clientes.jsp").forward(request, response);
+        } 
     }
 
     @Override

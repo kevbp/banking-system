@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
     };
     
     // CAMBIO 3: Manejar el envío del formulario para redireccionar
-    rolForm.addEventListener('submit', function(event) {
+    /*rolForm.addEventListener('submit', function(event) {
         event.preventDefault(); // Detener el envío normal del formulario
 
         const rolSeleccionado = document.querySelector('.rol.seleccionado');
@@ -32,5 +32,5 @@ document.addEventListener('DOMContentLoaded', function() {
                 window.location.href = urlDestino;
             }
         }
-    });
+    });*/
 });

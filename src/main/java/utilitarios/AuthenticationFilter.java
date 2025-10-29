@@ -35,6 +35,8 @@ public class AuthenticationFilter implements Filter{
 
         // Rutas que no requieren login
         String loginURI = req.getContextPath() + "/login.jsp";
+        String loginClienteURI = req.getContextPath() + "/clientes/login-clientes.jsp";
+        String selectRoleURI = req.getContextPath() + "/selec-rol.jsp";
 
         // Obtener la sesión existente. 'false' NO crea una sesión si no existe/expiró.
         HttpSession session = req.getSession(false);
@@ -42,7 +44,7 @@ public class AuthenticationFilter implements Filter{
         // Asume que guardaste el nombre de usuario (o un objeto User) al hacer login
         boolean isLoggedIn = (session != null && session.getAttribute("usuAut") != null);
         System.out.println("ruta:"+req.getRequestURI());
-        boolean isLoginRequest = req.getRequestURI().equals(loginURI);
+        boolean isLoginRequest = req.getRequestURI().equals(loginURI)||req.getRequestURI().equals(loginClienteURI)||req.getRequestURI().endsWith(selectRoleURI);
 
         if (isLoggedIn || isLoginRequest) {
             // Si el usuario está logueado O está intentando acceder a la página de login,
@@ -50,6 +52,7 @@ public class AuthenticationFilter implements Filter{
             fc.doFilter(request, response);
         } else {
             // Si no está logueado, redirige a la página de login.
+            String redirectURI = req.getContextPath() + "/selec-rol.jsp";
             res.sendRedirect(loginURI + "?auth=required");
             // Nota: Al no llamar a chain.doFilter(), el recurso original no se ejecuta.
         }
