@@ -19,14 +19,14 @@
                     <div class="text-center mb-4">
                         <img src="img/logoQB.png" alt="Quantum Bank Logo" style="width:120px" class="mb-3"/>
                     </div>
-                    
+
                     <h2>Seleccione su tipo de Ingreso</h2>
-                    
-                    <form id="rolForm" action="" method="post"> 
+
+                    <form id="rolForm" action="" method="post">
                         <input type="hidden" id="rolSeleccionado" name="rol" value="">
 
                         <div class="roles-container">
-                            
+
                             <div class="rol" id="empleado" data-url="login.jsp" onclick="seleccionarRol('empleado')">
                                 <img src="img/admin.png" alt="Empleado"> 
                                 <p>Empleado</p>
