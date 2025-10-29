@@ -11,7 +11,8 @@
 
         <div class="container">
             <div class="left">
-                </div>
+                <img src="img/portada.jpg" alt="Quantum Bank" class="img-fluid h-100 w-100 object-fit-cover">
+            </div>
 
             <div class="right">
                 <div class="role-card">
