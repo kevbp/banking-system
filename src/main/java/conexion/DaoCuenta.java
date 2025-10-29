@@ -21,7 +21,7 @@ public class DaoCuenta {
         Cuenta cuenta = null;
         
         String sql = "SELECT c.*, tc.descTipo AS desTipCuenta, m.descMoneda, e.des AS desEstado, " +
-                     "cl.codCliente, cl.nom, cl.ape, cl.tipoDoc, cl.numDoc, cl.fecNac, cl.dir, cl.codUbigeo, cl.tel, cl.cel, cl.email, cl.fecReg, cl.codEstado AS estadoCliente " +
+                     "cl.codCliente, cl.nomCompleto, cl.ape, cl.tipoDoc, cl.numDoc, cl.fecNac, cl.dir, cl.codUbigeo, cl.tel, cl.cel, cl.email, cl.fecReg, cl.codEstado AS estadoCliente " +
                      "FROM t_cuentas c " +
                      "INNER JOIN t_tipocuenta tc ON c.codTipCuenta = tc.codTipCuenta " +
                      "INNER JOIN t_moneda m ON c.codMoneda = m.codMoneda " +
@@ -58,8 +58,7 @@ public class DaoCuenta {
                 // Mapeo de datos del CLIENTE (SOLUCIONA EL ERROR EN ROJO)
                 Cliente cliente = new Cliente();
                 cliente.setCodigo(rs.getString("codCliente")); // Asume que este setter existe en Cliente.java
-                cliente.setNombre(rs.getString("nom"));       // Asume que este setter existe en Cliente.java
-                cliente.setApellido(rs.getString("ape"));     // Asume que este setter existe en Cliente.java
+                cliente.setNombre(rs.getString("nomCompleto"));       // Asume que este setter existe en Cliente.java
                 cliente.setTipoDoc(rs.getString("tipoDoc"));
                 cliente.setNumDocumento(rs.getString("numDoc"));
                 cliente.setFechaNac(rs.getString("fecNac")); // Usas String en Cliente.java

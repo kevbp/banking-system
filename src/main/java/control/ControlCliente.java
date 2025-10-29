@@ -1,6 +1,5 @@
 package control;
 
-import entidad.ClienteReniec;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -85,7 +84,6 @@ public class ControlCliente extends HttpServlet {
         } else if (accion.startsWith("Registrar")) {            
             String codigo = request.getParameter("codCliente");
             String nombre = request.getParameter("nom");
-            String apellido = request.getParameter("ape");
             String tipoDoc = request.getParameter("tipoDoc");
             String nroDoc = request.getParameter("nroDoc");
             String fecNac = request.getParameter("fecNac");
@@ -98,7 +96,7 @@ public class ControlCliente extends HttpServlet {
             String distrito = request.getParameter("distrito");            
             LocalDateTime hoy = LocalDateTime.now();
             
-            String msg = ServicioCliente.crearCliente(codigo, nombre, apellido, tipoDoc, nroDoc, fecNac, dir, tel, cel, email, region, provincia, distrito, usuAut.getCodUsuario(), hoy.toString());
+            String msg = ServicioCliente.crearCliente(codigo, nombre, tipoDoc, nroDoc, fecNac, dir, tel, cel, email, region, provincia, distrito, usuAut.getCodUsuario(), hoy.toString());
             if (msg != "") {
                 List lista = ServicioCliente.listarClientes(tipoDocumento, nroDocumento, nombre);
                 if (lista != null) {
@@ -107,10 +105,9 @@ public class ControlCliente extends HttpServlet {
                 response.sendRedirect("clientes/consulta-clientes.jsp");
             }
         } else if (accion.equalsIgnoreCase("Reniec")){
-            ClienteReniec clienteReniec = ServicioCliente.validacionReniec(tipoDocumento, nroDocumento);
+            Object[] clienteReniec = ServicioCliente.validacionReniec(tipoDocumento, nroDocumento);
             request.setAttribute("cliente", clienteReniec);
             request.setAttribute("tipoDoc", tipoDocumento);
-            request.setAttribute("nroDoc", nroDocumento);
             request.setAttribute("codigo", codigo);
             request.getRequestDispatcher("clientes/registrar-cliente.jsp").forward(request, response);
         }

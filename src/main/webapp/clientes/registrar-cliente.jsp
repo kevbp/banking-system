@@ -51,7 +51,7 @@
 
                                 <div class="col-md-4">
                                     <label for="numDoc" class="form-label">Número de Documento <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="numDoc" name="numDoc" value="${nroDoc}" required>
+                                    <input type="text" class="form-control" id="numDoc" name="numDoc" value="${c[0]}" required>
                                 </div>
                                 <div class="col-md-4 d-flex align-items-end">                                  
                                     <input type="submit" class="btn btn-secondary w-100" name="accion" value="Consultar RENIEC">
@@ -60,16 +60,12 @@
                         </form>
                         <form action="${pageContext.request.contextPath}/ControlCliente" method="post">    
                             <input type="hidden" name="tipoDoc" value="${tipoDoc}">
-                            <input type="hidden" name="nroDoc" value="${nroDoc}">
+                            <input type="hidden" name="nroDoc" value="${c[0]}">
                             <!-- Nombres y apellidos / razón social -->
                             <div class="row mb-3">
-                                <div class="col-md-6">
-                                    <label for="nom" class="form-label">Nombres <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="nom" name="nom" value="${c.nombres}" readonly>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="ape" class="form-label">Apellidos</label>
-                                    <input type="text" class="form-control" id="ape" name="ape" value="${c.apellidos}" readonly>
+                                <div class="col-md-12">
+                                    <label for="nom" class="form-label">Nombre/Razon Social <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="nom" name="nom" value="${c[1]}" readonly>
                                 </div>
                             </div>
 
@@ -87,7 +83,7 @@
                             <div class="row mb-3">
                                 <div class="col-md-8">
                                     <label for="dir" class="form-label">Dirección <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="dir" name="dir" required>
+                                    <input type="text" class="form-control" id="dir" name="dir" value="${c[2]}" required>
                                 </div>
                                 <div class="col-md-4">
                                     <label for="email" class="form-label">Correo Electrónico</label>
