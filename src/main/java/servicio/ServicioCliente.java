@@ -1,6 +1,5 @@
 package servicio;
 
-import entidad.ClienteReniec;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import conexion.DaoCliente;
 import entidad.Cliente;
@@ -9,18 +8,19 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.security.SecureRandom;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import utilitarios.Utiles;
 
 public class ServicioCliente {
-    public static ClienteReniec validacionReniec(String tipo, String documento){
+    public static Object[] validacionReniec(String tipo, String documento){
         // La URL del endpoint de la API que quieres consumir
         String API_URL_BASE = "https://dniruc.apisperu.com/api/v1/"+tipo+"/";
         String TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImNhcmxvc2VkdWFyZG8xMjkzQGdtYWlsLmNvbSJ9.9u9vycOXxx0pKH2ONaFg3l_7I7dpEGC8CZg94vBPh0w"; 
-        ClienteReniec usuario = null;
-        
+        Object[] clie = null;
         // 1. Construir la URL con parámetros de consulta (Query Params)
         String finalUrl = API_URL_BASE + documento + "?token=" + TOKEN;
         
@@ -52,7 +52,25 @@ public class ServicioCliente {
                 // Deserialización del JSON (Asumiendo que devuelve un Array JSON como antes)
                 ObjectMapper objectMapper = new ObjectMapper();  
                 
-                usuario = objectMapper.readValue(jsonResponse, ClienteReniec.class);  
+                Map<String, Object> resultado = objectMapper.readValue(jsonResponse, Map.class);
+                
+                List<Object> valoresDeseados = new ArrayList<>();
+
+                if (resultado.containsKey("dni")) {
+                    // Es el formato DNI. Queremos devolver DNI, Nombres y Apellidos
+                    valoresDeseados.add(resultado.get("dni"));
+                    valoresDeseados.add(resultado.get("nombres") + " " + resultado.get("apellidoPaterno") + " " + resultado.get("apellidoMaterno"));
+
+                } else if (resultado.containsKey("ruc")) {
+                    // Es el formato RUC. Queremos devolver RUC, Razón Social y Dirección
+                    valoresDeseados.add(resultado.get("ruc"));
+                    valoresDeseados.add(resultado.get("razonSocial"));
+                    valoresDeseados.add(resultado.get("direccion"));
+                    valoresDeseados.add(resultado.get("ubigeo"));
+                }
+
+                // Convertir la lista al tipo final requerido: Object[]
+                clie = valoresDeseados.toArray();
 
             } else {
                 System.err.println("\nError al consumir la API. Código de estado: " + response.statusCode());
@@ -63,20 +81,20 @@ public class ServicioCliente {
             System.err.println("Ocurrió un error al realizar la petición o al procesar el JSON.");
             e.printStackTrace();
         }
-        return usuario;
+        return clie;
     }
     
     public static String crearCliente(String codigo, String nombre, 
-                                        String apellido, String tipoDoc, 
-                                        String numDocumento, String fechaNac, 
-                                        String direccion, String telefono, 
-                                        String celular, String email, 
-                                        String region, String provincia, 
-                                        String distrito, String codUsuCre, String fechaReg){
+                                        String tipoDoc, String numDocumento, 
+                                        String fechaNac, String direccion, 
+                                        String telefono, String celular, 
+                                        String email, String region, 
+                                        String provincia,String distrito, 
+                                        String codUsuCre, String fechaReg){
         
         String codUbigeo = ServicioUtilitarios.obtenerUbigeo(region, provincia, distrito);
         
-        Cliente cliente = new Cliente(codigo, nombre, apellido, tipoDoc, numDocumento, fechaNac, direccion, codUbigeo, telefono, celular, email, fechaReg, "S0001", codUsuCre, fechaReg);
+        Cliente cliente = new Cliente(codigo, nombre, tipoDoc, numDocumento, fechaNac, direccion, codUbigeo, telefono, celular, email, fechaReg, "S0001", codUsuCre, fechaReg);
         String msg = DaoCliente.crear(cliente);
         if(msg == null){
             msg = "Cliente registrado!";

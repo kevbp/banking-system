@@ -4,7 +4,6 @@ package entidad;
 public class Cliente{
     private String codigo;
     private String nombre;
-    private String apellido;
     private String tipoDoc;
     private String numDocumento;
     private String fechaNac;
@@ -21,10 +20,9 @@ public class Cliente{
     public Cliente() {
     }
 
-    public Cliente(String codigo, String nombre, String apellido, String tipoDoc, String numDocumento, String fechaNac, String direccion, String codUbigeo, String telefono, String celular, String email, String fechaReg, String estado, String codUsuarioCre, String fechaUsuarioCre) {
+    public Cliente(String codigo, String nombre, String tipoDoc, String numDocumento, String fechaNac, String direccion, String codUbigeo, String telefono, String celular, String email, String fechaReg, String estado, String codUsuarioCre, String fechaUsuarioCre) {
         this.codigo = codigo;
         this.nombre = nombre;
-        this.apellido = apellido;
         this.tipoDoc = tipoDoc;
         this.numDocumento = numDocumento;
         this.fechaNac = fechaNac;
@@ -58,10 +56,6 @@ public class Cliente{
 
     public String getNombre() {
         return nombre;
-    }
-
-    public String getApellido() {
-        return apellido;
     }
 
     public String getTipoDoc() {
@@ -118,10 +112,6 @@ public class Cliente{
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
-    }
-
-    public void setApellido(String apellido) {
-        this.apellido = apellido;
     }
 
     public void setTipoDoc(String tipoDoc) {
