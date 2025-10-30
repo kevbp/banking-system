@@ -15,21 +15,6 @@ public class ControlLogin extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-        /*String usuario = request.getParameter("inpUsu");
-        String pass = request.getParameter("inpPwd");
-        System.out.println(usuario + " " + pass);
-        LoginRespuesta resultado = ServicioLogin.loginUsuario(usuario, pass);
-
-        if (resultado.getUsuario() != null) {
-            HttpSession session = request.getSession();
-            session.setMaxInactiveInterval(60);
-            session.setAttribute("usuAut", resultado.getUsuario());
-            response.sendRedirect("home.jsp");
-        } else {
-            request.setAttribute("mensaje", resultado.getMensaje());
-            request.getRequestDispatcher("login.jsp").forward(request, response);
-        }*/
     }
 
     @Override
@@ -47,7 +32,22 @@ public class ControlLogin extends HttpServlet {
             request.getRequestDispatcher("login.jsp").forward(request, response);
         } else if ("cliente".equals(rol)) {
             request.getRequestDispatcher("clientes/login-clientes.jsp").forward(request, response);
-        } 
+        } else if (rol == null) {
+            String usuario = request.getParameter("inpUsu");
+            String pass = request.getParameter("inpPwd");
+            System.out.println(usuario + " " + pass);
+            LoginRespuesta resultado = ServicioLogin.loginUsuario(usuario, pass);
+
+            if (resultado.getUsuario() != null) {
+                HttpSession session = request.getSession();
+                session.setMaxInactiveInterval(60);
+                session.setAttribute("usuAut", resultado.getUsuario());
+                response.sendRedirect("home.jsp");
+            } else {
+                request.setAttribute("mensaje", resultado.getMensaje());
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+            }
+        }
     }
 
     @Override
