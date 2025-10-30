@@ -80,7 +80,7 @@
 
                                 <div class="col-md-4">
                                     <label for="saldoApertura" class="form-label">Saldo de Apertura</label>
-                                    <input type="number" step="0.01" class="form-control" id="saldoApertura" name="saldoApertura" placeholder="0.00">
+                                    <input type="number" step="0.01" class="form-control" id="saldoApertura" name="saldoApertura" placeholder="0.00" min="500">
                                 </div>
                             </div>
 
