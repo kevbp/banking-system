@@ -16,21 +16,4 @@ document.addEventListener('DOMContentLoaded', function() {
         // CAMBIO 2: Habilitar el botón Continuar
         btnContinuar.disabled = false;
     };
-    
-    // CAMBIO 3: Manejar el envío del formulario para redireccionar
-    /*rolForm.addEventListener('submit', function(event) {
-        event.preventDefault(); // Detener el envío normal del formulario
-
-        const rolSeleccionado = document.querySelector('.rol.seleccionado');
-        
-        if (rolSeleccionado) {
-            // Obtener la URL del atributo data-url del div seleccionado
-            const urlDestino = rolSeleccionado.getAttribute('data-url');
-            
-            // Redirigir usando la URL deseada
-            if (urlDestino) {
-                window.location.href = urlDestino;
-            }
-        }
-    });*/
 });
