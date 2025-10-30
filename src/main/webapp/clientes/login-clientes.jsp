@@ -35,7 +35,7 @@
                             <p>Inicia sesión como Cliente.</p>
                         </div>
 
-                        <form action="${pageContext.request.contextPath}/ControlLoginCliente" method="POST">
+                        <form action="${pageContext.request.contextPath}/ControlLogin" method="POST">
                             <div class="form-floating mb-3">
                                 <input type="text" class="form-control" name="inpUsu" id="inpUsu" placeholder="Ingresa tu usuario" required>
                                 <label for="inpUsu">Usuario</label>

@@ -122,23 +122,23 @@
                             <tbody>
                                 <!-- Ejemplo de datos -->                                
                                 <c:forEach var="usu" items="${usuarios}">                                    
-                                <tr>
-                                    <td>${usu.nom}</td>
-                                    <td>${usu.ape}</td>
-                                    <td>${usu.username}</td>
-                                    <td>${usu.car}</td>
-                                    <td>${usu.roll.des}</td>
-                                    <td>${usu.estado.des}</td>
-                                    <td class="text-center">
-                                        <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#modalEditarUsuario1" 
-                                                data-nombre="${usu.nom}" data-rol="${usu.roll.codRol}" data-estado="${usu.estado.codEstado}"
-                                                data-id="${usu.codUsuario}" data-apellido="${usu.ape}" data-cargo="${usu.car}">Editar</button>
-                                        <form method="post" action="${pageContext.request.contextPath}/ControlUsuario" style="display: inline;">
-                                            <input type="hidden" name="id" value="${usu.codUsuario}">
-                                            <input type="submit" name="acc" value="Eliminar" class="btn btn-sm btn-danger">
-                                        </form>
-                                    </td>
-                                </tr>
+                                    <tr>
+                                        <td>${usu.nom}</td>
+                                        <td>${usu.ape}</td>
+                                        <td>${usu.username}</td>
+                                        <td>${usu.car}</td>
+                                        <td>${usu.roll.des}</td>
+                                        <td>${usu.estado.des}</td>
+                                        <td class="text-center">
+                                            <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#modalEditarUsuario1" 
+                                                    data-nombre="${usu.nom}" data-rol="${usu.roll.codRol}" data-estado="${usu.estado.codEstado}"
+                                                    data-id="${usu.codUsuario}" data-apellido="${usu.ape}" data-cargo="${usu.car}">Editar</button>
+                                            <form method="post" action="${pageContext.request.contextPath}/ControlUsuario" style="display: inline;">
+                                                <input type="hidden" name="id" value="${usu.codUsuario}">
+                                                <input type="submit" name="acc" value="Eliminar" class="btn btn-sm btn-danger">
+                                            </form>
+                                        </td>
+                                    </tr>
                                 </c:forEach>
                             </tbody>
                         </table>
@@ -168,7 +168,7 @@
                                     <input type="text" class="form-control" id="nombreEditar" name="nombreEditar" value="Juan Pérez">
                                 </div>
 
-                                
+
                                 <div class="col-md-5">
                                     <label for="cargoEditar" class="form-label">Cargo</label>
                                     <input type="text" class="form-control" id="cargoEditar" name="cargoEditar">
@@ -191,7 +191,7 @@
                                         </c:forEach>
                                     </select>
                                 </div>                                
-                                
+
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -207,20 +207,20 @@
     <script src="${pageContext.request.contextPath}/js/sidebars.js"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             // Verifica si el elemento del alert existe en la página
             if ($('#myAlert').length) {
-                
+
                 // 1. Establece el tiempo en milisegundos (ej: 5000 ms = 5 segundos)
-                var tiempoVisible = 5000; 
-                
+                var tiempoVisible = 5000;
+
                 // 2. Ocultar el alert después del tiempo especificado
-                setTimeout(function() {
+                setTimeout(function () {
                     // Cierra el alert con el método 'alert('close')' de Bootstrap
                     $('#myAlert').alert('close');
                 }, tiempoVisible);
             }
-            
+
             $('#modalEditarUsuario1').on('show.bs.modal', function (event) {
                 // 2. Elemento Disparador: 'button' que fue clickeado para abrir el modal
                 var button = $(event.relatedTarget);
@@ -232,7 +232,7 @@
                 var rol = button.data('rol');
                 var estado = button.data('estado');
                 var cargo = button.data('cargo');
-                
+
                 // 4. Inyección: Selecciona los campos de entrada del modal por su ID
                 // y les asigna los valores extraídos
                 var modal = $(this);
@@ -240,7 +240,7 @@
                 modal.find('#idUsuario').val(codUsuario);
                 modal.find('#nombreEditar').val(nombre);
                 modal.find('#apEditar').val(apellido);
-                modal.find('#cargoEditar').val(cargo);                
+                modal.find('#cargoEditar').val(cargo);
                 modal.find('#rolEditar').val(rol);
                 modal.find('#estadoEditar').val(estado);
             });
