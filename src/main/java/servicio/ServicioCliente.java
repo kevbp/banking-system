@@ -112,7 +112,7 @@ public class ServicioCliente {
         if (!tipoDoc.isEmpty() && !nomb.isEmpty()) {
             condicion = condicion + " and nom like '%"+nomb+"%'";
         }else if(tipoDoc.isEmpty() && !nomb.isEmpty()){
-            condicion = condicion + "nom like '%"+nomb+"%'";
+            condicion = condicion + "nomCompleto like '%"+nomb+"%'";
         }
         
         if (tipoDoc.isEmpty() && nomb.isEmpty()){

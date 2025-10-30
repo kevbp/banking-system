@@ -76,7 +76,6 @@
                                         <th>Tipo Doc</th>
                                         <th>Número Doc</th>
                                         <th>Nombre / Razón Social</th>
-                                        <th>Apellidos</th>
                                         <th>Celular</th>
                                         <th>Correo</th>
                                         <th>Estado</th>
@@ -93,7 +92,6 @@
                                         <td>${item[3]}</td>
                                         <td>${item[4]}</td>
                                         <td>${item[5]}</td>
-                                        <td>${item[6]}</td>
                                         <td>${item[7]}</td>
                                         <td class="text-center">
                                             <a href="verCliente.jsp?cod=CLI001" class="btn btn-sm btn-info">Ver</a>

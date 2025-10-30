@@ -3,7 +3,6 @@
     Created on : Oct 12, 2025, 11:34:24 AM
     Author     : kevin
 --%>
-<%@page import="entidad.ClienteReniec"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
