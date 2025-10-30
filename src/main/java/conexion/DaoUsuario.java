@@ -7,17 +7,7 @@ import java.util.List;
 public class DaoUsuario {
 
     public static String crear(Usuario usu) {
-        String sql = "INSERT INTO t_usuario (`codUsuario`, "
-                + "`usn`, "
-                + "`psw`, "
-                + "`nom`, "
-                + "`ape`, "
-                + "`carg`, "
-                + "`idRol`, "
-                + "`codEstado`, "
-                + "`intentos`, "
-                + "`codUsuCre`, "
-                + "`fecUsuCre`) "
+        String sql = "INSERT INTO t_usuario (codUsuario, usn, psw, nom, ape, carg, idRol, codEstado, intentos, codUsuCre, fecUsuCre, codUsuMod, fecUsuMod) "
                 + "VALUES ('" + usu.getCodUsuario() + "', "
                 + "'" + usu.getUsername() + "', "
                 + "'" + usu.getPass() + "', "
@@ -27,6 +17,8 @@ public class DaoUsuario {
                 + "'" + usu.getRol() + "', "
                 + "'" + usu.getEst() + "', "
                 + "'" + usu.getIntentos() + "', "
+                + "'" + usu.getCodUsuCre() + "', "
+                + "'" + usu.getFecUsuCre() + "', "
                 + "'" + usu.getCodUsuCre() + "', "
                 + "'" + usu.getFecUsuCre() + "');";
         return Acceso.ejecutar(sql);

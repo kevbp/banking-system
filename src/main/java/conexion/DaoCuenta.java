@@ -119,4 +119,9 @@ public class DaoCuenta {
     public static boolean actualizarSaldo(String numCuentaOrigen, BigDecimal negate, Connection cn) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
+    
+    public static Object[] verificarExistencia(String cuenta){
+        String sql = "SELECT numCuenta FROM t_cuentas where numCuenta = '"+cuenta+"';";
+        return Acceso.buscar(sql);
+    }
 }

@@ -1,5 +1,6 @@
 package servicio;
 
+import utilitarios.InsecureTrustManager;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import conexion.DaoCliente;
 import entidad.Cliente;
