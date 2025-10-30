@@ -16,7 +16,7 @@ public class ControlLogin extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String usuario = request.getParameter("inpUsu");
+        /*String usuario = request.getParameter("inpUsu");
         String pass = request.getParameter("inpPwd");
         System.out.println(usuario + " " + pass);
         LoginRespuesta resultado = ServicioLogin.loginUsuario(usuario, pass);
@@ -29,7 +29,7 @@ public class ControlLogin extends HttpServlet {
         } else {
             request.setAttribute("mensaje", resultado.getMensaje());
             request.getRequestDispatcher("login.jsp").forward(request, response);
-        }
+        }*/
     }
 
     @Override
@@ -41,7 +41,7 @@ public class ControlLogin extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+       
         String rol = request.getParameter("rol");
         if ("empleado".equals(rol)) {
             request.getRequestDispatcher("login.jsp").forward(request, response);

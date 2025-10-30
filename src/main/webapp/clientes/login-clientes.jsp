@@ -12,8 +12,8 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="../css/bootstrap.min.css">
-        <link rel="stylesheet" href="../css/styles.css"/>
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css"/>
         <title>Banca web - Login Cliente</title>
     </head>
     <body>
@@ -21,14 +21,14 @@
             <div class="row h-100 g-0">
                 <!-- Zona Izquierda (Imagen) -->
                 <div class="col-md-6 d-none d-md-block">
-                    <img src="../img/portada_cliente.jpg" alt="Quantum Bank Clientes" class="img-fluid h-100 w-100 object-fit-cover">
+                    <img src="${pageContext.request.contextPath}/img/portada_cliente.jpg" alt="Quantum Bank Clientes" class="img-fluid h-100 w-100 object-fit-cover">
                 </div>
 
                 <!-- Zona Derecha (Formulario) -->
                 <div class="col-md-6 right-section d-flex align-items-center justify-content-center">
                     <div class="login-card">
                         <div class="d-flex justify-content-center align-items-center mb-3">
-                            <img src="../img/logoQB.png" alt="Quantum Bank Logo" style="width:150px"/>
+                            <img src="${pageContext.request.contextPath}/img/logoQB.png" alt="Quantum Bank Logo" style="width:150px"/>
                         </div>
 
                         <div class="text-center mb-3">
@@ -69,6 +69,6 @@
                 </div>
             </div>
         </div>
-        <script src="../js/bootstrap.bundle.min.js"></script>
+        <script src="${pageContext.request.contextPath}/js/bootstrap.bundle.min.js"></script>
     </body>
 </html>
