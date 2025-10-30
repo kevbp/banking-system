@@ -156,22 +156,18 @@
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header bg-dark text-light">
-                        <h5 class="modal-title" id="modalEditarUsuario1Label">Editar Usuario: Juan Pérez</h5>
+                        <h5 class="modal-title" id="modalEditarUsuario1Label"></h5>
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <form action="${pageContext.request.contextPath}/ControlUsuario" method="post">
                         <input type="hidden" id="idUsuario" name="idUsuario" value="1">
                         <div class="modal-body">
                             <div class="row g-3">
-                                <div class="col-md-6">
+                                <div class="col-md-12">
                                     <label for="nombreEditar" class="form-label">Nombres</label>
                                     <input type="text" class="form-control" id="nombreEditar" name="nombreEditar" value="Juan Pérez">
                                 </div>
-                                
-                                <div class="col-md-6">
-                                    <label for="apEditar" class="form-label">Apellidos</label>
-                                    <input type="text" class="form-control" id="apEditar" name="apEditar">
-                                </div>
+
                                 
                                 <div class="col-md-5">
                                     <label for="cargoEditar" class="form-label">Cargo</label>
