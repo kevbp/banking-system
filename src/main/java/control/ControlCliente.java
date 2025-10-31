@@ -110,6 +110,12 @@ public class ControlCliente extends HttpServlet {
             request.setAttribute("tipoDoc", tipoDocumento);
             request.setAttribute("codigo", codigo);
             request.getRequestDispatcher("clientes/registrar-cliente.jsp").forward(request, response);
+        } else if(accion.equalsIgnoreCase("Actualizar")){
+            
+        }else if(accion.equalsIgnoreCase("Desactivar")){
+            String c = request.getParameter("idClienteDesactivar");
+            String msg = ServicioCliente.inactivarCliente(c);
+            request.getRequestDispatcher("clientes/consulta-clientes.jsp").forward(request, response);
         }
     }
 

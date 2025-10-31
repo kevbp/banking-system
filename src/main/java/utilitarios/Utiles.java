@@ -3,7 +3,7 @@ package utilitarios;
 import java.util.Random;
 
 public class Utiles {
-
+   
     public static String newCod(String pCodigo) {
         System.out.println("Código ingresante: " + pCodigo);
         char letraInicial = pCodigo.charAt(0);

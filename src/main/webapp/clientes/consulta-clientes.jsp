@@ -159,13 +159,13 @@
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">Nombre / Razón Social</label>
-                                    <input type="text" class="form-control" id="nombreEditar" name="nombreEditar">
+                                    <input type="text" class="form-control" id="nombreEditar" name="nombreEditar" readonly>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-2">
                                     <label class="form-label">Celular</label>
                                     <input type="text" class="form-control" id="celularEditar" name="celularEditar">
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-4">
                                     <label class="form-label">Correo</label>
                                     <input type="email" class="form-control" id="correoEditar" name="correoEditar">
                                 </div>

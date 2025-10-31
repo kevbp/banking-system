@@ -7,9 +7,10 @@ import java.util.List;
 public class DaoCliente {
     
    public static String crear(Cliente cli){
-        String newline = System.lineSeparator();
-        String sql = "INSERT t_cliente (codCliente, nomCompleto, tipoDoc, numDoc, fecNac, dir, codUbigeo, tel, cel, email, fecReg, codEstado, codUsuCre, fecUsuCre) VALUES('"+cli.getCodigo()+"','"+cli.getNombre()+"','"+cli.getTipoDoc()+"','"+cli.getNumDocumento()+"','"+cli.getFechaNac()+"','"+cli.getDireccion()+"','"+cli.getCodUbigeo()+"','"+cli.getTelefono()+"','"+cli.getCelular()+"','"+cli.getEmail()+"','"+cli.getFechaReg()+"','"+cli.getEstado()+"','"+cli.getCodUsuarioCre()+"','"+cli.getFechaUsuarioCre()+"');";
-        System.out.println(sql);
+        String sql = "INSERT t_cliente (codCliente, nomCompleto, tipoDoc, numDoc, fecNac, dir, codUbigeo, tel, cel, email, fecReg, codEstado, codUsuCre, fecUsuCre) "+
+                        "VALUES('"+cli.getCodigo()+"','"+cli.getNombre()+"','"+cli.getTipoDoc()+"','"+cli.getNumDocumento()+"','"+cli.getFechaNac()+"','"+
+                        cli.getDireccion()+"','"+cli.getCodUbigeo()+"','"+cli.getTelefono()+"','"+cli.getCelular()+"','"+cli.getEmail()+"','"+cli.getFechaReg()+"','"+
+                        cli.getEstado()+"','"+cli.getCodUsuarioCre()+"','"+cli.getFechaUsuarioCre()+"');";
         return Acceso.ejecutar(sql);
     }
 
@@ -44,5 +45,10 @@ public class DaoCliente {
         String sql = "SELECT codCliente, tipoDoc, numDoc, nomCompleto, cel, email, c.codEstado, e.des FROM t_cliente as c " +
                     "inner join t_estado as e on c.codEstado = e.codEstado where codCliente = '"+codigo+"';";
         return Acceso.buscar(sql);
-    } 
+    }    
+    
+    public static String inactivar(String codigo){
+        String sql = "UPDATE t_cliente SET codEstado = 'S0002' WHERE codCliente = '"+codigo+"';";
+        return Acceso.ejecutar(sql);
+    }
 }

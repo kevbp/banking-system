@@ -151,4 +151,12 @@ public class ServicioCliente {
     public static Object[] buscarCliente(String codigo){
         return DaoCliente.buscar(codigo);
     }    
+    
+    public static String inactivarCliente(String codigo){
+        String msg = DaoCliente.inactivar(codigo);
+        if(msg == null){
+            msg = "El cliente fue inactivado!";
+        }
+        return msg;
+    }
 }
