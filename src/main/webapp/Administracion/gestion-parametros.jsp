@@ -24,7 +24,7 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
     </head>
 
-    <body class="is-parametros">
+    <body data-active-page="admin-parametros">
         <%@ include file="../util/theme.jsp" %>
 
         <div class="d-flex">
@@ -35,15 +35,18 @@
 
                 <div class="content-area p-4">
                     <div class="card shadow-sm border-0">
-                        <div class="card-header bg-white border-0 pb-0">
-                            <h4 class="mb-1">Parámetros del Sistema</h4>
+
+                        <div class="card-header bg-dark text-light text-center">
+                            <h4 class="mb-0">Parámetros del Sistema</h4>
+                        </div>
+
+                        <div class="card-body p-4">
                             <p class="text-muted mb-0">
                                 Administre las configuraciones maestras del banco: monedas, tipos de cuenta y tipos de movimiento.
                                 Solo el personal autorizado debe realizar cambios en esta sección.
                             </p>
-                        </div>
+                            <hr>
 
-                        <div class="card-body">
                             <ul class="nav nav-tabs mb-3" id="paramTabs" role="tablist">
                                 <li class="nav-item" role="presentation">
                                     <button class="nav-link active" id="tab-monedas" data-bs-toggle="tab" 
@@ -69,9 +72,9 @@
                             </ul>
 
                             <div class="tab-content" id="paramTabsContent">
+
                                 <div class="tab-pane fade show active" id="pane-monedas" role="tabpanel" aria-labelledby="tab-monedas">
                                     <h5 class="mb-3">Monedas y Tipo de Cambio</h5>
-
                                     <div class="d-flex justify-content-between align-items-center mb-2">
                                         <h6 class="mb-0">Catálogo de Monedas</h6>
                                         <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modalNuevaMoneda">
