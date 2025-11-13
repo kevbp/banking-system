@@ -1,108 +1,127 @@
-/* ============ Base & Layout ============ */
 body {
-  font-family: 'Poppins', sans-serif;
-  background-color: #f5f7fa;
-  height: 100vh;
-  overflow-x: hidden;
+    font-family: 'Poppins', sans-serif;
+    background-color: #f5f7fa;
+    height: 100vh;
+    overflow-x: hidden;
 }
 
 /* Contenedor principal del home */
 .main-content {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 .content-area {
-  background-color: #f5f7fa;
-  min-height: calc(100vh - 60px); /* 60px = alto del header */
+    background-color: #f5f7fa;
+    min-height: calc(100vh - 60px); /* 60px = alto del header */
 }
 
 /* ============ Login ============ */
-/* Panel derecho con degradado */
+/* ... (Tu código de login sigue aquí) ... */
 .bg-gradient {
-  background: linear-gradient(135deg, #001f3f 0%, #003a78 100%);
+    background: linear-gradient(135deg, #001f3f 0%, #003a78 100%);
 }
-
-/* Card del formulario */
 .login-card {
-  background-color: #fff;
-  border-radius: 15px;
-  padding: 40px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-  width: 100%;
-  max-width: 380px;
+    background-color: #fff;
+    border-radius: 15px;
+    padding: 40px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    width: 100%;
+    max-width: 380px;
 }
-
-/* Botón de acceso */
 .btn-login {
-  background-color: #003a78;
-  border: none;
-  color: #fff;
-  font-weight: 500;
-  padding: 12px;
-  border-radius: 8px;
-  transition: all 0.3s ease;
+    background-color: #003a78;
+    border: none;
+    color: #fff;
+    font-weight: 500;
+    padding: 12px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
 }
 .btn-login:hover {
-  background-color: #0057b8;
-  transform: translateY(-2px);
+    background-color: #0057b8;
+    transform: translateY(-2px);
 }
-
-/* Animación suave */
-.animate-fade { animation: fadeIn 1.2s ease; }
+.animate-fade {
+    animation: fadeIn 1.2s ease;
+}
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to   {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
-
-/* Imagen lateral del login */
 .img-side img {
-  object-fit: cover;
-  height: 100vh;
+    object-fit: cover;
+    height: 100vh;
 }
 
 /* ============ Home / Dashboard ============ */
-/* Tarjetas “mini dashboard” (específicas) */
+/* Tus estilos de tarjeta. Son limpios y profesionales. */
 .card-dash {
-  background: #fff;
-  border-radius: 14px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  padding: 20px;
-  transition: all 0.3s ease;
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 20px;
+    transition: all 0.3s ease;
 }
 .card-dash:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.1);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.1);
 }
-.card-dash .icon { font-size: 2rem; color: #003a78; }
+.card-dash .icon {
+    font-size: 2rem;
+    color: #003a78;
+}
 .card-dash h6 {
-  font-weight: 600;
-  margin-bottom: 5px;
-  color: #001f3f;
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: #001f3f;
 }
 .card-dash .value {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #003a78;
+    font-size: 1.5rem; /* Ajustado a tu valor */
+    font-weight: 600;
+    color: #003a78;
+    line-height: 1; /* Añadido para alinear el skeleton */
 }
 
-/* Tarjetas genéricas (si usas .card de Bootstrap en otras vistas) */
-.card {
-  border-radius: 12px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-.card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+/* ... (Tus otros estilos de .card, h2, etc.) ... */
+
+/* ================================================= */
+/* ==== INICIO: ESTILOS DE SKELETON LOADER AÑADIDOS ==== */
+/* ================================================= */
+
+@keyframes skeleton-loading {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
 }
 
-/* Titulares coherentes */
-h2, h6 { color: #001f3f; }
+.value.is-loading {
+    /* Fondo degradado que se moverá */
+    background: linear-gradient(100deg,
+        #eceef1 30%, /* Color base claro */
+        #f5f7fa 50%, /* Color de brillo */
+        #eceef1 70%);
+    background-size: 400% 100%;
+    animation: skeleton-loading 1.5s infinite linear;
 
-/* Utilidades opcionales */
-.text-primary { color: #003a78 !important; }
-.bg-soft { background: #f0f4f9; }
+    /* Oculta el texto '...' */
+    color: transparent;
+
+    /* Da forma al 'hueso' */
+    border-radius: 4px;
+    width: 60%; /* Ocupa el 60% del contenedor */
+    min-height: 24px; /* Debe coincidir con tu font-size (1.5rem) */
+}

@@ -1,41 +1,58 @@
+/*
+ * ===============================================
+ * sidebar.js (Versión Robusta con data-attributes)
+ * ===============================================
+ *
+ * Esta lógica activa el enlace del sidebar basándose
+ * en un atributo 'data-active-page' en la etiqueta <body>
+ * de la página de contenido.
+ */
 document.addEventListener('DOMContentLoaded', () => {
-  const currentPath = window.location.pathname + window.location.search;
 
-  // 1) Marcar activo el subitem cuyo href coincide con la URL actual
-  const subLinks = document.querySelectorAll('.nav-sub-link');
-  let activeSub = null;
-  subLinks.forEach(a => {
-    // Comparación flexible: si el href está contenido en la URL actual
-    // o coincide exactamente (útil para /ControlCliente?op=...).
-    const href = a.getAttribute('href');
-    if (!href) return;
+    // 1. Obtener el ID de la página actual desde la etiqueta <body>
+    //    Ej: <body data-active-page="admin-usuarios">
+    const activePageId = document.body.dataset.activePage;
 
-    const samePage = currentPath === href || currentPath.endsWith(href) || currentPath.includes(href);
-    if (samePage) {
-      a.classList.add('active');
-      activeSub = a;
+    if (!activePageId) {
+        // Si la página no especificó un ID (ej. <body data-active-page="...">),
+        // no se puede activar ningún enlace.
+        console.warn('Sidebar: No se encontró "data-active-page" en el <body>. No se activará ningún enlace.');
+        return;
     }
-  });
 
-  // 2) Si hay un subitem activo, expandir su sección y marcar la raíz
-  if (activeSub) {
-    const section = activeSub.closest('.nav-section');
-    if (section && !section.classList.contains('show')) {
-      section.classList.add('show');
-    }
-    const collapseId = '#' + section.id;
-    const toggleBtn = document.querySelector(`[data-bs-target="${collapseId}"]`);
-    if (toggleBtn) {
-      toggleBtn.classList.add('active');
-      toggleBtn.setAttribute('aria-expanded', 'true');
-    }
-  }
+    // 2. Encontrar el enlace en el sidebar que corresponde a ese ID
+    //    Busca tanto enlaces raíz (<a class="nav-link">) como sub-enlaces (<a class="nav-sub-link">)
+    const activeLink = document.querySelector(
+        `.nav-link[data-page-id="${activePageId}"], .nav-sub-link[data-page-id="${activePageId}"]`
+    );
 
-  // 3) Si estamos exactamente en el home, marcar Inicio como activo
-  const isHome = document.body.classList.contains('is-home') ||
-                 /\/home\.jsp$/i.test(currentPath);
-  if (isHome) {
-    const homeLink = document.querySelector('.nav-link.nav-root[href$="home.jsp"]');
-    if (homeLink) homeLink.classList.add('active');
-  }
+    if (!activeLink) {
+        // No se encontró un enlace que coincida.
+        return;
+    }
+
+    // 3. Marcar el enlace como activo
+    activeLink.classList.add('active');
+
+    // 4. Lógica para expandir el menú padre (si es un sub-enlace)
+    if (activeLink.classList.contains('nav-sub-link')) {
+        
+        // Encontrar el contenedor colapsable (ej. <div id="admin-collapse" ...>)
+        const section = activeLink.closest('.nav-section');
+        
+        if (section) {
+            // 4a. Expandir la sección
+            section.classList.add('show');
+            
+            // 4b. Encontrar el botón que controla esta sección
+            const collapseId = '#' + section.id; // ej. "#admin-collapse"
+            const toggleBtn = document.querySelector(`[data-bs-target="${collapseId}"]`);
+            
+            if (toggleBtn) {
+                // 4c. Marcar el botón raíz (ej. "Administración") como activo y expandido
+                toggleBtn.classList.add('active');
+                toggleBtn.setAttribute('aria-expanded', 'true');
+            }
+        }
+    }
 });

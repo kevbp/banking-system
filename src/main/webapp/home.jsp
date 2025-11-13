@@ -13,18 +13,13 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Panel Principal - Quantum Bank</title>
 
-        <!-- Fuentes y estilos -->
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css">
-        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/estilos.css">
-        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/sidebar.css">
-        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/header.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 
-        <title>Home - Quantum Bank</title>
-
-
-    </head>
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/sidebar.css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/header.css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/estilos.css"> </head>
 
     <body>
         <%@ include file="util/theme.jsp" %>
@@ -42,28 +37,28 @@
                     <div class="row">
                         <div class="col-md-4 mb-3">
                             <div class="card-dash">
-                                <i class="bi bi-person-check icon"></i>
+                                <i class="bi bi-person-check icon" aria-hidden="true"></i>
                                 <div>
                                     <h6>Clientes activos</h6>
-                                    <p class="value">125</p>
+                                    <p class="value is-loading" id="stat-clientes-activos">...</p>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-4 mb-3">
                             <div class="card-dash">
-                                <i class="bi bi-credit-card icon"></i>
+                                <i class="bi bi-credit-card icon" aria-hidden="true"></i>
                                 <div>
                                     <h6>Cuentas abiertas hoy</h6>
-                                    <p class="value">8</p>
+                                    <p class="value is-loading" id="stat-cuentas-hoy">...</p>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-4 mb-3">
                             <div class="card-dash">
-                                <i class="bi bi-cash-stack icon"></i>
+                                <i class="bi bi-cash-stack icon" aria-hidden="true"></i>
                                 <div>
                                     <h6>Operaciones del día</h6>
-                                    <p class="value">42</p>
+                                    <p class="value is-loading" id="stat-operaciones-dia">...</p>
                                 </div>
                             </div>
                         </div>
@@ -72,8 +67,12 @@
             </div>
         </div>
 
+        <script>
+        window.APP_CONTEXT_PATH = "${pageContext.request.contextPath}";
+        </script>
+
         <script src="${pageContext.request.contextPath}/js/bootstrap.bundle.min.js"></script>
         <script src="${pageContext.request.contextPath}/js/sidebar.js"></script>
-
+        <script src="${pageContext.request.contextPath}/js/dashboard.js"></script>
     </body>
 </html>

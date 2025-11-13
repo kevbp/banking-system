@@ -11,7 +11,6 @@
 
     <title>Gestión de Usuarios - Quantum Bank</title>
 
-    <!-- Fuentes y estilos globales -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet">
     <link href="${pageContext.request.contextPath}/css/estilos.css" rel="stylesheet">
@@ -20,14 +19,12 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 </head>
 
-<body>
+<body data-active-page="admin-usuarios">
     <%@ include file="../util/theme.jsp" %>
 
     <div class="d-flex">
-        <!-- Sidebar -->
         <%@ include file="../util/sidebar.jsp" %>
 
-        <!-- Panel principal -->
         <div class="main-content flex-grow-1">
             <%@ include file="../util/header.jsp" %>
 
@@ -43,9 +40,7 @@
                         </p>
                         <hr>
 
-                        <!-- 🧍 Formulario de registro de usuario -->
                         <div class="row">
-                            <!-- Formulario de creación de usuario (1/3 del espacio) -->
                             <div class="col-md-4">
                                 <h5>Registrar Nuevo Usuario</h5>
                                 <form action="${pageContext.request.contextPath}/ControlUsuario" method="post" class="mb-4">
@@ -115,7 +110,6 @@
                                 </form>
                             </div>
 
-                            <!-- Tabla de usuarios registrados (2/3 del espacio) -->
                             <div class="col-md-8">
                                 <h5>Usuarios Registrados</h5>
                                 <div class="table-responsive mb-3">
@@ -170,25 +164,25 @@
                         </div>
                     </div>
                 </div>
-            </div> <!-- ./content-area -->
-        </div> <!-- ./main-content -->
-    </div> <!-- ./dashboard -->
-
-    <!-- 🪟 Modal Editar Usuario 1 -->
-    <div class="modal fade" id="modalEditarUsuario1" tabindex="-1" aria-labelledby="modalEditarUsuario1Label" aria-hidden="true">
+            </div> </div> </div> <div class="modal fade" id="modalEditarUsuario1" tabindex="-1" aria-labelledby="modalEditarUsuario1Label" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header bg-dark text-light">
-                    <h5 class="modal-title" id="modalEditarUsuario1Label"></h5>
+                    <h5 class="modal-title" id="modalEditarUsuario1Label">Editar Usuario</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form action="${pageContext.request.contextPath}/ControlUsuario" method="post">
-                    <input type="hidden" id="idUsuario" name="idUsuario" value="1">
+                    <input type="hidden" id="idUsuario" name="idUsuario">
                     <div class="modal-body">
                         <div class="row g-3">
-                            <div class="col-md-12">
+                            <div class="col-md-6">
                                 <label for="nombreEditar" class="form-label">Nombres</label>
-                                <input type="text" class="form-control" id="nombreEditar" name="nombreEditar" value="Juan Pérez">
+                                <input type="text" class="form-control" id="nombreEditar" name="nombreEditar">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="apellidoEditar" class="form-label">Apellidos</label>
+                                <input type="text" class="form-control" id="apellidoEditar" name="apellidoEditar">
                             </div>
 
                             <div class="col-md-5">
@@ -212,7 +206,7 @@
                                         <option value="${eu.codEstado}">${eu.des}</option>
                                     </c:forEach>
                                 </select>
-                            </div>                                 
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -224,33 +218,10 @@
         </div>
     </div>
 
-    <!-- Scripts -->
     <script src="${pageContext.request.contextPath}/js/bootstrap.bundle.min.js"></script>
-    <script src="${pageContext.request.contextPath}/js/sidebars.js"></script>
-    <script>
-        $(document).ready(function () {
-            // Verifica si el elemento del alert existe en la página
-            if ($('#myAlert').length) {
-                var tiempoVisible = 5000;  // Tiempo en ms
-                setTimeout(function () {
-                    $('#myAlert').alert('close');
-                }, tiempoVisible);
-            }
-
-            // Modal Editar Usuario
-            $('#modalEditarUsuario1').on('show.bs.modal', function (event) {
-                var button = $(event.relatedTarget);
-
-                $('#idUsuario').val(button.data('id'));
-                $('#nombreEditar').val(button.data('nombre'));
-                $('#apellidoEditar').val(button.data('apellido'));
-                $('#cargoEditar').val(button.data('cargo'));
-                $('#rolEditar').val(button.data('rol'));
-                $('#estadoEditar').val(button.data('estado'));
-
-                $('#modalEditarUsuario1Label').text('Editar Usuario: ' + button.data('nombre'));
-            });
-        });
-    </script>
+    
+    <script src="${pageContext.request.contextPath}/js/sidebar.js"></script>
+    
+    <script src="${pageContext.request.contextPath}/js/gestion-usuarios.js"></script>
 </body>
 </html>

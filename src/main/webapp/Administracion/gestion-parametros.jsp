@@ -16,7 +16,6 @@
 
         <title>Parámetros del Sistema - Quantum Bank</title>
 
-        <!-- Fuentes y estilos globales -->
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
         <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet">
         <link href="${pageContext.request.contextPath}/css/estilos.css" rel="stylesheet">
@@ -29,10 +28,8 @@
         <%@ include file="../util/theme.jsp" %>
 
         <div class="d-flex">
-            <!-- Sidebar general -->
             <%@ include file="../util/sidebar.jsp" %>
 
-            <!-- Panel principal -->
             <div class="main-content flex-grow-1">
                 <%@ include file="../util/header.jsp" %>
 
@@ -47,7 +44,6 @@
                         </div>
 
                         <div class="card-body">
-                            <!-- Tabs de parámetros -->
                             <ul class="nav nav-tabs mb-3" id="paramTabs" role="tablist">
                                 <li class="nav-item" role="presentation">
                                     <button class="nav-link active" id="tab-monedas" data-bs-toggle="tab" 
@@ -73,35 +69,15 @@
                             </ul>
 
                             <div class="tab-content" id="paramTabsContent">
-                                <!-- TAB: MONEDAS Y TIPO DE CAMBIO -->
                                 <div class="tab-pane fade show active" id="pane-monedas" role="tabpanel" aria-labelledby="tab-monedas">
-
                                     <h5 class="mb-3">Monedas y Tipo de Cambio</h5>
-                                    <p class="text-muted small mb-3">
-                                        Defina las monedas con las que opera el banco y consulte/actualice el tipo de cambio vigente para cada una.
-                                    </p>
 
-                                    <!-- ⚠️ Alerta informativa (opcional, solo front) -->
-                                    <!--
-                                    <div class="alert alert-warning d-flex align-items-center mb-4" role="alert">
-                                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
-                                        <div>
-                                            Falta registrar el tipo de cambio de hoy para una o más monedas extranjeras.
-                                            Las operaciones con moneda extranjera se encuentran restringidas.
-                                        </div>
-                                    </div>
-                                    -->
-
-                                    <!-- 1) TABLA DE MONEDAS -->
                                     <div class="d-flex justify-content-between align-items-center mb-2">
                                         <h6 class="mb-0">Catálogo de Monedas</h6>
                                         <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modalNuevaMoneda">
                                             <i class="bi bi-plus-circle me-1"></i> Nueva moneda
                                         </button>
                                     </div>
-                                    <p class="text-muted small mb-2">
-                                        Este catálogo define las monedas disponibles en el sistema.
-                                    </p>
 
                                     <div class="table-responsive mb-4">
                                         <table class="table table-bordered table-striped align-middle">
@@ -115,14 +91,18 @@
                                                 </tr>
                                             </thead>
                                             <tbody class="text-center">
-                                                <!-- Ejemplos estáticos, luego vendrán desde la BD -->
                                                 <tr>
                                                     <td>PEN</td>
                                                     <td>Soles</td>
                                                     <td>S/</td>
                                                     <td><span class="badge bg-success">Activa</span></td>
                                                     <td>
-                                                        <button class="btn btn-sm btn-outline-warning" data-bs-toggle="modal" data-bs-target="#modalEditarMoneda">
+                                                        <button class="btn btn-sm btn-outline-warning" 
+                                                                data-bs-toggle="modal" 
+                                                                data-bs-target="#modalEditarMoneda"
+                                                                data-codigo="PEN"
+                                                                data-descripcion="Soles"
+                                                                data-simbolo="S/">
                                                             Editar
                                                         </button>
                                                     </td>
@@ -133,7 +113,12 @@
                                                     <td>$</td>
                                                     <td><span class="badge bg-success">Activa</span></td>
                                                     <td>
-                                                        <button class="btn btn-sm btn-outline-warning" data-bs-toggle="modal" data-bs-target="#modalEditarMoneda">
+                                                        <button class="btn btn-sm btn-outline-warning" 
+                                                                data-bs-toggle="modal" 
+                                                                data-bs-target="#modalEditarMoneda"
+                                                                data-codigo="USD"
+                                                                data-descripcion="Dólares"
+                                                                data-simbolo="$">
                                                             Editar
                                                         </button>
                                                     </td>
@@ -144,7 +129,12 @@
                                                     <td>€</td>
                                                     <td><span class="badge bg-success">Activa</span></td>
                                                     <td>
-                                                        <button class="btn btn-sm btn-outline-warning" data-bs-toggle="modal" data-bs-target="#modalEditarMonedaEUR">
+                                                        <button class="btn btn-sm btn-outline-warning" 
+                                                                data-bs-toggle="modal" 
+                                                                data-bs-target="#modalEditarMoneda"
+                                                                data-codigo="EUR"
+                                                                data-descripcion="Euros"
+                                                                data-simbolo="€">
                                                             Editar
                                                         </button>
                                                     </td>
@@ -153,17 +143,12 @@
                                         </table>
                                     </div>
 
-                                    <!-- 2) TABLA DE TIPO DE CAMBIO DEL DÍA -->
                                     <div class="d-flex justify-content-between align-items-center mb-2">
                                         <h6 class="mb-0">Tipo de cambio del día</h6>
-                                        <!-- Puedes usar este botón para un modal que registre/actualice TC -->
                                         <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modalNuevoTipoCambio">
                                             <i class="bi bi-arrow-repeat me-1"></i> Registrar / Actualizar tipo de cambio
                                         </button>
                                     </div>
-                                    <p class="text-muted small mb-2">
-                                        Valores de compra y venta frente a la moneda base (PEN) para la fecha actual.
-                                    </p>
 
                                     <div class="table-responsive mb-2">
                                         <table class="table table-bordered table-striped align-middle">
@@ -178,67 +163,49 @@
                                                 </tr>
                                             </thead>
                                             <tbody class="text-center">
-                                                <!-- Ejemplo para USD -->
                                                 <tr>
                                                     <td>Dólares</td>
                                                     <td>USD</td>
                                                     <td>3.7200</td>
                                                     <td>3.7500</td>
-                                                    <td>12/11/2025 09:15</td>
+                                                    <td>13/11/2025 09:15</td>
                                                     <td>
-                                                        <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalEditarTcUSD">
+                                                        <button class="btn btn-sm btn-outline-primary" 
+                                                                data-bs-toggle="modal" 
+                                                                data-bs-target="#modalEditarTipoCambio"
+                                                                data-codigo="USD"
+                                                                data-descripcion="Dólares"
+                                                                data-compra="3.7200"
+                                                                data-venta="3.7500">
                                                             Actualizar
                                                         </button>
                                                     </td>
                                                 </tr>
-                                                <!-- Ejemplo para EUR -->
                                                 <tr>
                                                     <td>Euros</td>
                                                     <td>EUR</td>
                                                     <td>4.0000</td>
                                                     <td>4.0500</td>
-                                                    <td>12/11/2025 09:20</td>
+                                                    <td>13/11/2025 09:20</td>
                                                     <td>
-                                                        <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalEditarTcEUR">
+                                                        <button class="btn btn-sm btn-outline-primary" 
+                                                                data-bs-toggle="modal" 
+                                                                data-bs-target="#modalEditarTipoCambio"
+                                                                data-codigo="EUR"
+                                                                data-descripcion="Euros"
+                                                                data-compra="4.0000"
+                                                                data-venta="4.0500">
                                                             Actualizar
                                                         </button>
                                                     </td>
                                                 </tr>
-
-                                                <!-- Ejemplo de fila sin tipo de cambio cargado aún (solo front) -->
-                                                <!--
-                                                <tr class="table-warning">
-                                                    <td>Euros</td>
-                                                    <td>EUR</td>
-                                                    <td>—</td>
-                                                    <td>—</td>
-                                                    <td>Sin registro hoy</td>
-                                                    <td>
-                                                        <button class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modalRegistrarTcEUR">
-                                                            Registrar
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                                -->
                                             </tbody>
                                         </table>
                                     </div>
-
-                                    <!-- Nota informativa -->
-                                    <p class="text-muted small">
-                                        El sistema permitirá operaciones con moneda extranjera siempre que exista tipo de cambio registrado para USD y EUR en la fecha actual.
-                                    </p>
                                 </div>
 
-
-                                <!-- TAB 2: TIPOS DE CUENTA (incluye cuentas del sistema) -->
                                 <div class="tab-pane fade" id="pane-cuentas" role="tabpanel" aria-labelledby="tab-cuentas">
-                                    <!-- Tipos de cuenta -->
                                     <h5 class="mb-3">Tipos de Cuenta</h5>
-                                    <p class="text-muted small">
-                                        Configure los productos disponibles: cuentas de ahorro, corrientes y de plazo.
-                                        Estos parámetros se utilizan al momento de la apertura de cuentas.
-                                    </p>
 
                                     <div class="table-responsive mb-3">
                                         <table class="table table-bordered table-striped align-middle">
@@ -260,7 +227,13 @@
                                                     <td>1.50</td>
                                                     <td>Activa</td>
                                                     <td class="text-center">
-                                                        <button class="btn btn-sm btn-outline-warning" data-bs-toggle="modal" data-bs-target="#modalEditarTipo1">
+                                                        <button class="btn btn-sm btn-outline-warning" 
+                                                                data-bs-toggle="modal" 
+                                                                data-bs-target="#modalEditarTipoCuenta"
+                                                                data-id="1"
+                                                                data-descripcion="Ahorros"
+                                                                data-moneda="Soles"
+                                                                data-tasa="1.50">
                                                             Editar
                                                         </button>
                                                     </td>
@@ -276,11 +249,7 @@
 
                                     <hr>
 
-                                    <!-- Cuentas del sistema -->
                                     <h5 class="mb-3">Cuentas del Sistema</h5>
-                                    <p class="text-muted small">
-                                        Defina las cuentas internas del banco (por ejemplo, cuentas de caja, intereses y comisiones).
-                                    </p>
 
                                     <div class="table-responsive mb-3">
                                         <table class="table table-bordered table-striped align-middle">
@@ -302,7 +271,13 @@
                                                     <td>1.50</td>
                                                     <td>Activa</td>
                                                     <td class="text-center">
-                                                        <button class="btn btn-sm btn-outline-warning" data-bs-toggle="modal" data-bs-target="#modalEditarCuenta1">
+                                                        <button class="btn btn-sm btn-outline-warning" 
+                                                                data-bs-toggle="modal" 
+                                                                data-bs-target="#modalEditarCuentaSistema"
+                                                                data-numero="000-001"
+                                                                data-tipo="Ahorros"
+                                                                data-moneda="Soles"
+                                                                data-tasa="1.50">
                                                             Editar
                                                         </button>
                                                     </td>
@@ -317,13 +292,8 @@
                                     </div>
                                 </div>
 
-                                <!-- TAB 3: TIPOS DE MOVIMIENTO -->
                                 <div class="tab-pane fade" id="pane-movimientos" role="tabpanel" aria-labelledby="tab-movimientos">
                                     <h5 class="mb-3">Tipos de Movimiento</h5>
-                                    <p class="text-muted small">
-                                        Defina los códigos de movimiento que se utilizan en las operaciones de las cuentas:
-                                        depósitos, retiros, comisiones, intereses, etc.
-                                    </p>
 
                                     <div class="table-responsive mb-3">
                                         <table class="table table-bordered table-striped align-middle">
@@ -343,7 +313,13 @@
                                                     <td>+</td>
                                                     <td>Activo</td>
                                                     <td class="text-center">
-                                                        <button class="btn btn-sm btn-outline-warning" data-bs-toggle="modal" data-bs-target="#modalEditarMov1">
+                                                        <button class="btn btn-sm btn-outline-warning" 
+                                                                data-bs-toggle="modal" 
+                                                                data-bs-target="#modalEditarTipoMovimiento"
+                                                                data-id="1"
+                                                                data-descripcion="Depósito"
+                                                                data-signo="+"
+                                                                data-estado="Activo">
                                                             Editar
                                                         </button>
                                                     </td>
@@ -354,7 +330,13 @@
                                                     <td>-</td>
                                                     <td>Activo</td>
                                                     <td class="text-center">
-                                                        <button class="btn btn-sm btn-outline-warning" data-bs-toggle="modal" data-bs-target="#modalEditarMov2">
+                                                        <button class="btn btn-sm btn-outline-warning" 
+                                                                data-bs-toggle="modal" 
+                                                                data-bs-target="#modalEditarTipoMovimiento"
+                                                                data-id="2"
+                                                                data-descripcion="Retiro"
+                                                                data-signo="-"
+                                                                data-estado="Activo">
                                                             Editar
                                                         </button>
                                                     </td>
@@ -377,14 +359,7 @@
                             </div>
                         </div>
                     </div>
-                </div> <!-- ./content-area -->
-            </div> <!-- ./main-content -->
-        </div> <!-- ./dashboard -->
-
-        <!-- ========== MODALES ========== -->
-
-        <!-- Modal: Nueva Moneda -->
-        <div class="modal fade" id="modalNuevaMoneda" tabindex="-1" aria-labelledby="modalNuevaMonedaLabel" aria-hidden="true">
+                </div> </div> </div> <div class="modal fade" id="modalNuevaMoneda" tabindex="-1" aria-labelledby="modalNuevaMonedaLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header bg-dark text-light">
@@ -416,7 +391,6 @@
             </div>
         </div>
 
-        <!-- Modal: Editar Moneda -->
         <div class="modal fade" id="modalEditarMoneda" tabindex="-1" aria-labelledby="modalEditarMonedaLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
@@ -426,27 +400,20 @@
                     </div>
                     <form action="${pageContext.request.contextPath}/ControlParametros" method="post">
                         <input type="hidden" name="accion" value="editarMoneda">
-
-                        <!-- Campo de código (solo lectura) -->
                         <div class="modal-body">
                             <div class="mb-3">
-                                <label for="codMoneda" class="form-label">Código de Moneda</label>
-                                <input type="text" class="form-control" id="codMoneda" name="codMoneda" readonly>
+                                <label for="editMonedaCodigo" class="form-label">Código de Moneda</label>
+                                <input type="text" class="form-control" id="editMonedaCodigo" name="codMoneda" readonly>
                             </div>
-
-                            <!-- Campo de descripción -->
                             <div class="mb-3">
-                                <label for="descMoneda" class="form-label">Descripción</label>
-                                <input type="text" class="form-control" id="descMoneda" name="descMoneda" required>
+                                <label for="editMonedaDesc" class="form-label">Descripción</label>
+                                <input type="text" class="form-control" id="editMonedaDesc" name="descMoneda" required>
                             </div>
-
-                            <!-- Campo de símbolo -->
                             <div class="mb-3">
-                                <label for="simbolo" class="form-label">Símbolo</label>
-                                <input type="text" class="form-control" id="simbolo" name="simbolo" required>
+                                <label for="editMonedaSimbolo" class="form-label">Símbolo</label>
+                                <input type="text" class="form-control" id="editMonedaSimbolo" name="simbolo" required>
                             </div>
                         </div>
-
                         <div class="modal-footer">
                             <button type="submit" class="btn btn-primary">Actualizar</button>
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
@@ -456,33 +423,31 @@
             </div>
         </div>
 
-
-
-        <!-- Modal: Registrar / Actualizar Tipo de Cambio -->
         <div class="modal fade" id="modalNuevoTipoCambio" tabindex="-1" aria-labelledby="modalNuevoTipoCambioLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header bg-dark text-light">
-                        <h5 class="modal-title" id="modalNuevoTipoCambioLabel">Registrar / Actualizar Tipo de Cambio</h5>
+                        <h5 class="modal-title" id="modalNuevoTipoCambioLabel">Registrar Tipo de Cambio</h5>
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <form action="${pageContext.request.contextPath}/ControlParametros" method="post">
                         <input type="hidden" name="accion" value="registrarTipoCambio">
                         <div class="modal-body">
                             <div class="mb-3">
-                                <label for="codMoneda" class="form-label">Moneda</label>
-                                <select class="form-select" id="codMoneda" name="codMoneda" required>
+                                <label for="newTCMoneda" class="form-label">Moneda</label>
+                                <select class="form-select" id="newTCMoneda" name="codMoneda" required>
+                                    <option value="">Seleccione...</option>
                                     <option value="USD">USD - Dólares</option>
                                     <option value="EUR">EUR - Euros</option>
                                 </select>
                             </div>
                             <div class="mb-3">
-                                <label for="tasaCompra" class="form-label">Tasa de Compra (PEN)</label>
-                                <input type="number" step="0.0001" class="form-control" id="tasaCompra" name="tasaCompra" required>
+                                <label for="newTCCompra" class="form-label">Tasa de Compra (PEN)</label>
+                                <input type="number" step="0.0001" class="form-control" id="newTCCompra" name="tasaCompra" required>
                             </div>
                             <div class="mb-3">
-                                <label for="tasaVenta" class="form-label">Tasa de Venta (PEN)</label>
-                                <input type="number" step="0.0001" class="form-control" id="tasaVenta" name="tasaVenta" required>
+                                <label for="newTCVenta" class="form-label">Tasa de Venta (PEN)</label>
+                                <input type="number" step="0.0001" class="form-control" id="newTCVenta" name="tasaVenta" required>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -494,30 +459,28 @@
             </div>
         </div>
 
-        <!-- Modal: Editar Tipo de Cambio -->
-        <div class="modal fade" id="modalEditarTcUSD" tabindex="-1" aria-labelledby="modalEditarTcUSDLabel" aria-hidden="true">
+        <div class="modal fade" id="modalEditarTipoCambio" tabindex="-1" aria-labelledby="modalEditarTipoCambioLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header bg-dark text-light">
-                        <h5 class="modal-title" id="modalEditarTcUSDLabel">Actualizar Tipo de Cambio (USD)</h5>
+                        <h5 class="modal-title" id="modalEditarTipoCambioLabel">Actualizar Tipo de Cambio</h5>
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <form action="${pageContext.request.contextPath}/ControlParametros" method="post">
                         <input type="hidden" name="accion" value="actualizarTipoCambio">
                         <div class="modal-body">
                             <div class="mb-3">
-                                <label for="codMoneda" class="form-label">Moneda</label>
-                                <select class="form-select" id="codMoneda" name="codMoneda" readonly>
-                                    <option value="USD" selected>USD - Dólares</option>
-                                </select>
+                                <label for="editTCCodigo" class="form-label">Moneda</label>
+                                <input type="hidden" id="editTCCodigo" name="codMoneda">
+                                <input type="text" class="form-control" id="editTCDesc" disabled>
                             </div>
                             <div class="mb-3">
-                                <label for="tasaCompra" class="form-label">Tasa de Compra (PEN)</label>
-                                <input type="number" step="0.0001" class="form-control" id="tasaCompra" name="tasaCompra" required>
+                                <label for="editTCCompra" class="form-label">Tasa de Compra (PEN)</label>
+                                <input type="number" step="0.0001" class="form-control" id="editTCCompra" name="tasaCompra" required>
                             </div>
                             <div class="mb-3">
-                                <label for="tasaVenta" class="form-label">Tasa de Venta (PEN)</label>
-                                <input type="number" step="0.0001" class="form-control" id="tasaVenta" name="tasaVenta" required>
+                                <label for="editTCVenta" class="form-label">Tasa de Venta (PEN)</label>
+                                <input type="number" step="0.0001" class="form-control" id="editTCVenta" name="tasaVenta" required>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -529,7 +492,6 @@
             </div>
         </div>
 
-        <!-- Modal: Nuevo Tipo de Cuenta -->
         <div class="modal fade" id="modalNuevoTipo" tabindex="-1">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
@@ -547,6 +509,7 @@
                             <div class="mb-3">
                                 <label class="form-label">Moneda</label>
                                 <select class="form-select" name="moneda" required>
+                                    <option value="">Seleccione...</option>
                                     <option>Soles</option>
                                     <option>Dólares</option>
                                 </select>
@@ -565,7 +528,45 @@
             </div>
         </div>
 
-        <!-- Modal: Nueva Cuenta del Sistema -->
+        <div class="modal fade" id="modalEditarTipoCuenta" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header bg-dark text-light">
+                        <h5 class="modal-title">Editar Tipo de Cuenta</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+                    <form action="${pageContext.request.contextPath}/ControlParametros" method="post">
+                        <input type="hidden" name="accion" value="editarTipoCuenta">
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label class="form-label">ID</label>
+                                <input type="text" class="form-control" id="editTipoCuentaID" name="id" readonly>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Descripción</label>
+                                <input type="text" class="form-control" id="editTipoCuentaDesc" name="descripcion" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Moneda</label>
+                                <select class="form-select" id="editTipoCuentaMoneda" name="moneda" required>
+                                    <option>Soles</option>
+                                    <option>Dólares</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Tasa de Interés (%)</label>
+                                <input type="number" step="0.01" class="form-control" id="editTipoCuentaTasa" name="tasa" required>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">Actualizar</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
         <div class="modal fade" id="modalNuevaCuenta" tabindex="-1">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
@@ -583,14 +584,15 @@
                             <div class="mb-3">
                                 <label class="form-label">Tipo de Cuenta</label>
                                 <select class="form-select" name="tipoCuenta" required>
+                                    <option value="">Seleccione...</option>
                                     <option>Ahorros</option>
                                     <option>Corriente</option>
-                                    <option>Plazo Fijo</option>
                                 </select>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Moneda</label>
                                 <select class="form-select" name="moneda" required>
+                                    <option value="">Seleccione...</option>
                                     <option>Soles</option>
                                     <option>Dólares</option>
                                 </select>
@@ -609,7 +611,48 @@
             </div>
         </div>
 
-        <!-- Modal: Nuevo Tipo de Movimiento -->
+        <div class="modal fade" id="modalEditarCuentaSistema" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header bg-dark text-light">
+                        <h5 class="modal-title">Editar Cuenta del Sistema</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+                    <form action="${pageContext.request.contextPath}/ControlParametros" method="post">
+                        <input type="hidden" name="accion" value="editarCuentaBase">
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label class="form-label">Número de Cuenta</label>
+                                <input type="text" class="form-control" id="editCuentaNum" name="numCuenta" readonly>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Tipo de Cuenta</label>
+                                <select class="form-select" id="editCuentaTipo" name="tipoCuenta" required>
+                                    <option>Ahorros</option>
+                                    <option>Corriente</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Moneda</label>
+                                <select class="form-select" id="editCuentaMoneda" name="moneda" required>
+                                    <option>Soles</option>
+                                    <option>Dólares</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Tasa de Interés (%)</label>
+                                <input type="number" step="0.01" class="form-control" id="editCuentaTasa" name="tasa" required>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">Actualizar</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
         <div class="modal fade" id="modalNuevoMovimiento" tabindex="-1">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
@@ -627,6 +670,7 @@
                             <div class="mb-3">
                                 <label class="form-label">Signo</label>
                                 <select class="form-select" name="signo" required>
+                                    <option value="">Seleccione...</option>
                                     <option value="+">+</option>
                                     <option value="-">-</option>
                                 </select>
@@ -648,9 +692,51 @@
             </div>
         </div>
 
-        <!-- Scripts -->
+        <div class="modal fade" id="modalEditarTipoMovimiento" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header bg-dark text-light">
+                        <h5 class="modal-title">Editar Tipo de Movimiento</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+                    <form action="${pageContext.request.contextPath}/ControlParametros" method="post">
+                        <input type="hidden" name="accion" value="editarTipoMovimiento">
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label class="form-label">ID</label>
+                                <input type="text" class="form-control" id="editMovID" name="id" readonly>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Descripción</label>
+                                <input type="text" class="form-control" id="editMovDesc" name="descripcion" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Signo</label>
+                                <select class="form-select" id="editMovSigno" name="signo" required>
+                                    <option value="+">+</option>
+                                    <option value="-">-</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Estado</label>
+                                <select class="form-select" id="editMovEstado" name="estado" required>
+                                    <option>Activo</option>
+                                    <option>Inactivo</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">Actualizar</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
         <script src="${pageContext.request.contextPath}/js/bootstrap.bundle.min.js"></script>
         <script src="${pageContext.request.contextPath}/js/sidebar.js"></script>
 
+        <script src="${pageContext.request.contextPath}/js/gestion-parametros.js"></script>
     </body>
 </html>
