@@ -26,6 +26,8 @@ public class ControlUtilitarios extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+        
         String accion = request.getParameter("accion");
         String valor = request.getParameter("valor");
 

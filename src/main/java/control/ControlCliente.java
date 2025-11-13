@@ -28,7 +28,8 @@ public class ControlCliente extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        request.setCharacterEncoding("UTF-8");
+        
         String op = request.getParameter("op");
         System.out.println("Mensaje de get srvlet: " + op);
         
@@ -108,12 +109,24 @@ public class ControlCliente extends HttpServlet {
             request.setAttribute("codigo", codigo);
             request.getRequestDispatcher("clientes/registrar-cliente.jsp").forward(request, response);
         } else if(accion.equalsIgnoreCase("Actualizar")){
-            
-        }else if(accion.equalsIgnoreCase("Desactivar")){
+            String idCliente = request.getParameter("idCliente");
+            String fechaNacimiento = request.getParameter("fechaNacimiento");
+            String direccion = request.getParameter("direccion");
+            String telefono = request.getParameter("telefono");
+            String celular = request.getParameter("celular");
+            String correo = request.getParameter("correo");
+            String estado = request.getParameter("estado");
+            String region = request.getParameter("region");
+            String provincia = request.getParameter("provincia");
+            String distrito = request.getParameter("distrito");            
+            LocalDateTime hoy = LocalDateTime.now();   
+            String msg = ServicioCliente.actualizarCliente(idCliente, fechaNacimiento, direccion, telefono, celular, correo, estado, region, provincia, distrito, usuAut.getCodUsuario(), hoy.toString());
+            request.getRequestDispatcher("clientes/registrar-cliente.jsp").forward(request, response);
+        } else if(accion.equalsIgnoreCase("Desactivar")){
             String c = request.getParameter("idClienteDesactivar");
             String msg = ServicioCliente.inactivarCliente(c);
             request.getRequestDispatcher("clientes/consulta-clientes.jsp").forward(request, response);
-        }else if(accion.equalsIgnoreCase("Detalle")){
+        } else if(accion.equalsIgnoreCase("Detalle")){
             String id = request.getParameter("id"); 
             // Usa tu servicio existente que retorna Object[]
             Object[] r = ServicioCliente.buscarCliente(id);

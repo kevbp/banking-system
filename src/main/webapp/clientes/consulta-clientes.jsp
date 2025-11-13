@@ -145,7 +145,7 @@
                                 </div>
                                 <div class="col-md-4">
                                     <label class="form-label">Estado</label>
-                                    <select class="form-select" id="estadoEditar" name="estadoEditar">
+                                    <select class="form-select" id="estado" name="estado">
                                         <c:forEach var="eu" items="${estUsu}">
                                             <option value="${eu.codEstado}" <c:if test="${eu.codEstado == cli[6]}"> selected </c:if>>${eu.des}</option>
                                         </c:forEach>
@@ -158,25 +158,25 @@
                                 <!-- 📅 Fecha de Nacimiento -->
                                 <div class="col-md-6">
                                   <label class="form-label">Fecha de Nacimiento</label>
-                                  <input type="date" class="form-control" id="fechaNacimientoEditar" name="fechaNacimientoEditar" value="${cli[8]}">
+                                  <input type="date" class="form-control" id="fechaNacimiento" name="fechaNacimiento" value="${cli[8]}">
                                 </div>
                                 <!-- 📍 Dirección -->
                                 <div class="col-md-12">
                                   <label class="form-label">Dirección</label>
-                                  <input type="text" class="form-control" id="direccionEditar" name="direccionEditar" value="${cli[9]}" placeholder="Ingrese dirección completa">
+                                  <input type="text" class="form-control" id="direccion" name="direccion" value="${cli[9]}" placeholder="Ingrese dirección completa">
                                 </div>
                                 <!-- ☎️ Teléfono y Celular -->
                                 <div class="col-md-3">
                                   <label class="form-label">Teléfono</label>
-                                  <input type="text" class="form-control" id="telefonoEditar" name="telefonoEditar" value="${cli[11]}" placeholder="Ej. 012345678">
+                                  <input type="text" class="form-control" id="telefono" name="telefono" value="${cli[11]}" placeholder="Ej. 012345678">
                                 </div>
                                 <div class="col-md-3">
                                     <label class="form-label">Celular</label>
-                                    <input type="text" class="form-control" id="celularEditar" name="celularEditar" value="${cli[4]}">
+                                    <input type="text" class="form-control" id="celular" name="celular" value="${cli[4]}">
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">Correo</label>
-                                    <input type="email" class="form-control" id="correoEditar" name="correoEditar" value="${cli[5]}">
+                                    <input type="email" class="form-control" id="correo" name="correo" value="${cli[5]}">
                                 </div>
                                 <!-- 🌎 Ubicación: Departamento / Provincia / Distrito -->
                                 <c:set var="d" value="${sessionScope.region}"/>
@@ -185,7 +185,7 @@
                                   <select class="form-select" id="region" name="region">
                                     <option value="">Seleccione...</option>
                                     <c:forEach var="reg" items="${d}">
-                                        <option value="${reg}">${reg}</option>
+                                        <option value="${reg}" <c:if test="${reg == cli[12]}"> selected </c:if>>${reg}</option>
                                     </c:forEach>
                                   </select>
                                 </div>
@@ -234,38 +234,35 @@
                 </div>
             </div>
         </div>
-
+        <c:set var="provinciaGuardada" value="${cli[13]}"/>
+        <c:set var="distritoGuardado" value="${cli[14]}"/>
         <!-- Scripts -->
         <script src="${pageContext.request.contextPath}/js/bootstrap.bundle.min.js"></script>
         <script src="${pageContext.request.contextPath}/js/sidebars.js"></script>
         <script>
             const contextPath = "${pageContext.request.contextPath}";
         </script>
-        <script src="${pageContext.request.contextPath}/js/ubigeo.js"></script>
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
         <script>
-            $(document).ready(function () {
-                // Modal Editar Cliente
-                $('#modalEditarCliente').on('show.bs.modal', function (event) {
-                    var button = $(event.relatedTarget);
-                    $('#idCliente').val(button.data('id'));
-                    $('#tipoDocEditar').val(button.data('tipo'));
-                    $('#numDocEditar').val(button.data('numdoc'));
-                    $('#nombreEditar').val(button.data('nombre'));
-                    $('#celularEditar').val(button.data('celular'));
-                    $('#correoEditar').val(button.data('correo'));
-                    $('#estadoEditar').val(button.data('estado'));
-                    $('#modalEditarClienteLabel').text('Editar Cliente: ' + button.data('nombre'));
-                });
+            // 1. Definición de variables globales específicas para la edición
+            // Si estos valores son nulos o vacíos, la cadena vacía se usa como fallback.
+            const PROVINCIA_CLIENTE = '${provinciaGuardada}';
+            const DISTRITO_CLIENTE = '${distritoGuardado}';
 
+            // 2. Variable global para indicar si se debe intentar la carga inicial
+            // Esto previene que la lógica de edición se ejecute en páginas donde no debe.
+            const ES_MODO_EDICION_CLIENTE = true;
+            
+            $(document).ready(function () {
                 // Modal Desactivar Cliente
                 $('#modalDesactivarCliente').on('show.bs.modal', function (event) {
                     var button = $(event.relatedTarget);
                     $('#idClienteDesactivar').val(button.data('id'));
                     $('#nombreClienteDesactivar').text(button.data('nombre'));
                 });
-            });
+            });           
         </script>
+        <script src="${pageContext.request.contextPath}/js/ubigeo.js"></script>
     <c:if test="${requestScope.abrirModalEditar == '1'}">
         <script>
         document.addEventListener('DOMContentLoaded', function(){
