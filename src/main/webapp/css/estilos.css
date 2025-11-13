@@ -1,0 +1,108 @@
+/* ============ Base & Layout ============ */
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #f5f7fa;
+  height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Contenedor principal del home */
+.main-content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.content-area {
+  background-color: #f5f7fa;
+  min-height: calc(100vh - 60px); /* 60px = alto del header */
+}
+
+/* ============ Login ============ */
+/* Panel derecho con degradado */
+.bg-gradient {
+  background: linear-gradient(135deg, #001f3f 0%, #003a78 100%);
+}
+
+/* Card del formulario */
+.login-card {
+  background-color: #fff;
+  border-radius: 15px;
+  padding: 40px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  width: 100%;
+  max-width: 380px;
+}
+
+/* Botón de acceso */
+.btn-login {
+  background-color: #003a78;
+  border: none;
+  color: #fff;
+  font-weight: 500;
+  padding: 12px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+.btn-login:hover {
+  background-color: #0057b8;
+  transform: translateY(-2px);
+}
+
+/* Animación suave */
+.animate-fade { animation: fadeIn 1.2s ease; }
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Imagen lateral del login */
+.img-side img {
+  object-fit: cover;
+  height: 100vh;
+}
+
+/* ============ Home / Dashboard ============ */
+/* Tarjetas “mini dashboard” (específicas) */
+.card-dash {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 20px;
+  transition: all 0.3s ease;
+}
+.card-dash:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.1);
+}
+.card-dash .icon { font-size: 2rem; color: #003a78; }
+.card-dash h6 {
+  font-weight: 600;
+  margin-bottom: 5px;
+  color: #001f3f;
+}
+.card-dash .value {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #003a78;
+}
+
+/* Tarjetas genéricas (si usas .card de Bootstrap en otras vistas) */
+.card {
+  border-radius: 12px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Titulares coherentes */
+h2, h6 { color: #001f3f; }
+
+/* Utilidades opcionales */
+.text-primary { color: #003a78 !important; }
+.bg-soft { background: #f0f4f9; }
