@@ -121,7 +121,7 @@ public class ControlCliente extends HttpServlet {
             String distrito = request.getParameter("distrito");            
             LocalDateTime hoy = LocalDateTime.now();   
             String msg = ServicioCliente.actualizarCliente(idCliente, fechaNacimiento, direccion, telefono, celular, correo, estado, region, provincia, distrito, usuAut.getCodUsuario(), hoy.toString());
-            request.getRequestDispatcher("clientes/registrar-cliente.jsp").forward(request, response);
+            request.getRequestDispatcher("clientes/consulta-clientes.jsp").forward(request, response);
         } else if(accion.equalsIgnoreCase("Desactivar")){
             String c = request.getParameter("idClienteDesactivar");
             String msg = ServicioCliente.inactivarCliente(c);
