@@ -15,7 +15,7 @@ public class DaoCliente {
     }
 
     public static List listar(String condicion) {
-        String sql = "SELECT codCliente, tipoDoc, numDoc, nomCompleto, cel, email, c.codEstado, e.des FROM t_cliente as c " +
+        String sql = "SELECT codCliente, tipoDoc, numDoc, nomCompleto, cel, email, c.codEstado, e.des, fecNac, dir, codUbigeo, tel FROM t_cliente as c " +
                     "inner join t_estado as e on c.codEstado = e.codEstado " +condicion+";";
         return Acceso.listar(sql);
     }
@@ -42,8 +42,9 @@ public class DaoCliente {
     }   
 
     public static Object[] buscar(String codigo) {
-        String sql = "SELECT codCliente, tipoDoc, numDoc, nomCompleto, cel, email, c.codEstado, e.des FROM t_cliente as c " +
-                    "inner join t_estado as e on c.codEstado = e.codEstado where codCliente = '"+codigo+"';";
+        String sql = "SELECT codCliente, tipoDoc, numDoc, nomCompleto, cel, email, c.codEstado, e.des, fecNac, dir, c.codUbigeo, tel, u.nomDep, u.nomPro, u.nomDis FROM t_cliente AS c " +
+                    "INNER JOIN t_estado AS e on c.codEstado = e.codEstado " +
+                    "INNER JOIN t_ubigeo AS U on c.codUbigeo = u.codUbigeo where codCliente = '"+codigo+"';";
         return Acceso.buscar(sql);
     }    
     

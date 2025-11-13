@@ -5,10 +5,10 @@
 --%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 <!DOCTYPE html>
-<html>
+<html lang="es-ES">
     <head>
         <script src="${pageContext.request.contextPath}/js/color-modes.js"></script>
         <meta charset="utf-8">
@@ -92,19 +92,11 @@
                                             <td>${item[5]}</td>
                                             <td>${item[7]}</td>
                                             <td class="text-center">
-                                                <!-- Botón Editar -->
-                                                <button class="btn btn-sm btn-warning"
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="#modalEditarCliente"
-                                                        data-id="${item[0]}"
-                                                        data-tipo="${item[1]}"
-                                                        data-numdoc="${item[2]}"
-                                                        data-nombre="${item[3]}"
-                                                        data-celular="${item[4]}"
-                                                        data-correo="${item[5]}"
-                                                        data-estado="${item[7]}">
-                                                    Editar
-                                                </button>
+                                                <form action="${pageContext.request.contextPath}/ControlCliente" method="post" class="d-inline">
+                                                    <input type="hidden" name="accion" value="Detalle">
+                                                    <input type="hidden" name="id" value="${item[0]}"/>
+                                                    <button type="submit" class="btn btn-sm btn-warning">Editar</button>
+                                                </form>
 
                                                 <!-- Botón Desactivar -->
                                                 <button class="btn btn-sm btn-danger"
@@ -137,37 +129,77 @@
                         <h5 class="modal-title" id="modalEditarClienteLabel">Editar Cliente</h5>
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                     </div>
+                    <c:set var="cli" value="${requestScope.cliente}"/>
                     <form action="${pageContext.request.contextPath}/ControlCliente" method="post">
                         <input type="hidden" name="accion" value="Actualizar">
-                        <input type="hidden" id="idCliente" name="idCliente">
+                        <input type="hidden" id="idCliente" name="idCliente" value="${cli[0]}">
                         <div class="modal-body">
                             <div class="row g-3">
                                 <div class="col-md-4">
                                     <label class="form-label">Tipo Documento</label>
-                                    <input type="text" class="form-control" id="tipoDocEditar" name="tipoDocEditar" readonly>
+                                    <input type="text" class="form-control" id="tipoDocEditar" name="tipoDocEditar" value="${cli[1]}" readonly>
                                 </div>
                                 <div class="col-md-4">
                                     <label class="form-label">Número Documento</label>
-                                    <input type="text" class="form-control" id="numDocEditar" name="numDocEditar" readonly>
+                                    <input type="text" class="form-control" id="numDocEditar" name="numDocEditar" value="${cli[2]}" readonly>
                                 </div>
                                 <div class="col-md-4">
                                     <label class="form-label">Estado</label>
                                     <select class="form-select" id="estadoEditar" name="estadoEditar">
-                                        <option value="Activo">Activo</option>
-                                        <option value="Inactivo">Inactivo</option>
+                                        <c:forEach var="eu" items="${estUsu}">
+                                            <option value="${eu.codEstado}" <c:if test="${eu.codEstado == cli[6]}"> selected </c:if>>${eu.des}</option>
+                                        </c:forEach>
                                     </select>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">Nombre / Razón Social</label>
-                                    <input type="text" class="form-control" id="nombreEditar" name="nombreEditar" readonly>
+                                    <input type="text" class="form-control" id="nombreEditar" name="nombreEditar" value="${cli[3]}" readonly>
                                 </div>
-                                <div class="col-md-2">
+                                <!-- 📅 Fecha de Nacimiento -->
+                                <div class="col-md-6">
+                                  <label class="form-label">Fecha de Nacimiento</label>
+                                  <input type="date" class="form-control" id="fechaNacimientoEditar" name="fechaNacimientoEditar" value="${cli[8]}">
+                                </div>
+                                <!-- 📍 Dirección -->
+                                <div class="col-md-12">
+                                  <label class="form-label">Dirección</label>
+                                  <input type="text" class="form-control" id="direccionEditar" name="direccionEditar" value="${cli[9]}" placeholder="Ingrese dirección completa">
+                                </div>
+                                <!-- ☎️ Teléfono y Celular -->
+                                <div class="col-md-3">
+                                  <label class="form-label">Teléfono</label>
+                                  <input type="text" class="form-control" id="telefonoEditar" name="telefonoEditar" value="${cli[11]}" placeholder="Ej. 012345678">
+                                </div>
+                                <div class="col-md-3">
                                     <label class="form-label">Celular</label>
-                                    <input type="text" class="form-control" id="celularEditar" name="celularEditar">
+                                    <input type="text" class="form-control" id="celularEditar" name="celularEditar" value="${cli[4]}">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Correo</label>
+                                    <input type="email" class="form-control" id="correoEditar" name="correoEditar" value="${cli[5]}">
+                                </div>
+                                <!-- 🌎 Ubicación: Departamento / Provincia / Distrito -->
+                                <c:set var="d" value="${sessionScope.region}"/>
+                                <div class="col-md-4">
+                                  <label class="form-label">Departamento</label>
+                                  <select class="form-select" id="region" name="region">
+                                    <option value="">Seleccione...</option>
+                                    <c:forEach var="reg" items="${d}">
+                                        <option value="${reg}">${reg}</option>
+                                    </c:forEach>
+                                  </select>
                                 </div>
                                 <div class="col-md-4">
-                                    <label class="form-label">Correo</label>
-                                    <input type="email" class="form-control" id="correoEditar" name="correoEditar">
+                                  <label class="form-label">Provincia</label>
+                                  <select class="form-select" id="provincia" name="provincia">
+                                    <option value="">Seleccione</option>
+                                  </select>
+                                </div>
+                                <div class="col-md-4">
+                                  <label class="form-label">Distrito</label>
+                                  <select class="form-select" id="distrito" name="distrito">
+                                    <option value="">Seleccione</option>
+                                  </select>
                                 </div>
                             </div>
                         </div>
@@ -206,6 +238,10 @@
         <!-- Scripts -->
         <script src="${pageContext.request.contextPath}/js/bootstrap.bundle.min.js"></script>
         <script src="${pageContext.request.contextPath}/js/sidebars.js"></script>
+        <script>
+            const contextPath = "${pageContext.request.contextPath}";
+        </script>
+        <script src="${pageContext.request.contextPath}/js/ubigeo.js"></script>
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
         <script>
             $(document).ready(function () {
@@ -230,6 +266,12 @@
                 });
             });
         </script>
+    <c:if test="${requestScope.abrirModalEditar == '1'}">
+        <script>
+        document.addEventListener('DOMContentLoaded', function(){
+          new bootstrap.Modal(document.getElementById('modalEditarCliente')).show();
+        });
+        </script>
+    </c:if>
     </body>
-
 </html>

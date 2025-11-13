@@ -31,6 +31,10 @@ public class ControlCliente extends HttpServlet {
 
         String op = request.getParameter("op");
         System.out.println("Mensaje de get srvlet: " + op);
+        
+        //Llamada al dropdown
+        List<String> region = ServicioUtilitarios.listarRegion();
+        request.getSession().setAttribute("region", region);
 
         switch (op) {
             case "ListaClientes":
@@ -40,18 +44,11 @@ public class ControlCliente extends HttpServlet {
                 }
                 request.getRequestDispatcher("clientes/consulta-clientes.jsp").forward(request, response);
                 break;
-//            case "Consultar":
-//                String cod = request.getParameter("cod");
-//                Usuario usu = ServicioUsuario.consultarUsuario(cod);
-//                request.getSession().setAttribute("usu", usu);
-//                System.out.println(usu.getPerfil());
-//                response.sendRedirect(request.getContextPath() + "/GestionUsuarios/actualizarUsuario.jsp");
-//                break;
-            case "RegistrarCliente":
-                //Llamada al dropdown
-                List<String> region = ServicioUtilitarios.listarRegion();
-                request.getSession().setAttribute("region", region);
-                
+            case "Editar":
+                String id = request.getParameter("id");
+                Object[] r = ServicioCliente.buscarCliente(id);
+                break;
+            case "RegistrarCliente":                
                 codigo = ServicioCliente.nuevoCodigo();
                 request.setAttribute("codigo", codigo);
                 request.getRequestDispatcher("clientes/registrar-cliente.jsp").forward(request, response);
@@ -116,12 +113,25 @@ public class ControlCliente extends HttpServlet {
             String c = request.getParameter("idClienteDesactivar");
             String msg = ServicioCliente.inactivarCliente(c);
             request.getRequestDispatcher("clientes/consulta-clientes.jsp").forward(request, response);
+        }else if(accion.equalsIgnoreCase("Detalle")){
+            String id = request.getParameter("id"); 
+            // Usa tu servicio existente que retorna Object[]
+            Object[] r = ServicioCliente.buscarCliente(id);
+            if (r == null) {
+                request.setAttribute("error", "Cliente no encontrado");
+                request.getRequestDispatcher("clientes/consulta-clientes.jsp").forward(request, response);
+                return;
+            }
+            List estUsu = ServicioUtilitarios.listarEstadoUsuario();
+            request.setAttribute("estUsu", estUsu);
+            request.setAttribute("abrirModalEditar", "1");
+            request.setAttribute("cliente", r);
+            request.getRequestDispatcher("clientes/consulta-clientes.jsp").forward(request, response);
         }
     }
 
     @Override
     public String getServletInfo() {
         return "Short description";
-    }// </editor-fold>
-
+    }
 }
