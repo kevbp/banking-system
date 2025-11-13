@@ -75,6 +75,5 @@ document.addEventListener("DOMContentLoaded", () => {
                 cargarProvincias(regionInicial, PROVINCIA_CLIENTE, DISTRITO_CLIENTE);
             }
         });
-        alert(PROVINCIA_CLIENTE);
     }
 });
