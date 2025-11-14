@@ -9,7 +9,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import servicio.ServicioCliente;
 
 @WebServlet(name = "ControlLogin", urlPatterns = {"/ControlLogin"})
 public class ControlLogin extends HttpServlet {
@@ -39,15 +38,11 @@ public class ControlLogin extends HttpServlet {
             System.out.println(usuario + " " + pass);
             LoginRespuesta resultado = ServicioLogin.loginUsuario(usuario, pass);
 
-            if (resultado.getUsuario() != null) {
-                // Obtener la cantidad de clientes de hoy
-                int clientesHoy = ServicioCliente.contarClientesRegistradosHoy();
-                
+            if (resultado.getUsuario() != null) {                
                 HttpSession session = request.getSession();
                 session.setMaxInactiveInterval(3600);
                 session.setAttribute("usuAut", resultado.getUsuario());
-                session.setAttribute("clientesRegistradosHoy", clientesHoy);
-                response.sendRedirect("home.jsp");
+                response.sendRedirect(request.getContextPath() + "/ControlHome");
             } else {
                 request.setAttribute("mensaje", resultado.getMensaje());
                 request.getRequestDispatcher("login.jsp").forward(request, response);

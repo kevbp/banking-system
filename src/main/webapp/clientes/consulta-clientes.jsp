@@ -157,7 +157,7 @@
                                 </nav>
                             </div>
                             <div class="text-center mt-3">
-                                <a href="${pageContext.request.contextPath}/home.jsp" class="btn btn-secondary px-4">Volver al Panel</a>
+                                <a href="${pageContext.request.contextPath}/ControlHome" class="btn btn-secondary px-4">Volver al Panel</a>
                             </div>
                         </div>
                     </div>

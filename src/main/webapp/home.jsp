@@ -39,7 +39,7 @@
                                 <i class="bi bi-person-check icon" aria-hidden="true"></i>
                                 <div>
                                     <h6>Clientes activos</h6>
-                                    <p class="value is-loading" id="stat-clientes-activos">${sessionScope.clientesRegistradosHoy}</p>
+                                    <p class="value is-loading" id="stat-clientes-activos">${clientesActivos}</p>
                                 </div>
                             </div>
                         </div>

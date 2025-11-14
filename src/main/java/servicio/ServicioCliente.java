@@ -9,7 +9,6 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.security.SecureRandom;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -181,9 +180,8 @@ public class ServicioCliente {
         return DaoCliente.listar(condicion, REGISTROS_POR_PAGINA, offset);
     }
                 
-    public static int contarClientesRegistradosHoy() {
-        String fechaHoy = LocalDate.now().toString();
-        String condicion = "WHERE DATE(fecReg) = '"+fechaHoy+"'";
+    public static int contarClientesActivos() {
+        String condicion = "WHERE codEstado = 'S0001'";
         return DaoCliente.contar(condicion);
     }
 }

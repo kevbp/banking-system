@@ -24,54 +24,6 @@ public class ControlUsuario extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-/*
-        String op = request.getParameter("op");
-        System.out.println("Mensaje de get srvlet: " + op);
-
-        if (op == null) {
-            response.sendRedirect("login.jsp");
-            return;
-        }
-  
-        switch (op) {
-            // -----------------------------------------------------------------
-            // ----- INICIO: CÓDIGO AÑADIDO PARA EL TIMER DE SESIÓN -----
-            // -----------------------------------------------------------------
-            case "keepAlive":
-                // 1. Acción Keep-Alive (Ping)
-                // Reinicia el timer de 60s en el servidor.
-                // Responde con JSON para que fetch sepa que todo está OK.
-                response.setContentType("application/json");
-                response.getWriter().write("{\"status\": \"session_extended\"}");
-                break;
-            // -----------------------------------------------------------------
-            // ----- FIN: CÓDIGO AÑADIDO PARA EL TIMER DE SESIÓN -----
-            // -----------------------------------------------------------------
-
-            case "RegistrarUsuario":
-                List roles = ServicioUtilitarios.listarRoles();
-                request.getSession().setAttribute("roles", roles);
-                List estUsu = ServicioUtilitarios.listarEstadoUsuario();
-                request.getSession().setAttribute("estUsu", estUsu);
-                List usuarios = ServicioUsuario.listarUsuarios();
-                request.getSession().setAttribute("usuarios", usuarios);
-                response.sendRedirect(request.getContextPath() + "/Administracion/gestion-usuarios.jsp");
-                break;
-
-            case "CerrarSesion":
-                // 2. Acción de Cerrar Sesión (llamada por JS o el botón del header)
-                HttpSession session = request.getSession(false);
-                if (session != null) {
-                    session.invalidate();
-                }
-                response.sendRedirect("login.jsp");
-                break;
-
-            default:
-                // Manejo de otros 'op' si los hubiera
-                response.sendRedirect("login.jsp");
-                break;
-        }*/
         request.setCharacterEncoding("UTF-8");
         String op = request.getParameter("op");
         
@@ -155,13 +107,7 @@ public class ControlUsuario extends HttpServlet {
         response.getWriter().write("{\"status\": \"session_extended\"}");
     }
     
-    private void cargarDatosGestionUsuarios(HttpServletRequest request) {
-        // Mejor práctica: Usar REQUEST SCOPE para datos que solo se necesitan en la vista inmediata.
-        // Se mantiene la estructura original que usa getSession().setAttribute(), pero se recomienda usar REQUEST.
-        
-        // Opcional (Recomendado): List roles = ServicioUtilitarios.listarRoles();
-        // Opcional (Recomendado): request.setAttribute("roles", roles);
-        
+    private void cargarDatosGestionUsuarios(HttpServletRequest request) {        
         List roles = ServicioUtilitarios.listarRoles();
         request.getSession().setAttribute("roles", roles);
         
