@@ -18,18 +18,22 @@ body {
 }
 
 /* ============ Login ============ */
-/* ... (Tu código de login sigue aquí) ... */
 .bg-gradient {
     background: linear-gradient(135deg, #001f3f 0%, #003a78 100%);
 }
+
 .login-card {
     background-color: #fff;
     border-radius: 15px;
     padding: 40px;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
     width: 100%;
-    max-width: 380px;
+    /* CAMBIO: Aumentado de 380px a 480px para dar más espacio 
+      a los campos de formulario internos.
+    */
+    max-width: 480px;
 }
+
 .btn-login {
     background-color: #003a78;
     border: none;
@@ -62,7 +66,6 @@ body {
 }
 
 /* ============ Home / Dashboard ============ */
-/* Tus estilos de tarjeta. Son limpios y profesionales. */
 .card-dash {
     background: #fff;
     border-radius: 14px;
@@ -87,13 +90,11 @@ body {
     color: #001f3f;
 }
 .card-dash .value {
-    font-size: 1.5rem; /* Ajustado a tu valor */
+    font-size: 1.5rem;
     font-weight: 600;
     color: #003a78;
-    line-height: 1; /* Añadido para alinear el skeleton */
+    line-height: 1;
 }
-
-/* ... (Tus otros estilos de .card, h2, etc.) ... */
 
 /* ================================================= */
 /* ==== INICIO: ESTILOS DE SKELETON LOADER AÑADIDOS ==== */
@@ -109,19 +110,14 @@ body {
 }
 
 .value.is-loading {
-    /* Fondo degradado que se moverá */
     background: linear-gradient(100deg,
-        #eceef1 30%, /* Color base claro */
-        #f5f7fa 50%, /* Color de brillo */
+        #eceef1 30%,
+        #f5f7fa 50%,
         #eceef1 70%);
     background-size: 400% 100%;
     animation: skeleton-loading 1.5s infinite linear;
-
-    /* Oculta el texto '...' */
     color: transparent;
-
-    /* Da forma al 'hueso' */
     border-radius: 4px;
-    width: 60%; /* Ocupa el 60% del contenedor */
-    min-height: 24px; /* Debe coincidir con tu font-size (1.5rem) */
+    width: 60%;
+    min-height: 24px;
 }

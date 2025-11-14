@@ -29,9 +29,9 @@ public class ControlLogin extends HttpServlet {
        
         String rol = request.getParameter("rol");
         if ("empleado".equals(rol)) {
-            request.getRequestDispatcher("login.jsp").forward(request, response);
+            response.sendRedirect("login.jsp");
         } else if ("cliente".equals(rol)) {
-            request.getRequestDispatcher("clientes/login-clientes.jsp").forward(request, response);
+            response.sendRedirect("modulo-clientes/login-clientes.jsp");
         } else if (rol == null) {
             String usuario = request.getParameter("inpUsu");
             String pass = request.getParameter("inpPwd");
