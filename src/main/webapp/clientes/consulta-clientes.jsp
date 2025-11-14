@@ -251,7 +251,7 @@
             const DISTRITO_CLIENTE = '${distritoGuardado}';
             const ES_MODO_EDICION_CLIENTE = true;
         </script>
-
+        
         <script src="${pageContext.request.contextPath}/js/ubigeo.js"></script>
         <script src="${pageContext.request.contextPath}/js/consulta-clientes.js"></script>
 

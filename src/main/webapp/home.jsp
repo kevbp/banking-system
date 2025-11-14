@@ -71,7 +71,7 @@
             window.APP_CONTEXT_PATH = "${pageContext.request.contextPath}";
         </script>
 
-        <%@ include file="../util/cont-sesion.jsp" %>
+        <%@ include file="util/cont-sesion.jsp" %>
         <script src="${pageContext.request.contextPath}/js/bootstrap.bundle.min.js"></script>
         <script src="${pageContext.request.contextPath}/js/sidebar.js"></script>
         <script src="${pageContext.request.contextPath}/js/dashboard.js"></script>
