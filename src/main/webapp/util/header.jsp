@@ -9,7 +9,7 @@
     <div id="header-countdown-wrapper" class="d-flex align-items-center gap-2 text-muted fw-semibold">
         <i class="bi bi-clock"></i>
         <span>
-            <span id="session-header-countdown">60</span>s
+            Quedan <span id="session-header-countdown">60</span>s para el cierre automático de la sesión.
         </span>
     </div>
 
