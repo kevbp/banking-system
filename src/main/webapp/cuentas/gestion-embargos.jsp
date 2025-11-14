@@ -223,11 +223,10 @@
                 </div>
             </div>
         </div>
-
+        <%@ include file="../util/cont-sesion.jsp" %>
         <script src="${pageContext.request.contextPath}/js/bootstrap.bundle.min.js"></script>
-
         <script src="${pageContext.request.contextPath}/js/sidebar.js"></script>
-
         <script src="${pageContext.request.contextPath}/js/gestion-embargos.js"></script>
+        <script src="${pageContext.request.contextPath}/js/session-timer.js"></script>
     </body>
 </html>

@@ -236,25 +236,23 @@
                 </div>
             </div>
         </div>
-
+        <%@ include file="../util/cont-sesion.jsp" %>
+        
         <c:set var="provinciaGuardada" value="${cli[13]}"/>
         <c:set var="distritoGuardado" value="${cli[14]}"/>
 
         <script src="${pageContext.request.contextPath}/js/bootstrap.bundle.min.js"></script>
-
         <script src="${pageContext.request.contextPath}/js/sidebar.js"></script>
-
         <script>
-        const contextPath = "${pageContext.request.contextPath}";
+            const contextPath = "${pageContext.request.contextPath}";
 
-        // CAMBIO: Movido de los scripts de abajo para unificar
-        const PROVINCIA_CLIENTE = '${provinciaGuardada}';
-        const DISTRITO_CLIENTE = '${distritoGuardado}';
-        const ES_MODO_EDICION_CLIENTE = true;
+            // CAMBIO: Movido de los scripts de abajo para unificar
+            const PROVINCIA_CLIENTE = '${provinciaGuardada}';
+            const DISTRITO_CLIENTE = '${distritoGuardado}';
+            const ES_MODO_EDICION_CLIENTE = true;
         </script>
 
         <script src="${pageContext.request.contextPath}/js/ubigeo.js"></script>
-
         <script src="${pageContext.request.contextPath}/js/consulta-clientes.js"></script>
 
         <c:if test="${requestScope.abrirModalEditar == '1'}">
@@ -264,5 +262,6 @@
             });
             </script>
         </c:if>
+        <script src="${pageContext.request.contextPath}/js/session-timer.js"></script>
     </body>
 </html>

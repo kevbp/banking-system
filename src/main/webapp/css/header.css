@@ -1,24 +1,36 @@
 .header {
-  background-color: #ffffff;
-  border-bottom: 1px solid #e6e9ef;
-  position: sticky;
-  top: 0;
-  z-index: 1020;
-  height: 60px;
-  display: flex;
-  align-items: center;
+    background-color: #ffffff;
+    border-bottom: 1px solid #e6e9ef;
+    position: sticky;
+    top: 0;
+    z-index: 1020;
+    height: 60px;
+    display: flex;
+    align-items: center;
 }
 
 .header .btn {
-  font-size: 0.9rem;
-  border-radius: 8px;
-  transition: all 0.3s ease;
+    font-size: 0.9rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
 }
 .header .btn-outline-primary {
-  border-color: #003a78;
-  color: #003a78;
+    border-color: #003a78;
+    color: #003a78;
 }
 .header .btn-outline-primary:hover {
-  background-color: #003a78;
-  color: #fff;
+    background-color: #003a78;
+    color: #fff;
 }
+
+/* Estilo para el nuevo contador de sesión en el header */
+#header-countdown-wrapper {
+    font-size: 0.9rem;
+    transition: color 0.3s ease;
+}
+
+#header-countdown-wrapper .bi {
+    font-size: 1.1rem;
+}
+
+/* El JS le añadirá 'text-danger' cuando esté activo */

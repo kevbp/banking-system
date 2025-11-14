@@ -163,15 +163,18 @@
                             </form>
                         </div>
                     </div>
-                </div> </div> </div>
-
+                </div> 
+            </div> 
+        </div>
+        <%@ include file="../util/cont-sesion.jsp" %>
         <script src="${pageContext.request.contextPath}/js/bootstrap.bundle.min.js"></script>
 
         <script src="${pageContext.request.contextPath}/js/sidebar.js"></script>
 
         <script>
-        const contextPath = "${pageContext.request.contextPath}";
+            const contextPath = "${pageContext.request.contextPath}";
         </script>
         <script src="${pageContext.request.contextPath}/js/ubigeo.js"></script>
+        <script src="${pageContext.request.contextPath}/js/session-timer.js"></script>
     </body>
 </html>

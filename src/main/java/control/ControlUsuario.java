@@ -1,4 +1,3 @@
-
 package control;
 
 import entidad.Usuario;
@@ -19,29 +18,36 @@ public class ControlUsuario extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        // (Puedes dejar esto vacío si no lo usas)
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         String op = request.getParameter("op");
         System.out.println("Mensaje de get srvlet: " + op);
 
+        if (op == null) {
+            response.sendRedirect("login.jsp");
+            return;
+        }
+
         switch (op) {
-//            case "Listar":
-//                List lista = ServicioUsuario.listarUsuario();
-//                request.getSession().setAttribute("lista", lista);
-//                response.sendRedirect(request.getContextPath() + "/GestionUsuarios/listadoUsuarios.jsp");
-//                break;
-//            case "Consultar":
-//                String cod = request.getParameter("cod");
-//                Usuario usu = ServicioUsuario.consultarUsuario(cod);
-//                request.getSession().setAttribute("usu", usu);
-//                System.out.println(usu.getPerfil());
-//                response.sendRedirect(request.getContextPath() + "/GestionUsuarios/actualizarUsuario.jsp");
-//                break;
+            // -----------------------------------------------------------------
+            // ----- INICIO: CÓDIGO AÑADIDO PARA EL TIMER DE SESIÓN -----
+            // -----------------------------------------------------------------
+            case "keepAlive":
+                // 1. Acción Keep-Alive (Ping)
+                // Reinicia el timer de 60s en el servidor.
+                // Responde con JSON para que fetch sepa que todo está OK.
+                response.setContentType("application/json");
+                response.getWriter().write("{\"status\": \"session_extended\"}");
+                break;
+            // -----------------------------------------------------------------
+            // ----- FIN: CÓDIGO AÑADIDO PARA EL TIMER DE SESIÓN -----
+            // -----------------------------------------------------------------
+
             case "RegistrarUsuario":
                 List roles = ServicioUtilitarios.listarRoles();
                 request.getSession().setAttribute("roles", roles);
@@ -53,10 +59,16 @@ public class ControlUsuario extends HttpServlet {
                 break;
 
             case "CerrarSesion":
+                // 2. Acción de Cerrar Sesión (llamada por JS o el botón del header)
                 HttpSession session = request.getSession(false);
                 if (session != null) {
                     session.invalidate();
                 }
+                response.sendRedirect("login.jsp");
+                break;
+
+            default:
+                // Manejo de otros 'op' si los hubiera
                 response.sendRedirect("login.jsp");
                 break;
         }
@@ -66,7 +78,7 @@ public class ControlUsuario extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
-        
+
         String nom = request.getParameter("nom");
         String ape = request.getParameter("ape");
         String usn = request.getParameter("usn");
@@ -87,7 +99,7 @@ public class ControlUsuario extends HttpServlet {
             case "CrearUsuario":
                 System.out.println("Ingresando al case CREAR USUARIO");
                 msg = ServicioUsuario.crearUsuario(usn, clave, confClave, nom, ape, car, roles, est, usuAut.getCodUsuario(), hoy.toString());
-                                
+
                 request.getSession().setAttribute("msg", msg);
                 request.getSession().setAttribute("tipoAlerta", "success");
                 break;
@@ -101,16 +113,16 @@ public class ControlUsuario extends HttpServlet {
                 String pass = request.getParameter("claveNueva");
                 String confPass = request.getParameter("confirmarClaveNueva");
                 msg = ServicioUsuario.actualizarUsuario(id, nombre, apellido, cargo, rol, estado, usuAut.getCodUsuario(), hoy.toString());
-                
-                request.getSession().setAttribute("msg", msg);                
-                request.getSession().setAttribute("tipoAlerta", "success");  
+
+                request.getSession().setAttribute("msg", msg);
+                request.getSession().setAttribute("tipoAlerta", "success");
                 break;
             case "Eliminar":
                 String codigo = request.getParameter("id");
                 msg = ServicioUsuario.eliminarUsuario(codigo);
-                
+
                 request.getSession().setAttribute("msg", msg);
-                request.getSession().setAttribute("tipoAlerta", "success");                
+                request.getSession().setAttribute("tipoAlerta", "success");
                 break;
         }
         List usuarios = ServicioUsuario.listarUsuarios();

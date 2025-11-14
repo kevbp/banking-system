@@ -40,7 +40,7 @@ public class ControlLogin extends HttpServlet {
 
             if (resultado.getUsuario() != null) {
                 HttpSession session = request.getSession();
-                session.setMaxInactiveInterval(60);
+                session.setMaxInactiveInterval(3600);
                 session.setAttribute("usuAut", resultado.getUsuario());
                 response.sendRedirect("home.jsp");
             } else {

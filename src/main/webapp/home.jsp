@@ -68,11 +68,13 @@
         </div>
 
         <script>
-        window.APP_CONTEXT_PATH = "${pageContext.request.contextPath}";
+            window.APP_CONTEXT_PATH = "${pageContext.request.contextPath}";
         </script>
 
+        <%@ include file="../util/cont-sesion.jsp" %>
         <script src="${pageContext.request.contextPath}/js/bootstrap.bundle.min.js"></script>
         <script src="${pageContext.request.contextPath}/js/sidebar.js"></script>
         <script src="${pageContext.request.contextPath}/js/dashboard.js"></script>
+        <script src="${pageContext.request.contextPath}/js/session-timer.js"></script>
     </body>
 </html>
