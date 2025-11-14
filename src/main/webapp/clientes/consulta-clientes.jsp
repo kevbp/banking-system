@@ -4,23 +4,21 @@
     Author     : kevin
 --%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 <!DOCTYPE html>
-<html lang="es-ES">
+<html lang="es">
     <head>
         <meta charset="utf-8">
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-
         <title>Consulta de Clientes - Quantum Bank</title>
 
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
         <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet">
         <link href="${pageContext.request.contextPath}/css/estilos.css" rel="stylesheet">
         <link href="${pageContext.request.contextPath}/css/header.css" rel="stylesheet">
-        <link href="${pageContext.request.contextPath}/css/sidebar.css" rel="stylesheet"> <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+        <link href="${pageContext.request.contextPath}/css/sidebar.css" rel="stylesheet"> 
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
     </head>
 
     <body data-active-page="clientes-consulta">
@@ -92,27 +90,27 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <c:forEach var="item" items="${requestScope.lista}">
+                                        <c:forEach var="cliente" items="${lista}">
                                             <tr>
-                                                <td>${item[0]}</td>
-                                                <td>${item[1]}</td>
-                                                <td>${item[2]}</td>
-                                                <td>${item[3]}</td>
-                                                <td>${item[4]}</td>
-                                                <td>${item[5]}</td>
-                                                <td>${item[7]}</td>
+                                                <td>${cliente[0]}</td>
+                                                <td>${cliente[1]}</td>
+                                                <td>${cliente[2]}</td>
+                                                <td>${cliente[3]}</td>
+                                                <td>${cliente[4]}</td>
+                                                <td>${cliente[5]}</td>
+                                                <td>${cliente[7]}</td>
                                                 <td class="text-center">
                                                     <form action="${pageContext.request.contextPath}/ControlCliente" method="post" class="d-inline">
                                                         <input type="hidden" name="accion" value="Detalle">
-                                                        <input type="hidden" name="id" value="${item[0]}"/>
+                                                        <input type="hidden" name="id" value="${cliente[0]}"/>
                                                         <button type="submit" class="btn btn-sm btn-outline-warning">Editar</button>
                                                     </form>
 
                                                     <button class="btn btn-sm btn-outline-danger"
                                                             data-bs-toggle="modal"
                                                             data-bs-target="#modalDesactivarCliente"
-                                                            data-id="${item[0]}"
-                                                            data-nombre="${item[3]}">
+                                                            data-id="${cliente[0]}"
+                                                            data-nombre="${cliente[3]}">
                                                         Desactivar
                                                     </button>
                                                 </td>
@@ -237,18 +235,14 @@
             </div>
         </div>
         <%@ include file="../util/cont-sesion.jsp" %>
-        
-        <c:set var="provinciaGuardada" value="${cli[13]}"/>
-        <c:set var="distritoGuardado" value="${cli[14]}"/>
 
         <script src="${pageContext.request.contextPath}/js/bootstrap.bundle.min.js"></script>
         <script src="${pageContext.request.contextPath}/js/sidebar.js"></script>
         <script>
             const contextPath = "${pageContext.request.contextPath}";
-
             // CAMBIO: Movido de los scripts de abajo para unificar
-            const PROVINCIA_CLIENTE = '${provinciaGuardada}';
-            const DISTRITO_CLIENTE = '${distritoGuardado}';
+            const PROVINCIA_CLIENTE = '${cli[13]}';
+            const DISTRITO_CLIENTE = '${cli[14]}';
             const ES_MODO_EDICION_CLIENTE = true;
         </script>
         
