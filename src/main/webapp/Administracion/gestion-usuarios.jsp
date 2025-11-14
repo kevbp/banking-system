@@ -67,18 +67,16 @@
                                                 <input type="text" class="form-control" id="car" name="car" required>
                                             </div>
 
-                                            <c:set var="roles" value="${sessionScope.roles}"/>
                                             <div class="col-md-12">
                                                 <label for="rol" class="form-label">Rol</label>
                                                 <select id="roles" name="roles" class="form-select" required>
                                                     <option value="">Seleccione...</option>
-                                                    <c:forEach var="rol" items="${roles}">
-                                                        <option value="${rol.codRol}">${rol.des}</option>
+                                                    <c:forEach var="r" items="${roles}">
+                                                        <option value="${r.codRol}">${r.des}</option>
                                                     </c:forEach>
                                                 </select>
                                             </div>
 
-                                            <c:set var="estUsu" value="${sessionScope.estUsu}"/>
                                             <div class="col-md-12">
                                                 <label for="est" class="form-label">Estado</label>
                                                 <select id="est" name="est" class="form-select" required>
