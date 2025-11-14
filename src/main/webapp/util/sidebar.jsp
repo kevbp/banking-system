@@ -3,12 +3,12 @@
 <nav class="sidebar d-flex flex-column flex-shrink-0">
 
     <a href="${pageContext.request.contextPath}/home.jsp" 
-       class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-        <img src="${pageContext.request.contextPath}/img/logoQB.png" alt="Quantum Bank" height="70" class="me-2">
+       class="d-flex align-items-center justify-content-center mb-3 mb-md-0 text-white text-decoration-none">
+        <img src="${pageContext.request.contextPath}/img/logoQB.png" alt="Quantum Bank" height="50">
     </a>
     <hr class="text-white opacity-50">
 
-    <ul class="nav nav-pills flex-column mb-auto">
+    <ul class="nav nav-pills flex-column">
 
         <li class="nav-item mb-1">
             <a href="${pageContext.request.contextPath}/home.jsp" class="nav-link nav-root" data-page-id="home">

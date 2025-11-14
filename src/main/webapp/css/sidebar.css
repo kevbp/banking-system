@@ -1,107 +1,116 @@
 /* Contenedor */
 .sidebar {
-  width: 260px;
-  background: linear-gradient(180deg, #001f3f 0%, #003a78 100%);
-  color: #fff;
-  padding: 16px 0;
-  height: 100vh;
-  position: sticky;
-  top: 0;
-  display: flex;
-  flex-direction: column;
-  overflow-y: auto; /* Permite desplazamiento vertical */
-  overflow-x: hidden; /* Elimina desplazamiento horizontal */
+    width: 260px;
+    background: linear-gradient(180deg, #001f3f 0%, #003a78 100%);
+    color: #fff;
+    padding: 16px 0;
+    height: 100vh;
+    position: sticky;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    /* CAMBIO: Se elimina 'overflow-y: auto' de aquí. 
+      El scroll se manejará en el .nav
+    */
+    overflow-x: hidden; /* Esto previene el scroll horizontal que mencionaste */
 }
 
 /* Raíces (Inicio, y botones de secciones) */
 .nav-root {
-  width: 100%;
-  text-align: left;
-  color: #e0e6f0 !important;
-  font-weight: 600;
-  padding: 10px 20px;
-  border-radius: 8px;
+    width: 100%;
+    text-align: left;
+    color: #e0e6f0 !important;
+    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: 8px;
 }
 
 .nav-root:hover {
-  background-color: rgba(255,255,255,0.10);
-  color: #ffffff !important;
+    background-color: rgba(255, 255, 255, 0.10);
+    color: #ffffff !important;
 }
 
 .nav-link.nav-root {
-  display: block;
-  text-decoration: none;
+    display: block;
+    text-decoration: none;
 }
 
 /* Sección colapsable */
 .nav-section {
-  padding: 6px 0 6px 8px;
+    padding: 6px 0 6px 8px;
 }
 
 /* Submenú con puntito */
 .nav-sub {
-  margin: 4px 0 10px 0;
+    margin: 4px 0 10px 0;
 }
 
 .nav-sub-link {
-  display: block;
-  position: relative;
-  padding: 8px 20px 8px 36px; /* espacio para el dot */
-  color: #e6edf6;
-  text-decoration: none;
-  border-radius: 8px;
-  font-weight: 500;
+    display: block;
+    position: relative;
+    padding: 8px 20px 8px 36px; /* espacio para el dot */
+    color: #e6edf6;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 500;
+
+    /* Esto ayuda a manejar texto largo */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .nav-sub-link::before {
-  content: "";
-  position: absolute;
-  left: 20px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background-color: rgba(255,255,255,0.7);
+    content: "";
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.7);
 }
 
 .nav-sub-link:hover {
-  background-color: rgba(255,255,255,0.10);
-  color: #fff;
+    background-color: rgba(255, 255, 255, 0.10);
+    color: #fff;
 }
 
 /* Activos */
 .nav-root.active,
 .btn.btn-toggle.active {
-  background-color: rgba(255,255,255,0.14);
-  color: #ffffff !important;
+    background-color: rgba(255, 255, 255, 0.14);
+    color: #ffffff !important;
 }
 
 .nav-sub-link.active {
-  background-color: rgba(255,255,255,0.16);
-  color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.16);
+    color: #ffffff;
 }
 
 .nav-sub-link.active::before {
-  background-color: #ffffff; /* puntito sólido */
+    background-color: #ffffff; /* puntito sólido */
 }
 
 /* Íconos */
 .nav-root i {
-  color: #ffffff;
+    color: #ffffff;
 }
 
-/* Scroll si el contenido crece */
+/* CAMBIO: El .nav (la <ul>) ahora es el responsable
+  de crecer y gestionar el scroll vertical.
+*/
 .sidebar .nav {
-  overflow-y: auto; /* Desplazamiento vertical */
-  scrollbar-width: thin;
+    flex-grow: 1; /* Hace que la lista ocupe el espacio restante */
+    scrollbar-width: thin;
 }
 
 .sidebar .nav::-webkit-scrollbar {
-  width: 6px;
+    width: 6px;
 }
 
 .sidebar .nav::-webkit-scrollbar-thumb {
-  background-color: rgba(255,255,255,0.25);
-  border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.25);
+    border-radius: 10px;
 }
