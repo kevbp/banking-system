@@ -9,6 +9,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.security.SecureRandom;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -143,7 +144,7 @@ public class ServicioCliente {
     
     public static int contarClientes(String tipoDoc, String numDoc, String nomb) {
         String condicion = construirCondicionBusqueda(tipoDoc, numDoc, nomb);
-        return DaoCliente.contar("");
+        return DaoCliente.contar(condicion);
     }
     
     private static String construirCondicionBusqueda(String tipoDoc, String numDoc, String nomb) {
@@ -178,5 +179,11 @@ public class ServicioCliente {
         // 3. Llamar al DAO con la condición, el límite (15) y el offset
         // Asumiendo que DaoCliente.listarPaginado(condicion, limit, offset) fue añadido en el DAO
         return DaoCliente.listar(condicion, REGISTROS_POR_PAGINA, offset);
+    }
+                
+    public static int contarClientesRegistradosHoy() {
+        String fechaHoy = LocalDate.now().toString();
+        String condicion = "WHERE DATE(fecReg) = '"+fechaHoy+"'";
+        return DaoCliente.contar(condicion);
     }
 }

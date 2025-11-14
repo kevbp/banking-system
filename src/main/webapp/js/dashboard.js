@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const data = await response.json();
 
             // Éxito: Actualizar el DOM
-            statClientesEl.textContent = data.clientesActivos;
+            //statClientesEl.textContent = data.clientesActivos;
             statCuentasEl.textContent = data.cuentasHoy;
             statOperacionesEl.textContent = data.operacionesDia;
 
@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
             // Error: Mostrar estado de error
             statElements.forEach(el => {
                 if (el) {
-                    el.textContent = "N/A";
+                    //el.textContent = "N/A";
                     el.style.color = "#dc3545"; 
                 }
             });

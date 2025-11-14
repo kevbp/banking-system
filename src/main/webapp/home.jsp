@@ -3,7 +3,6 @@
     Created on : Oct 8, 2025, 6:08:47 PM
     Author     : kevin
 --%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="es-ES">
@@ -40,7 +39,7 @@
                                 <i class="bi bi-person-check icon" aria-hidden="true"></i>
                                 <div>
                                     <h6>Clientes activos</h6>
-                                    <p class="value is-loading" id="stat-clientes-activos">...</p>
+                                    <p class="value is-loading" id="stat-clientes-activos">${sessionScope.clientesRegistradosHoy}</p>
                                 </div>
                             </div>
                         </div>
