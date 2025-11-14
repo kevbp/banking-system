@@ -15,7 +15,6 @@ import servicio.ServicioUtilitarios;
 
 @WebServlet(name = "ControlCliente", urlPatterns = {"/ControlCliente"})
 public class ControlCliente extends HttpServlet {
-
     String tipoDocumento = "";
     String nroDocumento = "";
     String codigo = "";
@@ -113,10 +112,37 @@ public class ControlCliente extends HttpServlet {
                                         String tipoDoc, String nroDoc, String nombre) 
             throws ServletException, IOException {
         
-        List lista = ServicioCliente.listarClientes(tipoDoc, nroDoc, nombre);
-        if (lista != null) {
-            request.setAttribute("lista", lista);
-        }        
+        int paginaActual = 1;
+        String pStr = request.getParameter("p");
+        try {
+            if (pStr != null && !pStr.isEmpty()) {
+                paginaActual = Integer.parseInt(pStr);
+            }
+        } catch (NumberFormatException e) { /* Usa la página 1 por defecto */ }
+
+        // 1. Obtener totales
+        int totalRegistros = ServicioCliente.contarClientes(tipoDoc, nroDoc, nombre);
+        int totalPaginas = (int) Math.ceil((double) totalRegistros / 15);
+        
+        // Ajustar página
+        if (paginaActual < 1) paginaActual = 1;
+        if (paginaActual > totalPaginas && totalPaginas > 0) paginaActual = totalPaginas;
+
+        // 2. Obtener lista paginada
+        List lista = ServicioCliente.listarClientesPaginado(tipoDoc, nroDoc, nombre, paginaActual);
+        
+        // 3. Enviar datos al JSP
+        request.setAttribute("lista", lista);
+        request.setAttribute("paginaActual", paginaActual);
+        request.setAttribute("totalPaginas", totalPaginas);
+        request.setAttribute("totalRegistros", totalRegistros);
+        
+        // Conservar filtros
+        request.setAttribute("tipoDocFiltro", tipoDoc);
+        request.setAttribute("numDocFiltro", nroDoc);
+        request.setAttribute("nombreFiltro", nombre);
+        
+        // 4. Forward a la vista
         request.getRequestDispatcher("clientes/consulta-clientes.jsp").forward(request, response);
     }
     

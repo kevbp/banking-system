@@ -4,6 +4,7 @@
     Author     : kevin
 --%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 <!DOCTYPE html>
@@ -105,7 +106,7 @@
                                                         <input type="hidden" name="id" value="${cliente[0]}"/>
                                                         <button type="submit" class="btn btn-sm btn-outline-warning">Editar</button>
                                                     </form>
-
+ 
                                                     <button class="btn btn-sm btn-outline-danger"
                                                             data-bs-toggle="modal"
                                                             data-bs-target="#modalDesactivarCliente"
@@ -116,10 +117,45 @@
                                                 </td>
                                             </tr>
                                         </c:forEach>
+                                        <c:if test="${empty lista}">
+                                            <tr>
+                                                <td colspan="7" class="text-center">No se encontraron clientes con los filtros aplicados.</td>
+                                            </tr>
+                                        </c:if>
                                     </tbody>
                                 </table>
                             </div>
+                            <c:set var="totalPaginas" value="${totalPaginas == 0 ? 1 : totalPaginas}" />
+                            <div class="d-flex justify-content-between align-items-center mt-4">
+                                <div class="text-muted">
+                                    Mostrando **${fn:length(lista)}** de **${totalRegistros}** resultados. (Página ${paginaActual} de ${totalPaginas})
+                                </div>
 
+                                <nav aria-label="Navegación de Clientes">
+                                    <ul class="pagination pagination-sm mb-0">
+
+                                        <li class="page-item <c:if test="${paginaActual le 1}">disabled</c:if>">
+                                            <a class="page-link" 
+                                               href="${pageContext.request.contextPath}/ControlCliente?op=ListaClientes&p=${paginaActual - 1}&tipoDoc=${tipoDocFiltro}&numDoc=${numDocFiltro}&nomb=${nombreFiltro}"
+                                               tabindex="-1">Anterior</a>
+                                        </li>
+
+                                        <c:forEach begin="1" end="${totalPaginas}" var="i">
+                                            <li class="page-item <c:if test="${i == paginaActual}">active</c:if>">
+                                                <a class="page-link" 
+                                                   href="${pageContext.request.contextPath}/ControlCliente?op=ListaClientes&p=${i}&tipoDoc=${tipoDocFiltro}&numDoc=${numDocFiltro}&nomb=${nombreFiltro}">
+                                                    <c:out value="${i}"/>
+                                                </a>
+                                            </li>
+                                        </c:forEach>
+
+                                        <li class="page-item <c:if test="${paginaActual ge totalPaginas}">disabled</c:if>">
+                                            <a class="page-link" 
+                                               href="${pageContext.request.contextPath}/ControlCliente?op=ListaClientes&p=${paginaActual + 1}&tipoDoc=${tipoDocFiltro}&numDoc=${numDocFiltro}&nomb=${nombreFiltro}">Siguiente</a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
                             <div class="text-center mt-3">
                                 <a href="${pageContext.request.contextPath}/home.jsp" class="btn btn-secondary px-4">Volver al Panel</a>
                             </div>

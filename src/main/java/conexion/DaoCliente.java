@@ -13,11 +13,13 @@ public class DaoCliente {
                         cli.getEstado()+"','"+cli.getCodUsuarioCre()+"','"+cli.getFechaUsuarioCre()+"');";
         return Acceso.ejecutar(sql);
     }
-
-    public static List listar(String condicion) {
+    
+    public static List listar(String condicion, int limit, int offset) {
         String sql = "SELECT codCliente, tipoDoc, numDoc, nomCompleto, cel, email, c.codEstado, e.des, fecNac, dir, codUbigeo, tel FROM t_cliente as c " +
-                    "inner join t_estado as e on c.codEstado = e.codEstado " +condicion+";";
-        return Acceso.listar(sql);
+                     "INNER JOIN t_estado as e on c.codEstado = e.codEstado " + condicion +
+                     " ORDER BY codCliente ASC " + 
+                     " LIMIT " + limit + " OFFSET " + offset + ";";                     
+        return Acceso.listar(sql); 
     }
 
     public static Object[] ultCod() {
@@ -51,5 +53,21 @@ public class DaoCliente {
     public static String inactivar(String codigo){
         String sql = "UPDATE t_cliente SET codEstado = 'S0002' WHERE codCliente = '"+codigo+"';";
         return Acceso.ejecutar(sql);
+    }
+    
+    public static int contar(String condicion) {
+        String sql = "SELECT COUNT(*) FROM t_cliente AS c " + condicion + ";";
+        
+        Object[] resultado = Acceso.buscar(sql); 
+
+        if (resultado != null && resultado.length > 0 && resultado[0] != null) {
+            try {
+                return Integer.parseInt(resultado[0].toString());
+            } catch (NumberFormatException e) {
+                System.err.println("Error al parsear el resultado de COUNT: " + e.getMessage());
+                return 0;
+            }
+        }
+        return 0;
     }
 }

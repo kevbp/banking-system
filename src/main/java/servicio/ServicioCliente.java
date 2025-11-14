@@ -14,9 +14,11 @@ import java.util.List;
 import java.util.Map;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
-import utilitarios.Utiles;
+import utilitarios.Utiles;    
 
 public class ServicioCliente {
+    private static final int REGISTROS_POR_PAGINA = 15;
+    
     public static Object[] validacionReniec(String tipo, String documento){
         // La URL del endpoint de la API que quieres consumir
         String API_URL_BASE = "https://dniruc.apisperu.com/api/v1/"+tipo+"/";
@@ -103,27 +105,6 @@ public class ServicioCliente {
         return msg;
     }
     
-    public static List listarClientes(String tipoDoc, String numDoc, String nomb)
-    {
-        String condicion = "Where ";
-        if (!tipoDoc.isEmpty()) {
-            condicion = condicion + "tipoDoc = '"+tipoDoc+"' and numDoc = '"+numDoc+"'";
-        }
-        
-        if (!tipoDoc.isEmpty() && !nomb.isEmpty()) {
-            condicion = condicion + " and nom like '%"+nomb+"%'";
-        }else if(tipoDoc.isEmpty() && !nomb.isEmpty()){
-            condicion = condicion + "nomCompleto like '%"+nomb+"%'";
-        }
-        
-        if (tipoDoc.isEmpty() && nomb.isEmpty()){
-            condicion = "";
-        }
-        
-        List lista = DaoCliente.listar(condicion);          
-        return lista;
-    }
-    
     public static String nuevoCodigo(){
         Object[] ultCod = DaoCliente.ultCod();
         System.out.println(ultCod[0].toString());
@@ -147,7 +128,7 @@ public class ServicioCliente {
         }
         return msg;
     }
-    
+      
     public static Object[] buscarCliente(String codigo){
         return DaoCliente.buscar(codigo);
     }    
@@ -158,5 +139,44 @@ public class ServicioCliente {
             msg = "El cliente fue inactivado!";
         }
         return msg;
+    }
+    
+    public static int contarClientes(String tipoDoc, String numDoc, String nomb) {
+        String condicion = construirCondicionBusqueda(tipoDoc, numDoc, nomb);
+        return DaoCliente.contar("");
+    }
+    
+    private static String construirCondicionBusqueda(String tipoDoc, String numDoc, String nomb) {
+        StringBuilder condicion = new StringBuilder(" WHERE 1 = 1 "); // Asumimos un filtro de estado ACTIVO por defecto
+        
+        // 1. Aplicar filtro por tipo y número de documento (usualmente van juntos)
+        if (tipoDoc != null && !tipoDoc.isEmpty() && numDoc != null && !numDoc.isEmpty()) {
+            // Se usa el AND porque ya tenemos 'c.codEstado = 'S0001''
+            condicion.append(" AND tipoDoc = '").append(tipoDoc).append("' ");
+            condicion.append(" AND numDoc = '").append(numDoc).append("' ");
+        } 
+        
+        // 2. Aplicar filtro por nombre (LIKE)
+        // Se aplica si no se usó el filtro completo de tipo/número, o se complementa.
+        if (nomb != null && !nomb.isEmpty()) {
+            condicion.append(" AND nomCompleto LIKE '%").append(nomb).append("%' ");
+        } 
+        
+        // Si no hay ningún filtro más allá del estado activo, la condición sigue siendo " WHERE c.codEstado = 'S0001' "
+        return condicion.toString();
+    }
+    
+    public static List listarClientesPaginado(String tipoDoc, String numDoc, String nomb, int pagina) {
+        
+        // 1. Construir la condición de búsqueda
+        String condicion = construirCondicionBusqueda(tipoDoc, numDoc, nomb);
+        
+        // 2. Calcular el OFFSET para la paginación
+        // Fórmula: (Página - 1) * Registros_por_página
+        int offset = (pagina - 1) * REGISTROS_POR_PAGINA;
+        
+        // 3. Llamar al DAO con la condición, el límite (15) y el offset
+        // Asumiendo que DaoCliente.listarPaginado(condicion, limit, offset) fue añadido en el DAO
+        return DaoCliente.listar(condicion, REGISTROS_POR_PAGINA, offset);
     }
 }
