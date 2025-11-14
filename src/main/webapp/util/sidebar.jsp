@@ -9,9 +9,9 @@
     <hr class="text-white opacity-50">
 
     <ul class="nav nav-pills flex-column">
-
+        <c:url var="urlHome" value="/ControlHome"><c:param name="op" value="home"/></c:url>
         <li class="nav-item mb-1">
-            <a href="${pageContext.request.contextPath}/home.jsp" class="nav-link nav-root" data-page-id="home">
+            <a href="${urlHome}" class="nav-link nav-root" data-page-id="home">
                 <i class="bi bi-house-door me-2"></i> Inicio
             </a>
         </li>

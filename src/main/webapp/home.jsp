@@ -20,7 +20,7 @@
         <link rel="stylesheet" href="${pageContext.request.contextPath}/css/header.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/css/estilos.css"> </head>
 
-    <body>
+    <body data-active-page="home">
         <%@ include file="util/theme.jsp" %>
 
         <div class="d-flex">
