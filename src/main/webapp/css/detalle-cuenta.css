@@ -1,0 +1,136 @@
+/*
+ * =============================================
+ * detalle-cuenta.css
+ * Estilos específicos para la página detalle-cuenta.jsp
+ * =============================================
+ */
+
+/* 1. Botón "Volver" */
+.btn-volver {
+    font-weight: 500;
+    color: #003a78;
+}
+.btn-volver:hover {
+    color: #001f3f;
+}
+
+/* 2. Contenedor de la tabla de movimientos */
+.movements-scrollable {
+    /* CAMBIO: Se elimina flex-grow y min-height: 0 */
+    overflow-y: auto;
+    padding-right: 10px;
+
+    /* CAMBIO CRÍTICO: 
+      Se establece una altura máxima fija. 
+      Aprox. 50px por fila * 10 filas = 500px.
+      Si hay más de 10 filas, aparecerá el scroll.
+    */
+    max-height: 700px;
+}
+
+/* 3. Tarjeta de detalles (columna izquierda) */
+.details-card {
+    /* Ya no necesita flex-grow */
+}
+.details-card .card-body {
+    /* (sin cambios) */
+}
+.details-scrollable {
+    /* La lista de detalles NO scrollea */
+    overflow-y: visible;
+    padding-right: 0;
+}
+
+/* 4. Tabla de detalles */
+.account-details li {
+    display: flex;
+    flex-direction: column;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #f1f3f5;
+}
+.account-details li:last-child {
+    border-bottom: none;
+}
+.account-details span {
+    color: #6c757d;
+    font-size: 0.85rem;
+}
+.account-details strong {
+    color: #212529;
+    font-weight: 500;
+    font-size: 1rem;
+}
+.account-details strong.text-muted {
+    font-size: 0.9rem;
+    font-weight: 400;
+}
+.account-details li.account-copy-item {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+.account-copy-text {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    word-break: break-all;
+}
+.account-copy-button {
+    flex-shrink: 0;
+    padding-top: 0.25rem;
+    margin-left: 0.5rem;
+}
+
+/* 5. Botón "Copiar" */
+.btn-copy {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+    border: 1px solid #ced4da;
+    color: #003a78;
+}
+.btn-copy:hover {
+    background-color: #f1f3ff;
+}
+.btn-copy i {
+    font-size: 1em;
+    margin-right: 0.25rem;
+}
+
+/* 6. Dropdown (Selector de Cuenta) */
+.account-selector-dropdown .dropdown-toggle {
+    font-weight: 500;
+}
+
+/* 7. Colores de tabla de movimientos */
+.table .text-success {
+    color: #198754 !important;
+}
+.table .text-danger {
+    color: #dc3545 !important;
+}
+
+/* 8. Mini-botones de acción (Saldo) */
+.movements-actions-group {
+    display: flex;
+    gap: 0.5rem;
+    flex-shrink: 0;
+    padding-left: 1rem;
+}
+.movements-actions-group .btn-sm {
+    font-size: 0.9rem;
+    padding: 0.25rem 0.6rem;
+    line-height: 1.5;
+}
+.movements-actions-group .btn-sm i {
+    font-size: 1.1em;
+    vertical-align: middle;
+}
+
+/* 9. CAMBIO: Layout Fijo (Desktop) 
+  Se eliminaron todas las reglas de altura (h-100, max-height) 
+  para que la página tenga scroll natural.
+*/
+@media (min-width: 992px) {
+    /* Ya no es necesario forzar la altura de la página */
+}

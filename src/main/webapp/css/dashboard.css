@@ -1,0 +1,170 @@
+/*
+ * =============================================
+ * dashboard.css
+ * Estilos específicos para la página dashboard-cliente.jsp
+ * =============================================
+ */
+
+/* 1. Tarjeta de Cuenta Horizontal */
+.account-card-horizontal {
+    border: 1px solid #FFFFFF;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 15px rgba(0, 58, 120, 0.04);
+    transition: all 0.2s ease-in-out;
+    background-color: #FFFFFF;
+}
+.account-card-horizontal:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0, 58, 120, 0.08);
+    border-color: #003a78;
+}
+.account-card-horizontal .icon-wrapper {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+}
+.account-card-horizontal .account-type {
+    font-weight: 600;
+    font-size: 1rem;
+    color: #212529;
+}
+.account-card-horizontal .account-number {
+    font-size: 0.9rem;
+    color: #6c757d;
+    font-family: 'Courier New', Courier, monospace;
+}
+.account-card-horizontal .balance-label {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #6c757d;
+    text-transform: uppercase;
+}
+.account-card-horizontal .balance-amount {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #212529;
+}
+
+/* 2. Tarjeta de Acciones */
+.quick-actions-card {
+    border: none;
+    border-radius: 0.75rem;
+    background-color: #FFFFFF;
+    /* CAMBIO: Se quita la altura fija. Ahora será estática. */
+}
+.quick-actions-card .card-body {
+    display: flex;
+    flex-direction: column;
+}
+.action-grid-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 75px;
+    border: 1px solid #e9ecef;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    color: #003a78;
+    background-color: #FFFFFF;
+    transition: all 0.2s ease;
+    font-size: 0.85rem;
+    padding: 0.25rem;
+    text-align: center;
+}
+.action-grid-btn i {
+    font-size: 1.6em;
+    margin-bottom: 0.25rem;
+}
+.action-grid-btn:hover {
+    background-color: #f4f8fb;
+    border-color: #003a78;
+    color: #003a78;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 58, 120, 0.05);
+}
+
+/* 3. Lista de Favoritos */
+.favorite-account-item {
+    display: flex;
+    align-items: center;
+    border: 0;
+}
+.favorite-account-item:hover {
+    background-color: #f4f8fb;
+}
+.avatar-initial {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 1rem;
+    margin-right: 0.75rem;
+    flex-shrink: 0;
+}
+.favorite-info {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.3;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.favorite-info .fw-medium {
+    color: #212529;
+}
+.favorite-info small {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+/* 4. Contenedores de Scroll (Móvil) */
+.account-list-scrollable {
+    overflow-y: auto;
+    padding-right: 10px;
+    min-height: 0; /* Corrección Flexbox */
+}
+
+.favorite-list-scrollable {
+    overflow-y: auto;
+    padding-right: 10px;
+    min-height: 0; /* Corrección Flexbox */
+
+    /* CAMBIO: Altura máxima fija para 6 filas (aprox 60px/fila).
+      Esto activará el scroll si hay 7 o más items.
+    */
+    max-height: 360px;
+}
+
+/* 5. Layout Fijo (Desktop) */
+@media (min-width: 992px) {
+    .dashboard-account-column {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .account-list-scrollable {
+        flex-grow: 1;
+        max-height: 100%;
+    }
+
+    /* CAMBIO: Se eliminó height: 100% y max-height */
+    .quick-actions-card {
+        /* La tarjeta ahora tiene altura automática (estática) */
+    }
+
+    /* CAMBIO: Se elimina flex-grow y se mantiene la max-height fija */
+    .favorite-list-scrollable {
+        max-height: 360px; /* Mantiene el límite de 6 filas */
+    }
+}

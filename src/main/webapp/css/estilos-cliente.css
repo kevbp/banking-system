@@ -1,194 +1,371 @@
 /*
  * =============================================
  * estilos-cliente.css
- * Estilos para el Portal de Cliente (Opción 1).
+ * Estilos COMPLETOS para el Portal de Cliente.
  * =============================================
  */
 
 /* 1. Base del Cuerpo */
-body {
+.client-portal-body {
     font-family: 'Poppins', sans-serif;
-    background-color: #f5f7fa; /* Fondo gris claro */
+    background-color: #F4F8FB;
 }
 
-/* 2. Navbar del Cliente */
+/* 2. Banner de Tipo de Cambio (T.C.) */
+.tc-banner {
+    background-color: #001f3f;
+    color: #FFFFFF;
+    font-size: 0.85rem;
+    padding: 0.5rem 0;
+    text-align: center;
+    font-weight: 500;
+}
+.tc-banner strong {
+    color: #ffc107;
+}
+
+/* 3. Navbar del Cliente */
 .navbar-nav .nav-link {
     font-weight: 500;
-    color: #495057; /* Gris oscuro */
-    padding: 0.5rem 1rem;
-    border-radius: 0.375rem; /* 6px */
-    transition: background-color 0.2s ease;
-}
-
-.navbar-nav .nav-link:hover {
-    background-color: #f1f3f5; /* Gris muy claro al pasar el mouse */
-}
-
-/* * Estilo del enlace ACTIVO (se activa con JS).
- * Resalta el 'data-page-id' actual.
- */
-.navbar-nav .nav-link.active {
-    background-color: #e7f1ff; /* Azul claro (fondo) */
-    color: #003a78; /* Azul oscuro (texto) */
-    font-weight: 600;
-}
-
-/* 3. Tarjeta de Cuenta (Account Card) */
-.account-card {
-    border: 1px solid #e9ecef; /* Borde sutil */
-    border-radius: 0.75rem; /* 12px */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
-    transition: all 0.2s ease-in-out;
-    color: #212529; /* Color de texto base */
-}
-
-.account-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.07);
-    border-color: #003a78; /* Color primario del banco */
-}
-
-.account-card-header {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 0.5rem;
-}
-
-.account-card .account-type {
-    font-weight: 600;
-    font-size: 1rem;
-    color: #003a78; /* Color primario */
-}
-
-.account-card .account-currency {
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: #6c757d; /* Gris (muted) */
-}
-
-.account-card .account-card-balance {
-    font-size: 2rem; /* 32px */
-    font-weight: 600;
-    color: #212529; /* Negro */
-    margin-bottom: 0.75rem;
-}
-
-.account-card .account-card-number {
-    font-size: 0.9rem;
     color: #495057;
-    font-family: 'Courier New', Courier, monospace; /* Para N° de cuenta */
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    transition: background-color 0.2s ease;
+}
+.navbar-nav .nav-link:hover {
+    background-color: #f1f3f5;
+}
+.navbar-nav .nav-link.active {
+    background-color: #e7f1ff;
+    color: #003a78;
+    font-weight: 600;
+}
+.navbar .bi-person-circle {
+    font-size: 28px;
 }
 
-/* ... (Los estilos de .navbar y .account-card que ya teníamos) ... */
+/* 4. Estilo de Scrollbar Global (Compatibilidad Total) */
+.account-list-scrollable,
+.favorite-list-scrollable,
+.movements-scrollable,
+.details-column {
+    overflow-y: auto;
+    /* CAMBIO CRÍTICO: Permite que el contenedor se encoja */
+    min-height: 0;
+    /* Firefox */
+    scrollbar-width: thin;
+    scrollbar-color: #d1d9e1 #f4f8fb;
+}
+.account-list-scrollable::-webkit-scrollbar,
+.favorite-list-scrollable::-webkit-scrollbar,
+.movements-scrollable::-webkit-scrollbar,
+.details-column::-webkit-scrollbar {
+    width: 6px;
+}
+.account-list-scrollable::-webkit-scrollbar-thumb,
+.favorite-list-scrollable::-webkit-scrollbar-thumb,
+.movements-scrollable::-webkit-scrollbar-thumb,
+.details-column::-webkit-scrollbar-thumb {
+    background-color: #d1d9e1;
+    border-radius: 3px;
+}
 
-/*
- * =============================================
- * estilos-cliente.css
- * Estilos para el Portal de Cliente (Opción 1).
+/* * =============================================
+ * 5. Estilos de 'dashboard-cliente.jsp'
  * =============================================
  */
 
-/* 1. Base del Cuerpo */
-body {
-    font-family: 'Poppins', sans-serif;
-    background-color: #f5f7fa; /* Fondo gris claro */
-}
-
-/* 2. Navbar del Cliente */
-.navbar-nav .nav-link {
-    font-weight: 500;
-    color: #495057; /* Gris oscuro */
-    padding: 0.5rem 1rem;
-    border-radius: 0.375rem; /* 6px */
-    transition: background-color 0.2s ease;
-}
-
-.navbar-nav .nav-link:hover {
-    background-color: #f1f3f5; /* Gris muy claro al pasar el mouse */
-}
-
-/* Estilo del enlace ACTIVO (se activa con JS) */
-.navbar-nav .nav-link.active {
-    background-color: #e7f1ff; /* Azul claro (fondo) */
-    color: #003a78; /* Azul oscuro (texto) */
-    font-weight: 600;
-}
-
-/* 3. Tarjeta de Cuenta (Dashboard) */
-.account-card {
-    border: 1px solid #e9ecef;
-    border-radius: 0.75rem; /* 12px */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+/* Tarjeta de Cuenta */
+.account-card-horizontal {
+    border: 1px solid #FFFFFF;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 15px rgba(0, 58, 120, 0.04);
     transition: all 0.2s ease-in-out;
-    color: #212529;
+    background-color: #FFFFFF;
 }
-
-.account-card:hover {
+.account-card-horizontal:hover {
     transform: translateY(-4px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.07);
+    box-shadow: 0 8px 25px rgba(0, 58, 120, 0.08);
     border-color: #003a78;
 }
-
-.account-card-header {
+.account-card-horizontal .icon-wrapper {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
     display: flex;
-    justify-content: space-between;
-    margin-bottom: 0.5rem;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
 }
-
-.account-card .account-type {
+.account-card-horizontal .account-type {
     font-weight: 600;
     font-size: 1rem;
-    color: #003a78;
-}
-
-.account-card .account-currency {
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: #6c757d;
-}
-
-.account-card .account-card-balance {
-    font-size: 2rem;
-    font-weight: 600;
     color: #212529;
-    margin-bottom: 0.75rem;
 }
-
-.account-card .account-card-number {
+.account-card-horizontal .account-number {
     font-size: 0.9rem;
-    color: #495057;
+    color: #6c757d;
     font-family: 'Courier New', Courier, monospace;
 }
-
-/* * 4. NUEVO: Estilos para 'detalle-cuenta.jsp'
- */
-.account-details li {
-    display: flex;
-    justify-content: space-between;
-    padding: 0.5rem 0;
-    border-bottom: 1px solid #f1f3f5;
+.account-card-horizontal .balance-label {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #6c757d;
+    text-transform: uppercase;
+}
+.account-card-horizontal .balance-amount {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #212529;
 }
 
+/* Tarjeta de Acciones */
+.quick-actions-card {
+    border: none;
+    border-radius: 0.75rem;
+    background-color: #FFFFFF;
+}
+.quick-actions-card .card-body {
+    display: flex;
+    flex-direction: column;
+}
+.action-grid-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 75px;
+    border: 1px solid #e9ecef;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    color: #003a78;
+    background-color: #FFFFFF;
+    transition: all 0.2s ease;
+    font-size: 0.85rem;
+    padding: 0.25rem;
+    text-align: center;
+}
+.action-grid-btn i {
+    font-size: 1.6em;
+    margin-bottom: 0.25rem;
+}
+.action-grid-btn:hover {
+    background-color: #f4f8fb;
+    border-color: #003a78;
+    color: #003a78;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 58, 120, 0.05);
+}
+
+/* Lista de Favoritos */
+.favorite-list-scrollable {
+    flex-grow: 1; /* Ocupa el espacio restante */
+    min-height: 200px; /* Altura mínima en móvil */
+}
+.favorite-account-item {
+    display: flex;
+    align-items: center;
+    border: 0;
+}
+.favorite-account-item:hover {
+    background-color: #f4f8fb;
+}
+.avatar-initial {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 1rem;
+    margin-right: 0.75rem;
+    flex-shrink: 0;
+}
+.favorite-info {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.3;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.favorite-info .fw-medium {
+    color: #212529;
+}
+
+/* * =============================================
+ * 6. Estilos de 'detalle-cuenta.jsp'
+ * =============================================
+ */
+
+/* Botón "Volver" */
+.btn-volver {
+    font-weight: 500;
+    color: #003a78;
+}
+.btn-volver:hover {
+    color: #001f3f;
+}
+
+/* Contenedor de la tabla de movimientos */
+.movements-scrollable {
+    flex-grow: 1;
+    min-height: 200px; /* Altura mínima en móvil */
+}
+
+/* Tarjeta de detalles */
+.details-card {
+    flex-grow: 1;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+.details-card .card-body {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+.details-scrollable {
+    min-height: 150px; /* Altura mínima en móvil */
+}
+
+/* Tabla de detalles */
+.account-details li {
+    display: flex;
+    flex-direction: column;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #f1f3f5;
+}
 .account-details li:last-child {
     border-bottom: none;
 }
-
 .account-details span {
-    color: #6c757d; /* text-muted */
-    font-size: 0.9rem;
+    color: #6c757d;
+    font-size: 0.85rem;
 }
-
 .account-details strong {
     color: #212529;
     font-weight: 500;
+    font-size: 1rem;
+}
+.account-details strong.text-muted {
     font-size: 0.9rem;
+    font-weight: 400;
+}
+.account-details li.account-copy-item {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+.account-copy-text {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    word-break: break-all;
+}
+.account-copy-button {
+    flex-shrink: 0;
+    padding-top: 0.25rem;
+    margin-left: 0.5rem;
 }
 
-/* Estilo para las celdas de cargo/abono en la tabla de movimientos */
+/* Botón "Copiar" */
+.btn-copy {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+    border: 1px solid #ced4da;
+    color: #003a78;
+}
+.btn-copy:hover {
+    background-color: #f1f3ff;
+}
+.btn-copy i {
+    font-size: 1em;
+    margin-right: 0.25rem;
+}
+
+/* Dropdown (Selector de Cuenta) */
+.account-selector-dropdown .dropdown-toggle {
+    font-weight: 500;
+}
+
+/* Colores de tabla de movimientos */
 .table .text-success {
     color: #198754 !important;
 }
-
 .table .text-danger {
     color: #dc3545 !important;
+}
+
+/* Mini-botones de acción (Saldo) */
+.movements-actions-group {
+    display: flex;
+    gap: 0.5rem;
+    flex-shrink: 0;
+    padding-left: 1rem;
+}
+.movements-actions-group .btn-sm {
+    font-size: 0.9rem;
+    padding: 0.25rem 0.6rem;
+    line-height: 1.5;
+}
+.movements-actions-group .btn-sm i {
+    font-size: 1.1em;
+    vertical-align: middle;
+}
+
+
+/* * =============================================
+ * 7. Lógica de Layout Fijo (No-Scroll) SÓLO para Desktop
+ * =============================================
+ */
+@media (min-width: 992px) { /* 'lg' breakpoint de Bootstrap */
+
+    .client-portal-body {
+        height: 100vh;
+        overflow-y: hidden;
+    }
+
+    .client-portal-content {
+        height: calc(100vh - 93px);
+        overflow: hidden;
+    }
+
+    /* Scroll para la lista de cuentas (Dashboard) */
+    .account-list-scrollable {
+        max-height: calc(100vh - 183px);
+    }
+
+    /* Tarjeta de Acciones (Dashboard) */
+    .quick-actions-card {
+        height: 100%; /* << CAMBIO CRÍTICO */
+        max-height: calc(100vh - 125px);
+    }
+    .favorite-list-scrollable {
+        flex-grow: 1;
+        max-height: calc(100% - 200px); /* Ajusta este 200px si es necesario */
+    }
+
+    /* Scroll para la TABLA DE MOVIMIENTOS (Detalle Cuenta) */
+    .movements-scrollable {
+        max-height: 100%;
+    }
+
+    /* Columna izquierda (Detalles) con scroll */
+    .details-column {
+        overflow-y: auto;
+        padding-right: 10px;
+    }
+    .details-card {
+        flex-grow: 0; /* Ya no se estira */
+    }
+    .details-scrollable {
+        overflow-y: visible;
+        padding-right: 0;
+        max-height: none;
+        min-height: auto;
+    }
 }

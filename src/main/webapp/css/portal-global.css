@@ -1,0 +1,89 @@
+/*
+ * =============================================
+ * portal-global.css
+ * Estilos GLOBALES para todo el portal de cliente.
+ * =============================================
+ */
+
+/* 1. Base del Cuerpo */
+.client-portal-body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #F4F8FB;
+    /* El scroll en móvil es normal (auto) */
+}
+
+/* 2. Banner de Tipo de Cambio (T.C.) */
+.tc-banner {
+    background-color: #001f3f;
+    color: #FFFFFF;
+    font-size: 0.85rem;
+    padding: 0.5rem 0;
+    text-align: center;
+    font-weight: 500;
+}
+.tc-banner strong {
+    color: #ffc107;
+}
+
+/* 3. Navbar del Cliente */
+.navbar-nav .nav-link {
+    font-weight: 500;
+    color: #495057;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    transition: background-color 0.2s ease;
+}
+.navbar-nav .nav-link:hover {
+    background-color: #f1f3f5;
+}
+.navbar-nav .nav-link.active {
+    background-color: #e7f1ff;
+    color: #003a78;
+    font-weight: 600;
+}
+.navbar .bi-person-circle {
+    font-size: 28px;
+}
+
+/* 4. Estilo de Scrollbar Global (Compatibilidad Total) */
+/* Todos los divs que scrolleen usarán esto */
+.account-list-scrollable,
+.favorite-list-scrollable,
+.movements-scrollable,
+.details-column {
+    overflow-y: auto;
+    min-height: 0; /* Corrección de bug de Flexbox */
+
+    /* Firefox */
+    scrollbar-width: thin;
+    scrollbar-color: #d1d9e1 #f4f8fb;
+}
+.account-list-scrollable::-webkit-scrollbar,
+.favorite-list-scrollable::-webkit-scrollbar,
+.movements-scrollable::-webkit-scrollbar,
+.details-column::-webkit-scrollbar {
+    width: 6px;
+}
+.account-list-scrollable::-webkit-scrollbar-thumb,
+.favorite-list-scrollable::-webkit-scrollbar-thumb,
+.movements-scrollable::-webkit-scrollbar-thumb,
+.details-column::-webkit-scrollbar-thumb {
+    background-color: #d1d9e1;
+    border-radius: 3px;
+}
+
+/* * 5. Layout Fijo (SÓLO para Desktop)
+ * Aquí está la magia del "no-scroll" de la página.
+ */
+@media (min-width: 992px) { /* 'lg' breakpoint de Bootstrap */
+
+    .client-portal-body {
+        height: 100vh;
+        overflow-y: hidden; /* Evita el scroll de la PÁGINA */
+    }
+
+    .client-portal-content {
+        height: calc(100vh - 93px); /* Ocupa el 100% del alto restante */
+        overflow: hidden; /* Evita el scroll del CONTENIDO */
+    }
+}
