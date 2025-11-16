@@ -11,11 +11,11 @@
         <title>Detalle de Cuenta - Quantum Bank</title>
 
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-        <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-        <link rel="stylesheet" href="../css/portal-global.css"/> 
-        <link rel="stylesheet" href="../css/detalle-cuenta.css"/> 
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/portal-global.css"/> 
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/detalle-cuenta.css"/> 
     </head>
 
     <body data-active-page="cuentas" class="client-portal-body">
@@ -36,7 +36,7 @@
                 <div class="col-lg-4 d-flex flex-column h-100 details-column">
 
                     <div class="mb-3">
-                        <a href="dashboard-cliente.jsp" class="btn btn-link text-decoration-none p-0 btn-volver">
+                        <a href="${pageContext.request.contextPath}/modulo-clientes/dashboard-cliente.jsp" class="btn btn-link text-decoration-none p-0 btn-volver">
                             <i class="bi bi-arrow-left me-1"></i>
                             Volver a Mis Cuentas
                         </a>
@@ -66,10 +66,10 @@
                                 <h1 class="h1 fw-bold text-success mb-0">S/ 1,250.50</h1>
                             </div>
                             <div class="movements-actions-group">
-                                <a href="transferencia.jsp" class="btn btn-sm btn-outline-primary" data-bs-toggle="tooltip" title="Transferir">
+                                <a href="${pageContext.request.contextPath}/modulo-clientes/transferencias/transferencia.jsp" class="btn btn-sm btn-outline-primary" data-bs-toggle="tooltip" title="Transferir">
                                     <i class="bi bi-arrow-left-right"></i>
                                 </a>
-                                <a href="retiro.jsp" class="btn btn-sm btn-outline-secondary" data-bs-toggle="tooltip" title="Retirar">
+                                <a href="${pageContext.request.contextPath}/modulo-clientes/retiros/retiro.jsp" class="btn btn-sm btn-outline-secondary" data-bs-toggle="tooltip" title="Retirar">
                                     <i class="bi bi-cash"></i>
                                 </a>
                             </div>
@@ -156,9 +156,9 @@
 
                 </div> </div> </div> <%@ include file="../util/cont-sesion.jsp" %>
 
-        <script src="../js/bootstrap.bundle.min.js"></script>
-        <script src="../js/session-timer.js"></script>
-        <script src="../js/portal-cliente.js"></script>
-        <script src="../js/detalle-cuenta.js"></script>
+        <script src="${pageContext.request.contextPath}/js/bootstrap.bundle.min.js"></script>
+        <script src="${pageContext.request.contextPath}/js/session-timer.js"></script>
+        <script src="${pageContext.request.contextPath}/js/portal-cliente.js"></script>
+        <script src="${pageContext.request.contextPath}/js/detalle-cuenta.js"></script>
     </body>
 </html>

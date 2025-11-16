@@ -12,11 +12,11 @@
         <title>Mis Cuentas - Quantum Bank</title>
 
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-        <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-        <link rel="stylesheet" href="../css/portal-global.css"/> 
-        <link rel="stylesheet" href="../css/dashboard.css"/> 
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/portal-global.css"/> 
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/dashboard.css"/> 
     </head>
 
     <body data-active-page="inicio" class="client-portal-body">
@@ -44,7 +44,9 @@
                     <div class="account-list-scrollable">
                         <a href="detalle-cuenta.jsp" class="card account-card-horizontal text-decoration-none mb-3">
                             <div class="card-body d-flex align-items-center p-3">
-                                <div class="icon-wrapper bg-success-subtle text-success"><i class="bi bi-currency-dollar"></i></div>
+                                <div class="icon-wrapper bg-success-subtle text-success">
+                                    <i class="bi bi-currency-dollar"></i>
+                                </div>
                                 <div class="card-info mx-3">
                                     <span class="account-type">Cuenta de Ahorros</span>
                                     <span class="account-number">N° 001-XXXX-001</span>
@@ -101,9 +103,9 @@
                         <div class="card-body p-4"> <h5 class="fw-semibold mb-3">Operaciones</h5>
 
                             <div class="row g-2 mb-4">
-                                <div class="col-4"><a href="transferencia.jsp" class="btn action-grid-btn"><i class="bi bi-arrow-left-right"></i><span>Transferir</span></a></div>
-                                <div class="col-4"><a href="deposito.jsp" class="btn action-grid-btn"><i class="bi bi-box-arrow-in-down"></i><span>Depositar</span></a></div>
-                                <div class="col-4"><a href="retiro.jsp" class="btn action-grid-btn"><i class="bi bi-cash"></i><span>Retirar</span></a></div>
+                                <div class="col-4"><a href="${pageContext.request.contextPath}/modulo-clientes/transferencias/transferencia.jsp" class="btn action-grid-btn"><i class="bi bi-arrow-left-right"></i><span>Transferir</span></a></div>
+                                <div class="col-4"><a href="${pageContext.request.contextPath}/modulo-clientes/depositos/deposito.jsp" class="btn action-grid-btn"><i class="bi bi-box-arrow-in-down"></i><span>Depositar</span></a></div>
+                                <div class="col-4"><a href="${pageContext.request.contextPath}/modulo-clientes/retiros/retiro.jsp" class="btn action-grid-btn"><i class="bi bi-cash"></i><span>Retirar</span></a></div>
                             </div>
 
                             <hr>
@@ -168,8 +170,8 @@
                     </div>
                 </div> </div> </div> <%@ include file="../util/cont-sesion.jsp" %>
 
-        <script src="../js/bootstrap.bundle.min.js"></script>
-        <script src="../js/session-timer.js"></script>
-        <script src="../js/portal-cliente.js"></script>
+        <script src="${pageContext.request.contextPath}/js/bootstrap.bundle.min.js"></script>
+        <script src="${pageContext.request.contextPath}/js/session-timer.js"></script>
+        <script src="${pageContext.request.contextPath}/js/portal-cliente.js"></script>
     </body>
 </html>

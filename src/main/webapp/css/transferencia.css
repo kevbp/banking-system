@@ -1,0 +1,76 @@
+/*
+ * =============================================
+ * transferencia.css
+ * Estilos específicos para la página transferencia.jsp
+ * =============================================
+ */
+
+/* 1. Contenedor de Pasos (Paso 1, 2, 3) */
+.step-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+/* El círculo con el número */
+.step-number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: #003a78; /* Color primario */
+    color: #FFFFFF;
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin-right: 0.75rem;
+    flex-shrink: 0;
+}
+
+.step-title {
+    font-weight: 600;
+    margin-bottom: 0;
+}
+
+/* 2. Estilo del campo de destinatario verificado */
+#destinoVerificado input.is-valid {
+    border-color: var(--bs-success);
+    font-weight: 500;
+}
+
+/* 3. Alerta de Tipo de Cambio */
+#avisoTipoCambio {
+    background-color: #fff3cd; /* Amarillo claro */
+    border-left: 4px solid #ffc107; /* Borde de alerta */
+}
+
+/* * 4. NUEVO: Estilos para el layout de 3 columnas
+ */
+@media (min-width: 992px) {
+    /* Asegura que las tarjetas (pasos) se estiren 
+      a la misma altura en escritorio.
+    */
+    .row.d-flex .card {
+        height: 100%;
+    }
+}
+
+/* * 5. NUEVO: Estilos para el display de Saldo
+*/
+.saldo-display-box {
+    background-color: #f4f8fb; /* Fondo azulado */
+    border-radius: 0.5rem;
+    padding: 0.75rem 1rem;
+    margin-top: 1rem;
+}
+.saldo-display-box .label {
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+.saldo-display-box .valor {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #003a78;
+    display: block;
+}
