@@ -1,0 +1,33 @@
+/*
+ * =============================================
+ * productos.css
+ * Estilos para el flujo de Apertura y Cancelación.
+ * =============================================
+ */
+
+/* 1. Contenedor de Pasos (Títulos) */
+.step-title {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #003a78;
+}
+
+/* 2. Lista de Cálculo de Intereses (en cancelar-plazo.jsp) */
+.calculation-list li {
+    padding: 0.75rem 0;
+    font-size: 1rem;
+}
+.calculation-list li span {
+    color: #6c757d; /* text-muted */
+}
+.calculation-list li strong {
+    font-weight: 600;
+}
+.calculation-list li .text-success {
+    font-weight: 600;
+    color: #198754 !important;
+}
+.calculation-list li .text-danger {
+    font-weight: 600;
+    color: #dc3545 !important;
+}

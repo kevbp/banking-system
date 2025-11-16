@@ -21,7 +21,7 @@
 
     <body data-active-page="transferir" class="client-portal-body">
 
-        <jsp:include page="/util/header-cliente.jsp" />
+        <jsp:include page="../../util/header-cliente.jsp" />
 
         <div class="container-fluid p-4 client-portal-content">
 
@@ -106,7 +106,7 @@
                         </div>
                     </div> </div> </form>
 
-        </div> <jsp:include page="/util/cont-sesion.jsp" />
+        </div> <jsp:include page="../../util/cont-sesion.jsp" />
         <script src="${pageContext.request.contextPath}/js/bootstrap.bundle.min.js"></script>
         <script src="${pageContext.request.contextPath}/js/session-timer.js"></script>
         <script src="${pageContext.request.contextPath}/js/portal-cliente.js"></script>

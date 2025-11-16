@@ -1,0 +1,18 @@
+/*
+ * =============================================
+ * deposito.css
+ * Estilos específicos para la página deposito.jsp
+ * =============================================
+ */
+
+/* 1. Contenedor de Pasos (Títulos) */
+.step-title {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #003a78;
+}
+
+/* 2. Campo 'Origen de Fondos' */
+#origenFondosContainer .form-text {
+    font-size: 0.8rem;
+}

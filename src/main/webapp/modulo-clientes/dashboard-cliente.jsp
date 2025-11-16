@@ -103,9 +103,9 @@
                         <div class="card-body p-4"> <h5 class="fw-semibold mb-3">Operaciones</h5>
 
                             <div class="row g-2 mb-4">
-                                <div class="col-4"><a href="${pageContext.request.contextPath}/modulo-clientes/transferencias/transferencia.jsp" class="btn action-grid-btn"><i class="bi bi-arrow-left-right"></i><span>Transferir</span></a></div>
-                                <div class="col-4"><a href="${pageContext.request.contextPath}/modulo-clientes/depositos/deposito.jsp" class="btn action-grid-btn"><i class="bi bi-box-arrow-in-down"></i><span>Depositar</span></a></div>
-                                <div class="col-4"><a href="${pageContext.request.contextPath}/modulo-clientes/retiros/retiro.jsp" class="btn action-grid-btn"><i class="bi bi-cash"></i><span>Retirar</span></a></div>
+                                <div class="col-4"><a href="${pageContext.request.contextPath}/modulo-clientes/operaciones/transferencia.jsp" class="btn action-grid-btn"><i class="bi bi-arrow-left-right"></i><span>Transferir</span></a></div>
+                                <div class="col-4"><a href="${pageContext.request.contextPath}/modulo-clientes/operaciones/deposito.jsp" class="btn action-grid-btn"><i class="bi bi-box-arrow-in-down"></i><span>Depositar</span></a></div>
+                                <div class="col-4"><a href="${pageContext.request.contextPath}/modulo-clientes/operaciones/retiro.jsp" class="btn action-grid-btn"><i class="bi bi-cash"></i><span>Retirar</span></a></div>
                             </div>
 
                             <hr>

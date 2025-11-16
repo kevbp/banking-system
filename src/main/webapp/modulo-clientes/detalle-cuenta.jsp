@@ -3,6 +3,14 @@
     Descripción: (V-05) Muestra los movimientos y detalles de una cuenta.
 --%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+
+<c:set var="tipoCuenta" value="Ahorros"/>
+<%-- <c:set var="tipoCuenta" value="Plazo Fijo"/> --%>
+
+<c:set var="saldo" value="1250.50"/>
+
 <!DOCTYPE html>
 <html lang="es-ES">
     <head>
@@ -20,7 +28,7 @@
 
     <body data-active-page="cuentas" class="client-portal-body">
 
-        <%@ include file="../util/header-cliente.jsp" %>
+        <jsp:include page="/util/header-cliente.jsp" />
 
         <div class="tc-banner">
             <div class="container-fluid px-4">
@@ -63,15 +71,30 @@
                         <div class="card-body p-4 d-flex flex-wrap justify-content-between align-items-center">
                             <div class_ ="me-3">
                                 <h2 class="h6 text-muted fw-normal mb-1">Saldo Disponible</h2>
-                                <h1 class="h1 fw-bold text-success mb-0">S/ 1,250.50</h1>
+                                <h1 class="h1 fw-bold text-success mb-0">
+                                    <fmt:formatNumber value="${saldo}" type="currency" currencySymbol="S/ "/>
+                                </h1>
                             </div>
+
                             <div class="movements-actions-group">
-                                <a href="${pageContext.request.contextPath}/modulo-clientes/transferencias/transferencia.jsp" class="btn btn-sm btn-outline-primary" data-bs-toggle="tooltip" title="Transferir">
-                                    <i class="bi bi-arrow-left-right"></i>
-                                </a>
-                                <a href="${pageContext.request.contextPath}/modulo-clientes/retiros/retiro.jsp" class="btn btn-sm btn-outline-secondary" data-bs-toggle="tooltip" title="Retirar">
-                                    <i class="bi bi-cash"></i>
-                                </a>
+                                <c:choose>
+                                    <c:when test="${tipoCuenta == 'Plazo Fijo'}">
+                                        <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalRenovarPlazo" title="Renovar Plazo">
+                                            <i class="bi bi-arrow-clockwise"></i>
+                                        </button>
+                                        <a href="cancelar-plazo.jsp" class="btn btn-sm btn-outline-danger" data-bs-toggle="tooltip" title="Cancelar Plazo">
+                                            <i class="bi bi-x-circle"></i>
+                                        </a>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <a href="${pageContext.request.contextPath}/modulo-clientes/transferencias/transferencia.jsp" class="btn btn-sm btn-outline-primary" data-bs-toggle="tooltip" title="Transferir">
+                                            <i class="bi bi-arrow-left-right"></i>
+                                        </a>
+                                        <a href="${pageContext.request.contextPath}/modulo-clientes/operaciones/retiro.jsp" class="btn btn-sm btn-outline-secondary" data-bs-toggle="tooltip" title="Retirar">
+                                            <i class="bi bi-cash"></i>
+                                        </a>
+                                    </c:otherwise>
+                                </c:choose>
                             </div>
                         </div>
                     </div>
@@ -101,9 +124,21 @@
                                     <strong>Juan Pérez</strong>
                                 </li>
                                 <li>
-                                    <span>Tasa (TEA):</span>
-                                    <strong>1.50%</strong>
+                                    <span>Tipo de Cuenta:</span>
+                                    <strong>${tipoCuenta}</strong>
                                 </li>
+
+                                <c:if test="${tipoCuenta == 'Plazo Fijo'}">
+                                    <li>
+                                        <span>Plazo:</span>
+                                        <strong>12 meses</strong>
+                                    </li>
+                                    <li>
+                                        <span>Interés Mensual (TEA):</span>
+                                        <strong>2.50%</strong>
+                                    </li>
+                                </c:if>
+
                                 <li>
                                     <span>Estado:</span>
                                     <strong class="text-success">Activa</strong>
@@ -117,6 +152,13 @@
                                     <strong>10/05/2024</strong>
                                 </li>
                             </ul>
+
+                            <hr class="my-3">
+                            <div class="d-grid">
+                                <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modalConfirmarCierre">
+                                    <i class="bi bi-trash3 me-1"></i> Cerrar Cuenta
+                                </button>
+                            </div>
                         </div>
                     </div>
 
@@ -125,6 +167,7 @@
                     <div class="card shadow-sm border-0 h-100 d-flex flex-column">
                         <div class="card-body p-4 d-flex flex-column flex-grow-1">
                             <h5 class="card-title fw-semibold mb-3">Últimos Movimientos</h5>
+
                             <div class="table-responsive movements-scrollable">
                                 <table class="table table-striped align-middle">
                                     <thead class="table-light">
@@ -154,7 +197,47 @@
                         </div>
                     </div>
 
-                </div> </div> </div> <%@ include file="../util/cont-sesion.jsp" %>
+                </div> 
+            </div> 
+        </div> 
+
+        <div class="modal fade" id="modalRenovarPlazo" tabindex="-1" aria-labelledby="modalRenovarPlazoLabel" aria-hidden="true">
+            <%-- ... (Contenido del modal Renovar) ... --%>
+        </div>
+
+        <div class="modal fade" id="modalConfirmarCierre" tabindex="-1" aria-labelledby="modalConfirmarCierreLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header bg-danger text-white">
+                        <h5 class="modal-title" id="modalConfirmarCierreLabel">
+                            <i class="bi bi-exclamation-triangle-fill me-2"></i> Confirmar Cierre de Cuenta
+                        </h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form action="${pageContext.request.contextPath}/modulo-clientes/productos/cierre-exito.jsp" method="POST">
+                        <div class="modal-body">
+                            <p class="fs-5 text-center">¿Está seguro de que desea cerrar esta cuenta?</p>
+                            <p class="text-center text-muted">
+                                <strong>Esta acción no se puede deshacer.</strong>
+                            </p>
+
+                            
+                                <div class="alert alert-warning small">
+                                    <strong><i class="bi bi-info-circle-fill"></i> Saldo Pendiente:</strong> Su saldo de 
+                                    <strong><fmt:formatNumber value="${saldo}" type="currency" currencySymbol="S/ "/></strong> 
+                                    será transferido a su cuenta principal.
+                                </div>
+                           
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-danger">Sí, Cerrar Cuenta</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <jsp:include page="/util/cont-sesion.jsp" />
 
         <script src="${pageContext.request.contextPath}/js/bootstrap.bundle.min.js"></script>
         <script src="${pageContext.request.contextPath}/js/session-timer.js"></script>

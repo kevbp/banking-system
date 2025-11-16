@@ -28,7 +28,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="${pageContext.request.contextPath}/modulo-clientes/apertura-cuenta.jsp" data-page-id="productos">
+                    <a class="nav-link" href="${pageContext.request.contextPath}/modulo-clientes/productos/apertura-cuenta.jsp" data-page-id="productos">
                         Abrir Productos
                     </a>
                 </li>
@@ -36,7 +36,7 @@
 
             <ul class="navbar-nav ms-auto align-items-center">
                 <li class="nav-item me-2 mb-2 mb-lg-0">
-                    <a href="${pageContext.request.contextPath}/modulo-clientes/transferencias/transferencia.jsp" class="btn btn-primary fw-semibold px-3" data-page-id="transferir">
+                    <a href="${pageContext.request.contextPath}/modulo-clientes/operaciones/transferencia.jsp" class="btn btn-primary fw-semibold px-3" data-page-id="transferir">
                         <i class="bi bi-arrow-left-right me-1"></i> Transferir
                     </a>
                 </li>
