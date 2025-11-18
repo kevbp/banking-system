@@ -93,7 +93,7 @@ public class ControlCuenta extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
 
         String doc = request.getParameter("doc");
-        Object[] datos = null;//DaoCliente.buscarPorDocumento(doc);
+        Object[] datos = DaoCliente.buscarPorDocumento(doc);
 
         try (PrintWriter out = response.getWriter()) {
             if (datos != null) {
