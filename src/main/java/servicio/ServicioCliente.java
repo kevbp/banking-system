@@ -20,6 +20,7 @@ import utilitarios.Utiles;
 
 public class ServicioCliente {
     private static final int REGISTROS_POR_PAGINA = 15;
+    private static final String PASSWORD_PATTERN = "^(?=.*[A-Z])(?=.*[0-9])(?=.*[^a-zA-Z0-9\\s]).{9,}$";
     
     public static Object[] validacionReniec(String tipo, String documento){
         // La URL del endpoint de la API que quieres consumir
@@ -189,6 +190,12 @@ public class ServicioCliente {
     
     // --- MÉTODO NUEVO PARA REGISTRO WEB ---
     public static String registrarAccesoWeb(String dni, UsuarioCliente uc) {
+        String pwd = uc.getClaveWeb();
+        
+        // 0. VALIDACIÓN DE POLÍTICA DE CONTRASEÑA (NUEVO)
+        if (!pwd.matches(PASSWORD_PATTERN)) {
+            return "La contraseña es débil. Debe tener más de 8 caracteres, incluir al menos una mayúscula, un número y un símbolo.";
+        }
         
         // 1. Validar que el DNI corresponda a un Cliente existente
         List<Object[]> clientes = DaoCliente.listar(" WHERE numDoc = '" + dni + "'", 1, 0);
