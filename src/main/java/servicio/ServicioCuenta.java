@@ -206,7 +206,7 @@ public class ServicioCuenta {
 
         try {
             cn = Acceso.getConexion();
-            cn.setAutoCommit(false);
+            cn.setAutoCommit(false); // INICIO DE TRANSACCIÓN
 
             // 1. Validar Cuenta
             CuentasBancarias cuenta = DaoCuenta.obtenerCuenta(numCuenta, cn);
@@ -223,55 +223,50 @@ public class ServicioCuenta {
                 throw new Exception("El monto debe ser mayor a 0.");
             }
 
-            // 2. LÓGICA DE VALIDACIÓN DE FONDOS SEGÚN TIPO DE CUENTA
-            BigDecimal saldoDisponible = cuenta.getSalAct();
-
-            // Códigos de Cuentas Corrientes (según tu dump SQL: TC002 y TC005)
+            // 2. VALIDAR FONDOS (Lógica Ahorros vs Corriente)
+            // TC002 = Corriente Soles, TC005 = Corriente Dólares (Según tu BD)
             boolean esCorriente = "TC002".equals(cuenta.getCodTipoCuenta()) || "TC005".equals(cuenta.getCodTipoCuenta());
 
             if (esCorriente) {
-                // CUENTA CORRIENTE: Saldo disponible = Saldo Real + Línea de Sobregiro
+                // CORRIENTE: Saldo + Sobregiro >= Monto
                 BigDecimal capacidadTotal = cuenta.getSalAct().add(cuenta.getSobregiro());
 
                 if (capacidadTotal.compareTo(montoBD) < 0) {
-                    throw new Exception("Fondos insuficientes (incluyendo sobregiro). Capacidad máxima: " + capacidadTotal);
+                    throw new Exception("Fondos insuficientes (incluyendo sobregiro). Capacidad: " + capacidadTotal);
                 }
-                // Nota: En cuenta corriente, el saldo resultante puede ser negativo
             } else {
-                // CUENTA DE AHORROS: Solo saldo positivo
+                // AHORROS: Solo Saldo >= Monto
                 if (cuenta.getSalAct().compareTo(montoBD) < 0) {
-                    throw new Exception("Saldo insuficiente en Cuenta de Ahorros. Disponible: " + cuenta.getSalAct());
+                    throw new Exception("Saldo insuficiente. Disponible: " + cuenta.getSalAct());
                 }
             }
 
-            // 3. Calcular Nuevo Saldo (Resta normal, permitiendo negativos si pasó la validación anterior)
+            // 3. ACTUALIZAR SALDO (Resta)
             BigDecimal nuevoSaldo = cuenta.getSalAct().subtract(montoBD);
-
-            // 4. Actualizar BD
             if (!DaoCuenta.actualizarSaldo(numCuenta, nuevoSaldo, codUsuario, cn)) {
                 throw new Exception("No se pudo actualizar el saldo.");
             }
 
-            // 5. Registrar Transacción
+            // 4. REGISTRAR TRANSACCIÓN
             String idTransaccion = utilitarios.Utiles.generarIdTransaccion();
             entidad.Transaccion tran = new entidad.Transaccion();
             tran.setCodTransaccion(idTransaccion);
             tran.setNumCuentaOrigen(numCuenta);
-            tran.setCodTipMovimiento("T0002"); // T0002 = RETIRO
+            tran.setCodTipMovimiento("TM002"); // <--- CORREGIDO: TM002
             tran.setMonto(montoBD);
             tran.setCanal("VENTANILLA");
-            tran.setCodEstado("S0008"); // Procesado
+            tran.setCodEstado("S0008");
 
             if (!conexion.DaoTransaccion.insertarTransaccion(tran, cn)) {
                 throw new Exception("Error al registrar la transacción.");
             }
 
-            // 6. Registrar Movimiento
+            // 5. REGISTRAR MOVIMIENTO
             entidad.Movimiento mov = new entidad.Movimiento();
             mov.setCodMovimiento(conexion.DaoMovimiento.generarCodigoMovimiento());
             mov.setCodTransaccion(idTransaccion);
             mov.setNumCuenta(numCuenta);
-            mov.setCodTipMovimiento("T0002");
+            mov.setCodTipMovimiento("TM002"); // <--- CORREGIDO: TM002
             mov.setMonto(montoBD);
             mov.setSalFin(nuevoSaldo);
             mov.setDes("RETIRO VENTANILLA - " + (observacion != null ? observacion : ""));

@@ -80,11 +80,22 @@
                                     <div class="col-md-6">
                                         <div class="card border-success h-100">
                                             <div class="card-body text-center d-flex flex-column justify-content-center">
-                                                <h6 class="text-success fw-bold">SALDO DISPONIBLE</h6>
+                                                <h6 class="text-success fw-bold">SALDO ACTUAL</h6>
                                                 <h2 class="display-5 fw-bold text-dark mb-0">
                                                     ${cuenta.desMoneda eq 'Dólares' ? '$' : 'S/'} 
                                                     <fmt:formatNumber value="${cuenta.salAct}" minFractionDigits="2" maxFractionDigits="2"/>
                                                 </h2>
+
+                                                <c:if test="${cuenta.sobregiro > 0}">
+                                                    <div class="mt-2 pt-2 border-top text-muted small">
+                                                        <i class="bi bi-plus-circle-dotted"></i> Sobregiro: 
+                                                        <strong><fmt:formatNumber value="${cuenta.sobregiro}" minFractionDigits="2"/></strong>
+                                                    </div>
+                                                    <div class="text-primary fw-bold small">
+                                                        Disponible Total: 
+                                                        <fmt:formatNumber value="${cuenta.salAct + cuenta.sobregiro}" minFractionDigits="2"/>
+                                                    </div>
+                                                </c:if>
                                             </div>
                                         </div>
                                     </div>
@@ -101,6 +112,7 @@
                                             <input type="hidden" name="numCuenta" value="${cuenta.numCuenta}">
 
                                             <input type="hidden" id="saldoDisponible" value="${cuenta.salAct}">
+                                            <input type="hidden" id="limSobregiro" value="${cuenta.sobregiro}">
 
                                             <div class="row g-3">
                                                 <div class="col-md-5">
@@ -112,7 +124,7 @@
                                                         <input type="number" step="0.01" min="0.10" class="form-control fw-bold text-danger" 
                                                                id="montoRetiro" name="monto" placeholder="0.00" required>
                                                     </div>
-                                                    <div id="feedbackSaldo" class="form-text text-danger d-none">
+                                                    <div id="feedbackSaldo" class="form-text text-danger d-none fw-bold">
                                                         <i class="bi bi-x-circle"></i> El monto excede el saldo disponible.
                                                     </div>
                                                 </div>
