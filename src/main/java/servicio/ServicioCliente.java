@@ -187,9 +187,9 @@ public class ServicioCliente {
         String condicion = "WHERE codEstado = 'S0001'";
         return DaoCliente.contar(condicion);
     }
-    
     // --- MÉTODO NUEVO PARA REGISTRO WEB ---
     public static String registrarAccesoWeb(String dni, UsuarioCliente uc) {
+        
         String pwd = uc.getClaveWeb();
         
         // 0. VALIDACIÓN DE POLÍTICA DE CONTRASEÑA (NUEVO)
