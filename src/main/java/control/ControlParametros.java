@@ -66,14 +66,22 @@ public class ControlParametros extends HttpServlet {
                 tc.setDescTipo(request.getParameter("descripcion"));
                 tc.setCodMoneda(request.getParameter("moneda"));
                 tc.setTasaInt(Double.parseDouble(request.getParameter("tasa")));
+
+                // Capturar sobregiro (si viene vacío es 0)
+                String sob = request.getParameter("sobregiro");
+                tc.setLimSobregiro((sob != null && !sob.isEmpty()) ? Double.parseDouble(sob) : 0.0);
+
                 DaoParametros.agregarTipoCuenta(tc);
                 tab = "cuentas";
+
             } else if ("editarTipoCuenta".equals(accion)) {
                 TipoCuenta tc = new TipoCuenta();
                 tc.setCodTipCuenta(request.getParameter("id"));
                 tc.setDescTipo(request.getParameter("descripcion"));
                 tc.setCodMoneda(request.getParameter("moneda"));
                 tc.setTasaInt(Double.parseDouble(request.getParameter("tasa")));
+                String sob = request.getParameter("sobregiro");
+                tc.setLimSobregiro((sob != null && !sob.isEmpty()) ? Double.parseDouble(sob) : 0.0);
                 DaoParametros.editarTipoCuenta(tc);
                 tab = "cuentas";
             } else if ("registrarTipoCambio".equals(accion) || "actualizarTipoCambio".equals(accion)) {
@@ -82,7 +90,7 @@ public class ControlParametros extends HttpServlet {
                 double compra = Double.parseDouble(request.getParameter("tasaCompra"));
                 double venta = Double.parseDouble(request.getParameter("tasaVenta"));
                 DaoParametros.registrarTipoCambio(mon, compra, venta);
-                tab = "monedas"; // Volver a la pestaña de monedas
+                tab = "monedas"; 
             } else if ("agregarTipoMovimiento".equals(accion)) {
                 TipoMovimiento tm = new TipoMovimiento();
                 tm.setDes(request.getParameter("descripcion"));

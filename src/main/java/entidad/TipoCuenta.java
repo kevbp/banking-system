@@ -7,16 +7,18 @@ public class TipoCuenta {
     private String codMoneda;
     private double tasaInt;
     private String codEstado;
+    private double limSobregiro;
 
     public TipoCuenta() {
     }
 
-    public TipoCuenta(String codTipCuenta, String descTipo, String codMoneda, double tasaInt, String codEstado) {
+    public TipoCuenta(String codTipCuenta, String descTipo, String codMoneda, double tasaInt, String codEstado, double limSobregiro) {
         this.codTipCuenta = codTipCuenta;
         this.descTipo = descTipo;
         this.codMoneda = codMoneda;
         this.tasaInt = tasaInt;
         this.codEstado = codEstado;
+        this.limSobregiro = limSobregiro;
     }
 
     // Getters y Setters (Omite el código estándar, genéralos en tu IDE)
@@ -58,5 +60,13 @@ public class TipoCuenta {
 
     public void setCodEstado(String codEstado) {
         this.codEstado = codEstado;
+    }
+
+    public double getLimSobregiro() {
+        return limSobregiro;
+    }
+
+    public void setLimSobregiro(double limSobregiro) {
+        this.limSobregiro = limSobregiro;
     }
 }

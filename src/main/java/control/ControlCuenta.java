@@ -202,6 +202,15 @@ public class ControlCuenta extends HttpServlet {
         } catch (NumberFormatException e) {
         }
 
+        double sobregiro = 0.0;
+        try {
+            String s = request.getParameter("sobregiro");
+            if (s != null && !s.isEmpty()) {
+                sobregiro = Double.parseDouble(s);
+            }
+        } catch (NumberFormatException e) {
+        }
+
         int plazo = 0;
         double interes = 0.0;
         try {

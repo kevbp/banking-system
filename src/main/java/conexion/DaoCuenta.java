@@ -150,15 +150,17 @@ public class DaoCuenta {
     public static CuentasBancarias obtenerCuenta(String numCuenta, Connection cn) {
         CuentasBancarias cuenta = null;
 
-        // AGREGAMOS c.codEstado a la consulta (posición 9)
+        // AGREGAMOS EL JOIN A 't_cuentas_corriente' (cc) PARA OBTENER EL SOBREGIRO
         String sql = "SELECT c.numCuenta, c.salAct, c.fecApe, "
                 + "cl.nomCompleto, cl.numDoc, "
-                + "tc.descTipo, m.descMoneda, e.des, c.codEstado "
+                + "tc.descTipo, m.descMoneda, e.des, c.codEstado, c.codTipCuenta, " // Agregamos codTipCuenta
+                + "cc.limSobregiro " // <--- NUEVO CAMPO
                 + "FROM t_cuentas c "
                 + "LEFT JOIN t_cliente cl ON c.codCliente = cl.codCliente "
                 + "LEFT JOIN t_tipocuenta tc ON c.codTipCuenta = tc.codTipCuenta "
                 + "LEFT JOIN t_moneda m ON c.codMoneda = m.codMoneda "
                 + "LEFT JOIN t_estado e ON c.codEstado = e.codEstado "
+                + "LEFT JOIN t_cuentas_corriente cc ON c.numCuenta = cc.numCuenta " // <--- JOIN NUEVO
                 + "WHERE c.numCuenta = ?";
 
         try (PreparedStatement ps = cn.prepareStatement(sql)) {
@@ -170,7 +172,7 @@ public class DaoCuenta {
                     cuenta.setSalAct(rs.getBigDecimal(2));
                     cuenta.setFecApe(rs.getTimestamp(3));
 
-                    Cliente cli = new Cliente();
+                    entidad.Cliente cli = new entidad.Cliente();
                     cli.setNombre(rs.getString(4));
                     cli.setNumDocumento(rs.getString(5));
                     cuenta.setCliente(cli);
@@ -178,9 +180,11 @@ public class DaoCuenta {
                     cuenta.setDesTipoCuenta(rs.getString(6));
                     cuenta.setDesMoneda(rs.getString(7));
                     cuenta.setDesEstado(rs.getString(8));
-
-                    // IMPORTANTE: Asignar el codEstado recuperado
                     cuenta.setCodEstado(rs.getString(9));
+                    cuenta.setCodTipoCuenta(rs.getString(10)); // Necesario para validar tipo
+
+                    // ASIGNAR SOBREGIRO (Si es null, BigDecimal lo maneja o el getter devuelve Zero)
+                    cuenta.setSobregiro(rs.getBigDecimal(11));
                 }
             }
         } catch (SQLException e) {

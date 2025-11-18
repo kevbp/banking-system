@@ -3,8 +3,12 @@ package servicio;
 import conexion.Acceso; // Necesario para gestionar la conexión
 import conexion.DaoCuenta;
 import conexion.DaoEmbargo;
+import conexion.DaoMovimiento;
+import conexion.DaoTransaccion;
 import entidad.CuentasBancarias; // Importante: Usar la nueva entidad
 import entidad.Embargo;
+import entidad.Movimiento;
+import entidad.Transaccion;
 import utilitarios.Utiles;
 import java.math.BigDecimal;
 import java.sql.Connection;
@@ -99,5 +103,204 @@ public class ServicioCuenta {
 
     public List<Embargo> listarEmbargos(String numCuenta) {
         return DaoEmbargo.listarEmbargos(numCuenta);
+    }
+
+    // --- 3. OPERACIONES BANCARIAS ---
+    public String realizarDeposito(String numCuenta, double monto, String medioPago, String origenFondos, String codUsuario, String observacion) {
+        Connection cn = null;
+        String msg = null;
+
+        try {
+            cn = Acceso.getConexion();
+            cn.setAutoCommit(false); // INICIO DE TRANSACCIÓN
+
+            // 1. Validar Cuenta y Estado
+            CuentasBancarias cuenta = DaoCuenta.obtenerCuenta(numCuenta, cn);
+            if (cuenta == null) {
+                throw new Exception("La cuenta no existe.");
+            }
+            if (!"Activo".equals(cuenta.getDesEstado()) && !"Activa".equals(cuenta.getDesEstado())) {
+                throw new Exception("Cuenta no activa. Estado: " + cuenta.getDesEstado());
+            }
+
+            // 2. Calcular Nuevo Saldo
+            BigDecimal montoBD = new BigDecimal(monto);
+            if (montoBD.compareTo(BigDecimal.ZERO) <= 0) {
+                throw new Exception("El monto debe ser mayor a 0.");
+            }
+            BigDecimal nuevoSaldo = cuenta.getSalAct().add(montoBD);
+
+            // 3. Actualizar Saldo en Cuenta
+            if (!DaoCuenta.actualizarSaldo(numCuenta, nuevoSaldo, codUsuario, cn)) {
+                throw new Exception("No se pudo actualizar el saldo.");
+            }
+
+            // ---------------------------------------------------------
+            // 4. REGISTRAR TRANSACCIÓN (CABECERA) - ¡ESTO FALTABA!
+            // ---------------------------------------------------------
+            String idTransaccion = utilitarios.Utiles.generarIdTransaccion(); // Generamos el ID aquí
+
+            Transaccion tran = new Transaccion();
+            tran.setCodTransaccion(idTransaccion);
+            tran.setNumCuentaOrigen(null); // En depósito efectivo no hay cuenta origen del sistema
+            tran.setNumCuentaDestino(numCuenta); // El dinero va a esta cuenta
+            tran.setCodTipMovimiento("TM001"); // Código para DEPÓSITO (Verifica tu tabla t_tipomovimiento)
+            tran.setMonto(montoBD);
+            tran.setCanal("VENTANILLA"); // O "WEB" según corresponda
+            tran.setCodEstado("S0008"); // Procesado
+
+            if (!DaoTransaccion.insertarTransaccion(tran, cn)) {
+                throw new Exception("Error al registrar la transacción.");
+            }
+
+            // ---------------------------------------------------------
+            // 5. REGISTRAR MOVIMIENTO (DETALLE)
+            // ---------------------------------------------------------
+            Movimiento mov = new Movimiento();
+            mov.setCodMovimiento(DaoMovimiento.generarCodigoMovimiento());
+            mov.setCodTransaccion(idTransaccion); // ¡USAMOS EL ID DE LA TRANSACCIÓN CREADA!
+            mov.setNumCuenta(numCuenta);
+            mov.setCodTipMovimiento("TM001");
+            mov.setMonto(montoBD);
+            mov.setSalFin(nuevoSaldo);
+            mov.setDes("DEPÓSITO (" + medioPago + ") - " + (observacion != null ? observacion : ""));
+            mov.setNumCueDes(numCuenta); // Cuenta afectada
+            mov.setCodEstado("S0008"); // Procesado
+
+            // Agregar origen de fondos a la descripción si existe (Regla de negocio > 2000)
+            if (origenFondos != null && !origenFondos.isEmpty()) {
+                mov.setDes(mov.getDes() + " | Origen: " + origenFondos);
+            }
+
+            if (!DaoMovimiento.insertarMovimiento(mov, cn)) {
+                throw new Exception("Error al registrar el movimiento.");
+            }
+
+            cn.commit(); // CONFIRMAR TODO
+            msg = "Depósito realizado con éxito. Nuevo Saldo: " + nuevoSaldo;
+
+        } catch (Exception e) {
+            try {
+                if (cn != null) {
+                    cn.rollback();
+                }
+            } catch (Exception ex) {
+            }
+            e.printStackTrace();
+            msg = "Error: " + e.getMessage();
+        } finally {
+            try {
+                if (cn != null) {
+                    cn.close();
+                }
+            } catch (Exception ex) {
+            }
+        }
+        return msg;
+    }
+
+    // ... (métodos anteriores) ...
+    public String realizarRetiro(String numCuenta, double monto, String codUsuario, String observacion) {
+        Connection cn = null;
+        String msg = null;
+
+        try {
+            cn = Acceso.getConexion();
+            cn.setAutoCommit(false);
+
+            // 1. Validar Cuenta
+            CuentasBancarias cuenta = DaoCuenta.obtenerCuenta(numCuenta, cn);
+            if (cuenta == null) {
+                throw new Exception("La cuenta no existe.");
+            }
+
+            if (!"S0001".equals(cuenta.getCodEstado())) { // S0001 = Activo
+                throw new Exception("No se puede retirar. La cuenta no está activa.");
+            }
+
+            BigDecimal montoBD = new BigDecimal(monto);
+            if (montoBD.compareTo(BigDecimal.ZERO) <= 0) {
+                throw new Exception("El monto debe ser mayor a 0.");
+            }
+
+            // 2. LÓGICA DE VALIDACIÓN DE FONDOS SEGÚN TIPO DE CUENTA
+            BigDecimal saldoDisponible = cuenta.getSalAct();
+
+            // Códigos de Cuentas Corrientes (según tu dump SQL: TC002 y TC005)
+            boolean esCorriente = "TC002".equals(cuenta.getCodTipoCuenta()) || "TC005".equals(cuenta.getCodTipoCuenta());
+
+            if (esCorriente) {
+                // CUENTA CORRIENTE: Saldo disponible = Saldo Real + Línea de Sobregiro
+                BigDecimal capacidadTotal = cuenta.getSalAct().add(cuenta.getSobregiro());
+
+                if (capacidadTotal.compareTo(montoBD) < 0) {
+                    throw new Exception("Fondos insuficientes (incluyendo sobregiro). Capacidad máxima: " + capacidadTotal);
+                }
+                // Nota: En cuenta corriente, el saldo resultante puede ser negativo
+            } else {
+                // CUENTA DE AHORROS: Solo saldo positivo
+                if (cuenta.getSalAct().compareTo(montoBD) < 0) {
+                    throw new Exception("Saldo insuficiente en Cuenta de Ahorros. Disponible: " + cuenta.getSalAct());
+                }
+            }
+
+            // 3. Calcular Nuevo Saldo (Resta normal, permitiendo negativos si pasó la validación anterior)
+            BigDecimal nuevoSaldo = cuenta.getSalAct().subtract(montoBD);
+
+            // 4. Actualizar BD
+            if (!DaoCuenta.actualizarSaldo(numCuenta, nuevoSaldo, codUsuario, cn)) {
+                throw new Exception("No se pudo actualizar el saldo.");
+            }
+
+            // 5. Registrar Transacción
+            String idTransaccion = utilitarios.Utiles.generarIdTransaccion();
+            entidad.Transaccion tran = new entidad.Transaccion();
+            tran.setCodTransaccion(idTransaccion);
+            tran.setNumCuentaOrigen(numCuenta);
+            tran.setCodTipMovimiento("T0002"); // T0002 = RETIRO
+            tran.setMonto(montoBD);
+            tran.setCanal("VENTANILLA");
+            tran.setCodEstado("S0008"); // Procesado
+
+            if (!conexion.DaoTransaccion.insertarTransaccion(tran, cn)) {
+                throw new Exception("Error al registrar la transacción.");
+            }
+
+            // 6. Registrar Movimiento
+            entidad.Movimiento mov = new entidad.Movimiento();
+            mov.setCodMovimiento(conexion.DaoMovimiento.generarCodigoMovimiento());
+            mov.setCodTransaccion(idTransaccion);
+            mov.setNumCuenta(numCuenta);
+            mov.setCodTipMovimiento("T0002");
+            mov.setMonto(montoBD);
+            mov.setSalFin(nuevoSaldo);
+            mov.setDes("RETIRO VENTANILLA - " + (observacion != null ? observacion : ""));
+            mov.setCodEstado("S0008");
+
+            if (!conexion.DaoMovimiento.insertarMovimiento(mov, cn)) {
+                throw new Exception("Error al registrar el movimiento.");
+            }
+
+            cn.commit();
+            msg = "Retiro realizado con éxito. Nuevo Saldo: " + nuevoSaldo;
+
+        } catch (Exception e) {
+            try {
+                if (cn != null) {
+                    cn.rollback();
+                }
+            } catch (Exception ex) {
+            }
+            e.printStackTrace();
+            msg = "Error: " + e.getMessage();
+        } finally {
+            try {
+                if (cn != null) {
+                    cn.close();
+                }
+            } catch (Exception ex) {
+            }
+        }
+        return msg;
     }
 }

@@ -35,13 +35,19 @@ public class DaoParametros {
     // --- TIPOS DE CUENTA ---
     public static List<TipoCuenta> listarTiposCuenta() {
         List<TipoCuenta> lista = new ArrayList<>();
-        // Traemos los datos. Nota: Podrías hacer JOIN con t_moneda para mostrar el nombre de la moneda
-        String sql = "SELECT codTipCuenta, descTipo, codMoneda, tasaInt, codEstado FROM t_tipocuenta";
+        // Traemos también el límite de sobregiro
+        String sql = "SELECT codTipCuenta, descTipo, codMoneda, tasaInt, codEstado, IFNULL(limSobregiro, 0) FROM t_tipocuenta";
         List<Object[]> filas = Acceso.listar(sql);
         if (filas != null) {
             for (Object[] f : filas) {
-                lista.add(new TipoCuenta(f[0].toString(), f[1].toString(), f[2].toString(),
-                        Double.parseDouble(f[3].toString()), f[4].toString()));
+                lista.add(new TipoCuenta(
+                        f[0].toString(),
+                        f[1].toString(),
+                        f[2].toString(),
+                        Double.parseDouble(f[3].toString()),
+                        f[4].toString(),
+                        Double.parseDouble(f[5].toString()) // Sobregiro
+                ));
             }
         }
         return lista;
@@ -49,14 +55,18 @@ public class DaoParametros {
 
     public static String agregarTipoCuenta(TipoCuenta t) {
         String nuevoCodigo = generarCodigo("t_tipocuenta", "codTipCuenta", "TC");
-        String sql = "INSERT INTO t_tipocuenta(codTipCuenta, descTipo, codMoneda, tasaInt, codEstado) VALUES('"
-                + nuevoCodigo + "','" + t.getDescTipo() + "','" + t.getCodMoneda() + "'," + t.getTasaInt() + ",'S0001')";
+        // Insertamos el límite de sobregiro
+        String sql = "INSERT INTO t_tipocuenta(codTipCuenta, descTipo, codMoneda, tasaInt, codEstado, limSobregiro) VALUES('"
+                + nuevoCodigo + "','" + t.getDescTipo() + "','" + t.getCodMoneda() + "',"
+                + t.getTasaInt() + ",'S0001', " + t.getLimSobregiro() + ")";
         return Acceso.ejecutar(sql);
     }
 
     public static String editarTipoCuenta(TipoCuenta t) {
+        // Actualizamos el límite de sobregiro
         String sql = "UPDATE t_tipocuenta SET descTipo='" + t.getDescTipo() + "', codMoneda='" + t.getCodMoneda()
-                + "', tasaInt=" + t.getTasaInt() + " WHERE codTipCuenta='" + t.getCodTipCuenta() + "'";
+                + "', tasaInt=" + t.getTasaInt() + ", limSobregiro=" + t.getLimSobregiro()
+                + " WHERE codTipCuenta='" + t.getCodTipCuenta() + "'";
         return Acceso.ejecutar(sql);
     }
 
@@ -132,7 +142,7 @@ public class DaoParametros {
         List<Object[]> filas = Acceso.listar(sql);
         int numero = 1;
         if (filas != null && !filas.isEmpty() && filas.get(0)[0] != null) {
-            String ultimo = filas.get(0)[0].toString(); // Ej: TC005
+            String ultimo = filas.get(0)[0].toString();
             try {
                 numero = Integer.parseInt(ultimo.substring(2)) + 1;
             } catch (Exception e) {

@@ -1,26 +1,20 @@
-<%-- 
-    Document   : retiro
-    Created on : Oct 12, 2025, 6:30:40 PM
-    Author     : kevin
---%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <!DOCTYPE html>
-<html lang="es-ES"> <head>
+<html lang="es">
+    <head>
         <meta charset="utf-8">
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-
-        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+        <title>Retiro de Efectivo - Quantum Bank</title>
         <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet">
         <link href="${pageContext.request.contextPath}/css/estilos.css" rel="stylesheet">
+        <link href="${pageContext.request.contextPath}/css/sidebar.css" rel="stylesheet">
         <link href="${pageContext.request.contextPath}/css/header.css" rel="stylesheet">
-        <link href="${pageContext.request.contextPath}/css/sidebar.css" rel="stylesheet"> <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-
-        <title>Registro de Retiro - Quantum Bank</title> </head>
-
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    </head>
     <body data-active-page="operaciones-retiro">
         <%@ include file="../util/theme.jsp" %>
 
@@ -31,101 +25,127 @@
                 <%@ include file="../util/header.jsp" %>
 
                 <div class="content-area p-4">
+
+                    <c:if test="${not empty msg}">
+                        <div class="alert alert-success shadow-sm border-success mb-4">
+                            <i class="bi bi-check-circle-fill me-2"></i> ${msg}
+                        </div>
+                    </c:if>
+                    <c:if test="${not empty msgError}">
+                        <div class="alert alert-danger shadow-sm border-danger mb-4">
+                            <i class="bi bi-exclamation-triangle-fill me-2"></i> ${msgError}
+                        </div>
+                    </c:if>
+
                     <div class="card shadow-sm border-0">
-                        <div class="card-header bg-dark text-light text-center">
-                            <h4 class="mb-0">Retiro de Cuenta</h4>
+                        <div class="card-header bg-dark text-white text-center py-3">
+                            <h4 class="mb-0"><i class="bi bi-wallet2 me-2"></i>Retiro de Efectivo</h4>
                         </div>
 
                         <div class="card-body p-4">
-                            <p class="text-muted">
-                                Registre retiros en cuentas de Ahorros o Corrientes. Verifique que la cuenta tenga saldo disponible y esté activa.
-                            </p>
-                            <hr>
 
-                            <h5>Buscar Cuenta</h5>
-                            <form action="/ControlRetiro" method="get" class="mb-4">
-                                <div class="row g-3 align-items-end">
-                                    <div class="col-md-5">
-                                        <label for="numCuenta" class="form-label">Número de Cuenta</label>
-                                        <input type="text" class="form-control" id="numCuenta" name="numCuenta" placeholder="Ej: 001-00012345">
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label for="tipoDoc" class="form-label">Tipo de Documento</label>
-                                        <select class="form-select" id="tipoDoc" name="tipoDoc">
-                                            <option value="">Seleccione...</option>
-                                            <option value="DNI">DNI</option>
-                                            <option value="RUC">RUC</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label for="numDoc" class="form-label">Número de Documento</label>
-                                        <input type="text" class="form-control" id="numDoc" name="numDoc" placeholder="DNI o RUC">
-                                    </div>
-                                    <div class="col-md-1 d-grid">
-                                        <button type="submit" class="btn btn-primary">
-                                            <i class="bi bi-search"></i>
-                                        </button>
+                            <form action="${pageContext.request.contextPath}/ControlRetiro" method="get" class="mb-4">
+                                <div class="row g-2 align-items-end justify-content-center">
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold text-muted">BUSCAR CUENTA DE ORIGEN</label>
+                                        <div class="input-group input-group-lg">
+                                            <span class="input-group-text bg-light"><i class="bi bi-search"></i></span>
+                                            <input type="text" class="form-control" name="numCuenta" 
+                                                   value="${numCuentaBusqueda}" placeholder="Ingrese N° de Cuenta" required>
+                                            <button class="btn btn-primary px-4" type="submit">Buscar</button>
+                                        </div>
                                     </div>
                                 </div>
                             </form>
 
-                            <hr>
+                            <c:if test="${not empty cuenta}">
+                                <hr class="my-4">
 
-                            <h5>Datos de la Cuenta</h5>
-                            <table class="table table-bordered mb-4">
-                                <tr><th>Cliente</th><td>Juan Pérez</td></tr>
-                                <tr><th>Número de Cuenta</th><td>001-00012345</td></tr>
-                                <tr><th>Tipo de Cuenta</th><td>Ahorros</td></tr>
-                                <tr><th>Moneda</th><td>Soles</td></tr>
-                                <tr><th>Saldo Actual</th><td>S/ 1,250.50</td></tr>
-                                <tr><th>Estado</th><td>Activa</td></tr>
-                                <tr><th>Embargo</th><td>No</td></tr>
-                            </table>
-
-                            <hr>
-
-                            <h5>Registrar Retiro</h5>
-                            <form action="/ControlRetiro" method="post">
-                                <input type="hidden" name="accion" value="registrar">
-                                <input type="hidden" name="numCuenta" value="001-00012345">
-
-                                <div class="row mb-3">
-                                    <div class="col-md-4">
-                                        <label for="monto" class="form-label">Monto a Retirar <span class="text-danger">*</span></label>
-                                        <input type="number" step="0.01" class="form-control" id="monto" name="monto" placeholder="0.00" required>
+                                <div class="row g-4 mb-4">
+                                    <div class="col-md-6">
+                                        <div class="card bg-light border-0 h-100">
+                                            <div class="card-body">
+                                                <h6 class="text-muted fw-bold mb-3">DATOS DEL CLIENTE</h6>
+                                                <h4 class="mb-1">${cuenta.cliente.nombre}</h4>
+                                                <div class="text-muted">DOC: ${cuenta.cliente.numDocumento}</div>
+                                                <div class="mt-2">
+                                                    <span class="badge bg-primary">${cuenta.desTipoCuenta}</span>
+                                                    <span class="badge ${cuenta.desEstado eq 'Activo' ? 'bg-success' : 'bg-danger'}">
+                                                        ${cuenta.desEstado}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="col-md-4">
-                                        <label for="medioPago" class="form-label">Medio de Entrega</label>
-                                        <select class="form-select" id="medioPago" name="medioPago">
-                                            <option value="Efectivo">Efectivo</option>
-                                            <option value="Transferencia">Transferencia</option>
-                                            <option value="Cheque">Cheque</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label for="fechaOperacion" class="form-label">Fecha de Operación</label>
-                                        <input type="date" class="form-control" id="fechaOperacion" name="fechaOperacion" value="2025-10-12">
+                                    <div class="col-md-6">
+                                        <div class="card border-success h-100">
+                                            <div class="card-body text-center d-flex flex-column justify-content-center">
+                                                <h6 class="text-success fw-bold">SALDO DISPONIBLE</h6>
+                                                <h2 class="display-5 fw-bold text-dark mb-0">
+                                                    ${cuenta.desMoneda eq 'Dólares' ? '$' : 'S/'} 
+                                                    <fmt:formatNumber value="${cuenta.salAct}" minFractionDigits="2" maxFractionDigits="2"/>
+                                                </h2>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
 
-                                <div class="mb-3">
-                                    <label for="descripcion" class="form-label">Observaciones (opcional)</label>
-                                    <textarea class="form-control" id="descripcion" name="descripcion" rows="2" placeholder="Ej: Retiro en ventanilla o transferencia saliente"></textarea>
-                                </div>
+                                <div class="card border-0 shadow-sm">
+                                    <div class="card-body bg-white">
+                                        <h5 class="card-title mb-4 text-danger">
+                                            <i class="bi bi-dash-circle me-2"></i>Registrar Salida de Dinero
+                                        </h5>
 
-                                <div class="text-center mt-4">
-                                    <button type="submit" class="btn btn-danger px-4">Registrar Retiro</button>
-                                    <a href="../home.jsp" class="btn btn-secondary px-4">Cancelar</a>
+                                        <form action="${pageContext.request.contextPath}/ControlRetiro" method="post" id="formRetiro" onsubmit="return confirmarRetiro();">
+                                            <input type="hidden" name="accion" value="procesar">
+                                            <input type="hidden" name="numCuenta" value="${cuenta.numCuenta}">
+
+                                            <input type="hidden" id="saldoDisponible" value="${cuenta.salAct}">
+
+                                            <div class="row g-3">
+                                                <div class="col-md-5">
+                                                    <label class="form-label fw-bold">Monto a Retirar</label>
+                                                    <div class="input-group input-group-lg">
+                                                        <span class="input-group-text fw-bold text-danger">
+                                                            ${cuenta.desMoneda eq 'Dólares' ? '$' : 'S/'}
+                                                        </span>
+                                                        <input type="number" step="0.01" min="0.10" class="form-control fw-bold text-danger" 
+                                                               id="montoRetiro" name="monto" placeholder="0.00" required>
+                                                    </div>
+                                                    <div id="feedbackSaldo" class="form-text text-danger d-none">
+                                                        <i class="bi bi-x-circle"></i> El monto excede el saldo disponible.
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-7">
+                                                    <label class="form-label">Observaciones / Autorización</label>
+                                                    <textarea class="form-control form-control-lg" name="descripcion" rows="1" 
+                                                              placeholder="Opcional: DNI de quien retira si es carta poder..."></textarea>
+                                                </div>
+                                            </div>
+
+                                            <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                                                <a href="retiro.jsp" class="btn btn-secondary px-4">Cancelar</a>
+                                                <button type="submit" class="btn btn-danger px-5 fw-bold" id="btnProcesar">
+                                                    Procesar Retiro
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
                                 </div>
-                            </form>
+                            </c:if>
+
                         </div>
                     </div>
-                </div> 
-            </div> 
+                </div>
+            </div>
         </div>
+
         <%@ include file="../util/cont-sesion.jsp" %>
         <script src="${pageContext.request.contextPath}/js/bootstrap.bundle.min.js"></script>
         <script src="${pageContext.request.contextPath}/js/sidebar.js"></script>
         <script src="${pageContext.request.contextPath}/js/session-timer.js"></script>
+        <script src="${pageContext.request.contextPath}/js/retiro.js"></script>
+
     </body>
 </html>

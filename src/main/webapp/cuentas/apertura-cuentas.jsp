@@ -69,7 +69,8 @@
                                                 <option value="${tc.codTipCuenta}" 
                                                         data-moneda="${tc.codMoneda}" 
                                                         data-tasa="${tc.tasaInt}"
-                                                        data-desc="${tc.descTipo}">
+                                                        data-desc="${tc.descTipo}"
+                                                        data-sobregiro="${tc.limSobregiro}"> <%-- DATO TRAÍDO DE LA BD --%>
                                                     ${tc.descTipo} (${tc.codMoneda})
                                                 </option>
                                             </c:if>
@@ -86,7 +87,19 @@
                                     <input type="text" class="form-control bg-light" id="txtInteres" name="interes" readonly>
                                 </div>
                             </div>
-
+                            <div class="row mb-3 d-none" id="rowCtaCorriente">
+                                <div class="col-md-6">
+                                    <label for="txtSobregiro" class="form-label text-primary fw-bold">Línea de Sobregiro (Configurada)</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text text-primary bg-light fw-bold" id="simboloSobregiro">S/</span>
+                                        <input type="number" step="0.01" class="form-control border-primary text-primary fw-bold" 
+                                               id="txtSobregiro" name="sobregiro" placeholder="0.00">
+                                    </div>
+                                    <div class="form-text text-primary small">
+                                        <i class="bi bi-info-circle-fill"></i> Límite pre-aprobado según tipo de cuenta. Puede ajustarlo si es necesario.
+                                    </div>
+                                </div>
+                            </div>
                             <div class="row mb-3 d-none" id="rowPlazoFijo">
                                 <div class="col-md-6">
                                     <label for="plazo" class="form-label">Plazo de Permanencia <span class="text-danger">*</span></label>
