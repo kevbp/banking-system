@@ -96,6 +96,7 @@
                                 <div class="row small">
                                     <div class="col-6"><strong>Producto:</strong> <span id="valTip">...</span></div>
                                     <div class="col-6"><strong>Moneda:</strong> <span id="valMon">...</span></div>
+                                    <div class="col-6"><strong>Saldo Actual:</strong> <span id="valSaldo" class="fw-bold text-primary">...</span></div>
                                     <div class="col-6"><strong>Fecha Apertura:</strong> <span id="valFec">...</span></div>
                                 </div>
                             </div>
@@ -147,8 +148,9 @@
                                 <input type="hidden" name="accion" value="cambiarEstado">
                                 <input type="hidden" name="tipo" value="cerrar">
                                 <input type="hidden" name="numCuenta" id="inCerrarNum">
-                                <button class="btn btn-dark px-4 fw-bold">
-                                    <i class="bi bi-archive-fill me-1"></i> Cerrar
+                                <button id="btnCerrarCuenta" class="btn btn-dark px-4 fw-bold"> 
+                                    <i class="bi bi-archive-fill me-1"></i> 
+                                    Cerrar
                                 </button>
                             </form>
                         </div>
@@ -167,66 +169,115 @@
                                     $('.btn-ver').click(function () {
                                         let num = $(this).data('id');
 
-                                        // 1. Pre-asignar IDs a formularios
+                                        // 1. PRE-ASIGNAR IDs
                                         $('#lblCuenta').text(num);
                                         $('#inEmbargoNum').val(num);
                                         $('#inCerrarNum').val(num);
                                         $('#inEstadoNum').val(num);
 
-                                        // Resetear UI
+                                        // 2. RESETEAR UI (¡Importante!)
+                                        // Ocultar alertas y formularios previos
                                         $('#formEmbargo').addClass('d-none');
                                         $('#alertEmbargo').addClass('d-none');
-                                        $('#valCli').text('Cargando...');
 
-                                        // 2. AJAX
+                                        // Poner textos de carga
+                                        $('#valCli').text('Cargando...');
+                                        $('#valSaldo').text('...');
+                                        $('#valEstBadged').html('<span class="badge bg-secondary">Consultando...</span>');
+
+                                        // HABILITAR TODOS LOS BOTONES DEL MODAL AL INICIO
+                                        // Esto corrige el problema de que se queden bloqueados si viste una cerrada antes
+                                        $('#modalGestion button').prop('disabled', false);
+
+                                        // Resetear texto del botón de estado
+                                        $('#lblToggleEstado').text('Cargando...');
+
+                                        // 3. AJAX
                                         $.ajax({
                                             url: '${pageContext.request.contextPath}/ControlCuenta',
                                             data: {accion: 'detalle', num: num},
                                             dataType: 'json',
                                             success: function (data) {
                                                 if (data.exito) {
-                                                    $('#valCli').text(data.cli);
+                                                    // Datos básicos
+                                                    $('#valCli').text(data.cliente); // Asegúrate que sea data.cliente
                                                     $('#valDoc').text(data.doc);
                                                     $('#valTip').text(data.tipo);
                                                     $('#valMon').text(data.moneda);
                                                     $('#valFec').text(data.fecha.substring(0, 10));
 
-                                                    // Lógica de Estado (Badge)
-                                                    let color = 'bg-secondary';
-                                                    if (data.codEstado === 'S0001')
-                                                        color = 'bg-success'; // Activo
-                                                    else if (data.codEstado === 'S0002')
-                                                        color = 'bg-warning text-dark'; // Inactivo
-                                                    else if (data.codEstado === 'S0006')
-                                                        color = 'bg-danger'; // Embargado
+                                                    // Saldo
+                                                    let simbolo = (data.moneda === 'Dólares') ? '$ ' : 'S/ ';
+                                                    let saldoNum = parseFloat(data.saldo);
+                                                    $('#valSaldo').text(simbolo + saldoNum.toFixed(2));
 
-                                                    $('#valEstBadged').html(`<span class="badge ${color} fs-6">${data.estado}</span>`);
+                                                    // --- LÓGICA DE ESTADOS Y BOTONES ---
 
-                                                    // Lógica de Botón Activar/Desactivar
-                                                    if (data.codEstado === 'S0002') { // Si está INACTIVO
-                                                        $('#lblToggleEstado').text('Activar');
-                                                        $('#inTipoEstado').val('activar');
-                                                        $('#btnToggleEstado').removeClass('btn-warning').addClass('btn-success');
-                                                    } else { // Si está ACTIVO (o cualquier otro)
-                                                        $('#lblToggleEstado').text('Desactivar');
-                                                        $('#inTipoEstado').val('inactivar');
-                                                        $('#btnToggleEstado').removeClass('btn-success').addClass('btn-warning');
+                                                    let badgeColor = 'bg-secondary';
+                                                    let estadoTexto = data.estado; // Texto que viene de la BD (Activo, Cerrado...)
+
+                                                    // Configuración por defecto del botón Toggle
+                                                    let btnToggle = $('#btnToggleEstado');
+                                                    let lblToggle = $('#lblToggleEstado');
+                                                    let inputTipo = $('#inTipoEstado');
+
+                                                    if (data.codEstado === 'S0001') {
+                                                        // ACTIVO
+                                                        badgeColor = 'bg-success';
+                                                        lblToggle.text('Desactivar');
+                                                        inputTipo.val('inactivar');
+                                                        btnToggle.removeClass('btn-success btn-secondary').addClass('btn-warning');
+
+                                                    } else if (data.codEstado === 'S0002') {
+                                                        // INACTIVO
+                                                        badgeColor = 'bg-warning text-dark';
+                                                        lblToggle.text('Activar');
+                                                        inputTipo.val('activar');
+                                                        btnToggle.removeClass('btn-warning btn-secondary').addClass('btn-success');
+
+                                                    } else if (data.codEstado === 'S0005') {
+                                                        // CERRADO
+                                                        badgeColor = 'bg-dark';
+                                                        lblToggle.text('Cuenta Cerrada'); // Texto explícito en el botón
+                                                        btnToggle.removeClass('btn-success btn-warning').addClass('btn-secondary');
+                                                        btnToggle.prop('disabled', true); // Botón desactivado
+
+                                                    } else if (data.codEstado === 'S0006') {
+                                                        // EMBARGADO
+                                                        badgeColor = 'bg-danger';
+                                                        lblToggle.text('Embargada');
+                                                        btnToggle.prop('disabled', true);
                                                     }
 
-                                                    // Lógica Embargo
+                                                    // Actualizar el Badge (La casilla de estado)
+                                                    $('#valEstBadged').html(`<span class="badge ${badgeColor} fs-6">${estadoTexto}</span>`);
+
+                                                    // Regla de Negocio: No cerrar si hay saldo
+                                                    if (saldoNum > 0) {
+                                                        $('#btnCerrarCuenta').prop('disabled', true);
+                                                        $('#btnCerrarCuenta').attr('title', 'No se puede cerrar cuenta con saldo');
+                                                    } else {
+                                                        // Solo habilitar si la cuenta NO está cerrada ya
+                                                        if (data.codEstado !== 'S0005') {
+                                                            $('#btnCerrarCuenta').prop('disabled', false);
+                                                        }
+                                                    }
+
+                                                    // Mostrar Embargo si existe
                                                     if (data.embargo && data.embargo.activo) {
                                                         $('#alertEmbargo').removeClass('d-none');
                                                         $('#embExp').text(data.embargo.expediente);
                                                         $('#embMonto').text(data.embargo.monto);
                                                         $('#embMot').text(data.embargo.motivo);
-                                                        $('#btnShowEmbargo').prop('disabled', true);
-                                                    } else {
-                                                        $('#btnShowEmbargo').prop('disabled', false);
+                                                        $('#btnShowEmbargo').prop('disabled', true); // Ya está embargada
                                                     }
 
-                                                    // Deshabilitar acciones si está cerrada
+                                                    // BLOQUEO FINAL: Si está cerrada, bloquear acciones críticas
                                                     if (data.codEstado === 'S0005') {
-                                                        $('button').not('.btn-close').prop('disabled', true);
+                                                        // Bloqueamos botones de acción (Embargar, Cerrar, Toggle)
+                                                        $('#btnShowEmbargo').prop('disabled', true);
+                                                        $('#btnCerrarCuenta').prop('disabled', true);
+                                                        // El btnToggle ya se deshabilitó arriba
                                                     }
 
                                                 } else {
@@ -237,11 +288,9 @@
                                                 alert('Error de conexión.');
                                             }
                                         });
-
                                         new bootstrap.Modal(document.getElementById('modalGestion')).show();
                                     });
 
-                                    // Botón Mostrar Embargo
                                     $('#btnShowEmbargo').click(function () {
                                         $('#formEmbargo').removeClass('d-none');
                                     });

@@ -149,10 +149,11 @@ public class DaoCuenta {
     // Obtener una sola cuenta (usado en Detalle/Operaciones)
     public static CuentasBancarias obtenerCuenta(String numCuenta, Connection cn) {
         CuentasBancarias cuenta = null;
-        // Consulta simplificada y segura
+
+        // AGREGAMOS c.codEstado a la consulta (posición 9)
         String sql = "SELECT c.numCuenta, c.salAct, c.fecApe, "
                 + "cl.nomCompleto, cl.numDoc, "
-                + "tc.descTipo, m.descMoneda, e.des "
+                + "tc.descTipo, m.descMoneda, e.des, c.codEstado "
                 + "FROM t_cuentas c "
                 + "LEFT JOIN t_cliente cl ON c.codCliente = cl.codCliente "
                 + "LEFT JOIN t_tipocuenta tc ON c.codTipCuenta = tc.codTipCuenta "
@@ -177,6 +178,9 @@ public class DaoCuenta {
                     cuenta.setDesTipoCuenta(rs.getString(6));
                     cuenta.setDesMoneda(rs.getString(7));
                     cuenta.setDesEstado(rs.getString(8));
+
+                    // IMPORTANTE: Asignar el codEstado recuperado
+                    cuenta.setCodEstado(rs.getString(9));
                 }
             }
         } catch (SQLException e) {
