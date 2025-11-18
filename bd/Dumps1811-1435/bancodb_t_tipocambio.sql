@@ -16,39 +16,36 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `t_embargo`
+-- Table structure for table `t_tipocambio`
 --
 
-DROP TABLE IF EXISTS `t_embargo`;
+DROP TABLE IF EXISTS `t_tipocambio`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `t_embargo` (
-  `codEmbargo` varchar(20) NOT NULL,
-  `numCuenta` varchar(20) DEFAULT NULL,
-  `mon` decimal(18,4) DEFAULT NULL,
-  `expedienteJudicial` varchar(50) DEFAULT NULL,
-  `descripcion` varchar(255) DEFAULT NULL,
-  `montoLiberado` decimal(18,4) DEFAULT '0.0000',
-  `codEstado` varchar(20) DEFAULT NULL,
-  `codUsuCre` varchar(20) DEFAULT NULL,
-  `fecUsuCre` datetime DEFAULT NULL,
+CREATE TABLE `t_tipocambio` (
+  `idTipoCambio` int NOT NULL AUTO_INCREMENT,
+  `fecha` datetime NOT NULL,
+  `horaRegistro` time NOT NULL,
+  `monedaOrigen` char(3) NOT NULL,
+  `monedaDestino` char(3) NOT NULL,
+  `tasaCompra` decimal(10,4) NOT NULL,
+  `tasaVenta` decimal(10,4) NOT NULL,
+  `codUsuCre` varchar(20) NOT NULL,
+  `fecUsuCre` datetime NOT NULL,
   `codUsuMod` varchar(20) DEFAULT NULL,
   `fecUsuMod` datetime DEFAULT NULL,
-  PRIMARY KEY (`codEmbargo`),
-  KEY `codEstado` (`codEstado`),
-  KEY `idx_embargo_cuenta` (`numCuenta`),
-  CONSTRAINT `t_embargo_ibfk_1` FOREIGN KEY (`numCuenta`) REFERENCES `t_cuentas` (`numCuenta`),
-  CONSTRAINT `t_embargo_ibfk_2` FOREIGN KEY (`codEstado`) REFERENCES `t_estado` (`codEstado`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  PRIMARY KEY (`idTipoCambio`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `t_embargo`
+-- Dumping data for table `t_tipocambio`
 --
 
-LOCK TABLES `t_embargo` WRITE;
-/*!40000 ALTER TABLE `t_embargo` DISABLE KEYS */;
-/*!40000 ALTER TABLE `t_embargo` ENABLE KEYS */;
+LOCK TABLES `t_tipocambio` WRITE;
+/*!40000 ALTER TABLE `t_tipocambio` DISABLE KEYS */;
+INSERT INTO `t_tipocambio` VALUES (1,'2025-11-18 00:00:00','10:46:32','USD','PEN',3.3590,3.3720,'U0001','2025-11-18 10:46:32',NULL,NULL),(2,'2025-11-18 00:00:00','10:48:50','USD','PEN',3.3700,3.3925,'U0001','2025-11-18 10:48:50',NULL,NULL);
+/*!40000 ALTER TABLE `t_tipocambio` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -60,4 +57,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-11-18 10:54:04
+-- Dump completed on 2025-11-18 14:35:30

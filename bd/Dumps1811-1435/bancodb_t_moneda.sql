@@ -16,35 +16,35 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `t_tipomovimiento`
+-- Table structure for table `t_moneda`
 --
 
-DROP TABLE IF EXISTS `t_tipomovimiento`;
+DROP TABLE IF EXISTS `t_moneda`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `t_tipomovimiento` (
-  `codTipMovimiento` varchar(20) NOT NULL,
-  `des` varchar(100) DEFAULT NULL,
+CREATE TABLE `t_moneda` (
+  `codMoneda` varchar(20) NOT NULL,
+  `descMoneda` varchar(50) DEFAULT NULL,
+  `simbolo` varchar(5) DEFAULT NULL,
   `codEstado` varchar(20) DEFAULT NULL,
   `codUsuCre` varchar(20) DEFAULT NULL,
   `fecUsuCre` datetime DEFAULT NULL,
   `codUsuMod` varchar(20) DEFAULT NULL,
   `fecUsuMod` datetime DEFAULT NULL,
-  `signo` char(1) DEFAULT '+',
-  PRIMARY KEY (`codTipMovimiento`),
+  PRIMARY KEY (`codMoneda`),
   KEY `codEstado` (`codEstado`),
-  CONSTRAINT `t_tipomovimiento_ibfk_1` FOREIGN KEY (`codEstado`) REFERENCES `t_estado` (`codEstado`)
+  CONSTRAINT `t_moneda_ibfk_1` FOREIGN KEY (`codEstado`) REFERENCES `t_estado` (`codEstado`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `t_tipomovimiento`
+-- Dumping data for table `t_moneda`
 --
 
-LOCK TABLES `t_tipomovimiento` WRITE;
-/*!40000 ALTER TABLE `t_tipomovimiento` DISABLE KEYS */;
-INSERT INTO `t_tipomovimiento` VALUES ('T0001','Depósito','S0001',NULL,NULL,NULL,NULL,'+'),('T0002','Retiro','S0001',NULL,NULL,NULL,NULL,'-'),('T0003','Transferencia Salida','S0001',NULL,NULL,NULL,NULL,'-'),('T0004','Transferencia Entrada','S0001',NULL,NULL,NULL,NULL,'+');
-/*!40000 ALTER TABLE `t_tipomovimiento` ENABLE KEYS */;
+LOCK TABLES `t_moneda` WRITE;
+/*!40000 ALTER TABLE `t_moneda` DISABLE KEYS */;
+INSERT INTO `t_moneda` VALUES ('PEN','Soles','S/','S0001',NULL,NULL,NULL,NULL),('USD','Dólares','$','S0001',NULL,NULL,NULL,NULL);
+/*!40000 ALTER TABLE `t_moneda` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -56,4 +56,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-11-18 10:54:03
+-- Dump completed on 2025-11-18 14:35:28
