@@ -10,8 +10,8 @@
 
     <ul class="nav nav-pills flex-column">
         <c:url var="urlHome" value="/ControlHome"><c:param name="op" value="home"/></c:url>
-        <li class="nav-item mb-1">
-            <a href="${urlHome}" class="nav-link nav-root" data-page-id="home">
+            <li class="nav-item mb-1">
+                <a href="${urlHome}" class="nav-link nav-root" data-page-id="home">
                 <i class="bi bi-house-door me-2"></i> Inicio
             </a>
         </li>
@@ -37,9 +37,12 @@
             </button>
             <div class="collapse nav-section" id="cuentas-collapse">
                 <ul class="nav-sub list-unstyled">
-                    <li><a class="nav-sub-link" href="${pageContext.request.contextPath}/cuentas/apertura-cuentas.jsp" data-page-id="cuentas-apertura">Apertura de cuentas</a></li>
-                    <li><a class="nav-sub-link" href="${pageContext.request.contextPath}/cuentas/gestion-cuentas.jsp" data-page-id="cuentas-gestion">Gestión de cuentas</a></li>
-                    <li><a class="nav-sub-link" href="${pageContext.request.contextPath}/cuentas/gestion-embargos.jsp" data-page-id="cuentas-embargos">Gestión de embargos</a></li>
+                    <c:url var="urlAperturaCuenta" value="/ControlCuenta"><c:param name="accion" value="apertura"/></c:url>
+                    <li><a class="nav-sub-link" href="${urlAperturaCuenta}" data-page-id="cuentas-apertura">Apertura de cuentas</a></li>
+                        <c:url var="urlGestion" value="/ControlCuenta"><c:param name="accion" value="listar"/></c:url>
+                    <li><a class="nav-sub-link" href="${urlGestion}" data-page-id="cuentas-gestion">Gestión de cuentas</a></li>
+                    <c:url var="urlEmbargos" value="/cuentas/gestion-embargos.jsp"/>
+                    <li><a class="nav-sub-link" href="${urlEmbargos}" data-page-id="cuentas-embargos">Gestión de embargos</a></li>
                 </ul>
             </div>
         </li>
@@ -79,7 +82,7 @@
                     <ul class="nav-sub list-unstyled">
                         <c:url var="urlRegistroUsuario" value="/ControlUsuario"><c:param name="op" value="RegistrarUsuario"/></c:url>
                         <li><a class="nav-sub-link" href="${urlRegistroUsuario}" data-page-id="admin-usuarios">Usuarios</a></li>
-                        <c:url var="urlParametros" value="/ControlParametros"><c:param name="op" value="Parametros"/></c:url>
+                            <c:url var="urlParametros" value="/ControlParametros"><c:param name="op" value="Parametros"/></c:url>
                         <li><a class="nav-sub-link" href="${urlParametros}" data-page-id="admin-parametros">Parámetros</a></li>
                         <li><a class="nav-sub-link" href="${pageContext.request.contextPath}/Administracion/gestion-accesos.jsp" data-page-id="admin-accesos">Control de accesos</a></li>
                     </ul>

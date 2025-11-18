@@ -1,88 +1,108 @@
-/*
- * ===================================================
- * gestion-cuentas.js
- * Lógica de UI para la página de Gestión de Cuentas
- *
- * Funcionalidad:
- * 1. Poblado dinámico del Modal "Ver Cuenta".
- * 2. Lógica condicional para mostrar/ocultar secciones
- * (Embargos, Plazo Fijo).
- * ===================================================
- */
-
 document.addEventListener('DOMContentLoaded', () => {
 
-    const modalElement = document.getElementById('modalGestionCuenta');
+    // Referencias del Modal
+    const modalEl = document.getElementById('modalDetalle');
 
-    if (modalElement) {
-        // --- Elementos del Modal ---
-        const modalLabel = document.getElementById('modalGestionCuentaLabel');
-        // Info General
-        const modalCliente = document.getElementById('modalCuentaCliente');
-        const modalTipo = document.getElementById('modalCuentaTipo');
-        const modalMoneda = document.getElementById('modalCuentaMoneda');
-        const modalSaldo = document.getElementById('modalCuentaSaldo');
-        const modalEstado = document.getElementById('modalCuentaEstado');
-        const modalFechaApertura = document.getElementById('modalCuentaFechaApertura');
-        // Plazo Fijo
-        const modalFilaInteres = document.getElementById('modalPlazoFijoFilaInteres');
-        const modalInteres = document.getElementById('modalCuentaInteres');
-        const modalFilaPlazo = document.getElementById('modalPlazoFijoFilaPlazo');
-        const modalPlazo = document.getElementById('modalCuentaPlazo');
-        // Embargo
-        const modalEmbargoAlert = document.getElementById('modalEmbargoAlert');
-        const modalSinEmbargoAlert = document.getElementById('modalSinEmbargoAlert');
-        const modalEmbargoMonto = document.getElementById('modalEmbargoMonto');
-        const modalEmbargoExp = document.getElementById('modalEmbargoExp');
-        const modalEmbargoMotivo = document.getElementById('modalEmbargoMotivo');
+    // Campos de valor (Detalles visuales)
+    const lblNum = document.getElementById('lblNumCuenta');
+    const valCliente = document.getElementById('valCliente');
+    const valTipo = document.getElementById('valTipo');
+    const valMoneda = document.getElementById('valMoneda');
+    const valSaldo = document.getElementById('valSaldo');
+    const valEstado = document.getElementById('valEstado');
+    const valFecha = document.getElementById('valFecha');
 
-        // --- Evento ---
-        modalElement.addEventListener('show.bs.modal', (event) => {
-            const button = event.relatedTarget;
+    // Secciones y Alertas
+    const alertEmbargo = document.getElementById('alertEmbargoInfo');
+    const formEmbargo = document.getElementById('formEmbargoSection');
+    const actionsPanel = document.getElementById('actionsPanel');
 
-            // 1. Extraer datos del botón
-            const nroCuenta = button.dataset.nroCuenta;
-            const cliente = button.dataset.cliente;
-            const tipo = button.dataset.tipo;
-            const moneda = button.dataset.moneda;
-            const saldo = button.dataset.saldo;
-            const estado = button.dataset.estado;
-            const fechaApertura = button.dataset.fechaApertura;
-            const embargoActivo = button.dataset.embargoActivo === 'true'; // Convertir a booleano
-            const interes = button.dataset.interes;
-            const plazo = button.dataset.plazo;
+    // INPUTS OCULTOS (Para que funcionen los botones)
+    const inpCerrar = document.getElementById('inputNumCuentaCerrar');
+    const inpInactivar = document.getElementById('inputNumCuentaInactivar');
+    const inpEmbargo = document.getElementById('inputNumCuentaEmbargo');
 
-            // 2. Poblar Info General
-            modalLabel.textContent = `Detalle de Cuenta - ${nroCuenta}`;
-            modalCliente.textContent = cliente;
-            modalTipo.textContent = tipo;
-            modalMoneda.textContent = moneda;
-            modalSaldo.textContent = saldo;
-            modalEstado.textContent = estado;
-            modalFechaApertura.textContent = fechaApertura;
+    // Botones UI
+    const btnShowEmbargo = document.getElementById('btnShowEmbargo');
+    const btnCancelEmbargo = document.getElementById('btnCancelarEmbargo');
 
-            // 3. Lógica condicional para Plazo Fijo
-            if (tipo === 'Plazo Fijo') {
-                modalInteres.textContent = `${interes}%`;
-                modalPlazo.textContent = plazo;
-                modalFilaInteres.classList.remove('d-none');
-                modalFilaPlazo.classList.remove('d-none');
-            } else {
-                modalFilaInteres.classList.add('d-none');
-                modalFilaPlazo.classList.add('d-none');
+    // EVENTO 1: Abrir Modal
+    modalEl.addEventListener('show.bs.modal', (event) => {
+        const button = event.relatedTarget;
+        const numCuenta = button.getAttribute('data-num');
+
+        // --- ASIGNACIÓN CRÍTICA: Asegura que los botones funcionen ---
+        lblNum.textContent = numCuenta;
+        inpCerrar.value = numCuenta;
+        inpInactivar.value = numCuenta;
+        inpEmbargo.value = numCuenta;
+
+        // Resetear vista
+        alertEmbargo.classList.add('d-none');
+        formEmbargo.classList.add('d-none');
+        actionsPanel.classList.remove('d-none');
+        valCliente.textContent = "Cargando...";
+        valSaldo.textContent = "";
+
+        // --- Cargar datos vía AJAX ---
+        fetch(`${contextPath}/ControlCuenta?accion=detalle&num=${numCuenta}`)
+                .then(res => {
+                    if (!res.ok) {
+                        throw new Error("Error de red o Servidor no accesible.");
+                    }
+                    return res.json();
+                })
+                .then(data => {
+                    if (data && data.exito) {
+                        valCliente.textContent = data.cliente;
+                        valTipo.textContent = data.tipo;
+                        valMoneda.textContent = data.moneda;
+
+                        // Formateo de Saldo
+                        const saldoFormato = (data.moneda === 'Dólares' ? '$ ' : 'S/ ') + parseFloat(data.saldo).toFixed(2);
+                        valSaldo.textContent = saldoFormato;
+
+                        // Manejo de Estado
+                        valEstado.innerHTML = `<span class="badge bg-${data.estado === 'Activo' ? 'success' : (data.estado === 'Embargado' ? 'danger' : 'secondary')}">${data.estado}</span>`;
+                        valFecha.textContent = data.fecha.substring(0, 10); // Cortar el timestamp
+
+                        // Manejo de Embargo Activo
+                        if (data.embargo && data.embargo.activo) {
+                            alertEmbargo.classList.remove('d-none');
+                            document.getElementById('embExp').textContent = data.embargo.expediente;
+                            document.getElementById('embMot').textContent = data.embargo.motivo;
+                            document.getElementById('embMonto').textContent = (data.moneda === 'Dólares' ? '$ ' : 'S/ ') + parseFloat(data.embargo.monto).toFixed(2);
+
+                            btnShowEmbargo.classList.add('disabled');
+                        } else {
+                            btnShowEmbargo.classList.remove('disabled');
+                        }
+                    } else {
+                        valCliente.textContent = "Error: No se pudo cargar el detalle.";
+                        console.error("El servidor devolvió un error lógico o datos vacíos.");
+                    }
+                })
+                .catch(err => {
+                    console.error("Error AJAX:", err);
+                    valCliente.textContent = "Error de conexión con el servidor.";
+                });
+    });
+
+    // EVENTO 2: Mostrar Formulario Embargo
+    if (btnShowEmbargo) {
+        btnShowEmbargo.addEventListener('click', () => {
+            if (!btnShowEmbargo.classList.contains('disabled')) { // Solo si no está embargada
+                formEmbargo.classList.remove('d-none');
+                actionsPanel.classList.add('d-none');
             }
+        });
+    }
 
-            // 4. Lógica condicional para Embargo
-            if (embargoActivo) {
-                modalEmbargoMonto.textContent = button.dataset.embargoMonto;
-                modalEmbargoExp.textContent = button.dataset.embargoExp;
-                modalEmbargoMotivo.textContent = button.dataset.embargoMotivo;
-                modalEmbargoAlert.classList.remove('d-none');
-                modalSinEmbargoAlert.classList.add('d-none');
-            } else {
-                modalEmbargoAlert.classList.add('d-none');
-                modalSinEmbargoAlert.classList.remove('d-none');
-            }
+    // EVENTO 3: Cancelar Embargo
+    if (btnCancelEmbargo) {
+        btnCancelEmbargo.addEventListener('click', () => {
+            formEmbargo.classList.add('d-none');
+            actionsPanel.classList.remove('d-none');
         });
     }
 });
