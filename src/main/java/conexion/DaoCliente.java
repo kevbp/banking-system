@@ -95,4 +95,18 @@ public class DaoCliente {
         Object[] res = Acceso.buscar(sql);
         return (res != null);
     }
+    
+    // 4. Buscar credenciales web por codCliente para verificación
+    // Devuelve: [0] codCliente, [1] claveWeb, [2] palabraRecuperacion
+    public static Object[] buscarCredencialesWeb(String codCliente) {
+        // Seleccionamos los campos necesarios para la validación y la actualización
+        String sql = "SELECT codCliente, claveWeb, palabraRecuperacion FROM t_usuario_cliente WHERE codCliente = '" + codCliente + "'";
+        return Acceso.buscar(sql); 
+    }
+
+    // 5. Actualizar la contraseña web del cliente
+    public static String actualizarClaveWeb(String codCliente, String nuevaClaveHash) {
+        String sql = "UPDATE t_usuario_cliente SET claveWeb = '" + nuevaClaveHash + "', estado = 'ACTIVO' WHERE codCliente = '" + codCliente + "'";
+        return Acceso.ejecutar(sql);
+    }
 }

@@ -1,8 +1,6 @@
 package control;
 
-import control.*;
-import entidad.LoginRespuesta;
-import servicio.ServicioLogin;
+import entidad.UsuarioCliente;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -24,12 +22,10 @@ public class ControlLoginCliente extends HttpServlet {
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         
-        // Verificar qué acción se está solicitando
         String accion = request.getParameter("accion");
         
-        // Si no hay acción, asumimos login (o lo que tenías antes)
         if (accion == null) {
-            response.sendRedirect("modulo-clientes/dashboard-cliente.jsp");
+            response.sendRedirect("modulo-clientes/login-clientes.jsp"); 
             return;
         }
 
@@ -37,8 +33,11 @@ public class ControlLoginCliente extends HttpServlet {
             case "registrar":
                 procesarRegistro(request, response);
                 break;
+            case "recuperar":
+                procesarRecuperacion(request, response);
+                break;
             case "login":
-                // Aquí implementarías la lógica de login luego...
+                // Aquí iría la lógica de login
                 response.sendRedirect("modulo-clientes/dashboard-cliente.jsp");
                 break;
             default:
@@ -55,31 +54,91 @@ public class ControlLoginCliente extends HttpServlet {
     private void procesarRegistro(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
         
-        String dni = request.getParameter("inpDni");
-        String usuario = request.getParameter("inpUsu");
-        String palabraRec = request.getParameter("inpPalRec");
-        String pwd = request.getParameter("inpPwd");
+        // DNI necesario para la búsqueda en t_cliente
+        String dni = request.getParameter("inpDni"); 
         String pwdConf = request.getParameter("inpPwdConf");
-        
         String urlDestino = "modulo-clientes/registro-clientes.jsp";
 
-        // 1. Validar contraseñas en el controlador (validación básica)
-        if (pwd == null || !pwd.equals(pwdConf)) {
+        // 1. Validación de contraseñas
+        if (!request.getParameter("inpPwd").equals(pwdConf)) {
             request.setAttribute("mensaje", "Las contraseñas no coinciden.");
             request.getRequestDispatcher(urlDestino).forward(request, response);
             return;
         }
+        
+        // 2. Llenar la entidad UsuarioCliente
+        UsuarioCliente uc = new UsuarioCliente();
+        uc.setNomUsuario(request.getParameter("inpUsu"));
+        uc.setClaveWeb(request.getParameter("inpPwd"));
+        uc.setPalabraRecuperacion(request.getParameter("inpPalRec"));
 
-        // 2. Llamar al ServicioCliente para la lógica de negocio
-        String error = ServicioCliente.registrarAccesoWeb(dni, usuario, pwd, palabraRec);
+        // 3. Llamar al ServicioCliente
+        String error = ServicioCliente.registrarAccesoWeb(dni, uc);
 
         if (error == null) {
-            // Éxito: Redirigir al login con parámetro de éxito
             response.sendRedirect("modulo-clientes/login-clientes.jsp?registro=exito");
         } else {
-            // Error: Volver al formulario y mostrar mensaje
             request.setAttribute("mensaje", error);
             request.getRequestDispatcher(urlDestino).forward(request, response);
+        }
+    }
+    
+    private void procesarRecuperacion(HttpServletRequest request, HttpServletResponse response) 
+            throws ServletException, IOException {
+        
+        String urlDestino = "modulo-clientes/recuperar-contrasena.jsp";
+        
+        String dni = request.getParameter("inpDNI");
+        String actionStep = request.getParameter("actionStep"); 
+        
+        String palabraClave = request.getParameter("inpClave");
+        String nuevaClave = request.getParameter("inpNuevaPwd");
+        String confirmarClave = request.getParameter("inpConfirmarPwd");
+        
+        UsuarioCliente uc = new UsuarioCliente();
+        String mensajeResultado = null;
+
+        if ("verificar".equalsIgnoreCase(actionStep)) {
+            // PASO 1: Llenar entidad con la palabra clave
+            uc.setPalabraRecuperacion(palabraClave);
+            mensajeResultado = ServicioCliente.recuperarContrasenaWeb("verificar", dni, uc);
+            
+            if (mensajeResultado == null) {
+                // Éxito
+                request.setAttribute("showNewPasswordForm", true);
+                request.setAttribute("inpDNI", dni); // Mantenemos DNI para el siguiente POST
+            } else {
+                request.setAttribute("mensaje", mensajeResultado);
+            }
+            
+            request.getRequestDispatcher(urlDestino).forward(request, response);
+            
+        } else if ("recuperar".equalsIgnoreCase(actionStep)) {
+            // PASO 2: Actualizar Contraseña
+            
+            // 1. Validación de confirmación
+            if (nuevaClave == null || !nuevaClave.equals(confirmarClave)) {
+                request.setAttribute("mensaje", "La nueva contraseña y su confirmación no coinciden.");
+                // Volvemos a mostrar el Paso 2
+                request.setAttribute("showNewPasswordForm", true); 
+                request.setAttribute("inpDNI", dni);
+                request.getRequestDispatcher(urlDestino).forward(request, response);
+                return;
+            }
+            
+            // 2. Llenar entidad con la nueva clave
+            uc.setClaveWeb(nuevaClave); 
+            mensajeResultado = ServicioCliente.recuperarContrasenaWeb("recuperar", dni, uc);
+
+            if (mensajeResultado == null) {
+                response.sendRedirect("modulo-clientes/login-clientes.jsp?recuperacion=exito");
+            } else {
+                request.setAttribute("mensaje", mensajeResultado);
+                // Si falla, volvemos a mostrar el Paso 2
+                request.setAttribute("showNewPasswordForm", true); 
+                request.setAttribute("inpDNI", dni);
+                request.getRequestDispatcher(urlDestino).forward(request, response);
+            }
         }
     }
 }
