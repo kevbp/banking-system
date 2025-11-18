@@ -4,6 +4,7 @@ import utilitarios.InsecureTrustManager;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import conexion.DaoCliente;
 import entidad.Cliente;
+import entidad.UsuarioCliente;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
+import utilitarios.Encriptacion;
 import utilitarios.Utiles;    
 
 public class ServicioCliente {
@@ -183,5 +185,43 @@ public class ServicioCliente {
     public static int contarClientesActivos() {
         String condicion = "WHERE codEstado = 'S0001'";
         return DaoCliente.contar(condicion);
+    }
+    
+    // --- MÉTODO NUEVO PARA REGISTRO WEB ---
+    
+    public static String registrarAccesoWeb(String dni, String usuario, String pwd, String palabraRec) {
+        
+        // 1. Validar que el DNI corresponda a un Cliente existente
+        // Usamos el método listar existente filtrando por numDoc
+        List<Object[]> clientes = DaoCliente.listar(" WHERE numDoc = '" + dni + "'", 1, 0);
+        
+        if (clientes == null || clientes.isEmpty()) {
+            return "El DNI ingresado no pertenece a un cliente registrado en el banco.";
+        }
+
+        // Obtener el codCliente (asumiendo que es el primer elemento del array devuelto por DaoCliente.listar)
+        Object[] datosCliente = clientes.get(0);
+        String codCliente = datosCliente[0].toString();
+
+        // 2. Validar si el cliente YA tiene usuario web (evitar duplicados)
+        if (DaoCliente.clienteTieneUsuarioWeb(codCliente)) {
+            return "Usted ya tiene una cuenta web activa. Use la opción de recuperar contraseña.";
+        }
+
+        // 3. Validar disponibilidad del nombre de usuario
+        if (DaoCliente.existeUsuarioWeb(usuario)) {
+            return "El nombre de usuario ya está en uso. Por favor elija otro.";
+        }
+
+        // 4. Encriptar contraseña y palabra de recuperación
+        String pwdHash = Encriptacion.encriptar(pwd);
+        String palabraHash = Encriptacion.encriptar(palabraRec);
+
+        // 5. Registrar en BD
+        UsuarioCliente nuevoUsu = new UsuarioCliente(codCliente, usuario, pwdHash, palabraHash);
+        String resultado = DaoCliente.registrarUsuarioWeb(nuevoUsu);
+        
+        // Si retorna null significa éxito en Acceso.ejecutar
+        return resultado; 
     }
 }

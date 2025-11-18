@@ -39,7 +39,7 @@
                             <p class="text-muted">Inicia sesión como Cliente.</p>
                         </div>
 
-                        <form action="${pageContext.request.contextPath}/ControlLoginCliente" method="POST">
+                        <form action="${pageContext.request.contextPath}/ControlLoginCliente" method="post">
                             <div class="form-floating mb-3">
                                 <input type="text" class="form-control" name="inpUsu" id="inpUsu" placeholder="Ingresa tu DNI" required>
                                 <label for="inpUsu">Usuario</label>
