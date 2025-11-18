@@ -109,4 +109,9 @@ public class DaoCliente {
         String sql = "UPDATE t_usuario_cliente SET claveWeb = '" + nuevaClaveHash + "', estado = 'ACTIVO' WHERE codCliente = '" + codCliente + "'";
         return Acceso.ejecutar(sql);
     }
+    
+    public static Object[] buscarUsuarioWeb(String nomUsuario) {
+        String sql = "SELECT u.codCliente, nomUsuario, claveWeb, c.codEstado FROM t_usuario_cliente as u inner join t_cliente as c on u.codCliente = c.codCliente WHERE nomUsuario = '"+nomUsuario+"';";
+        return Acceso.buscar(sql); 
+    }
 }

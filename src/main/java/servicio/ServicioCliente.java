@@ -260,4 +260,32 @@ public class ServicioCliente {
         
         return "Acción de servicio no reconocida.";
     }
+    
+    public static Object[] autenticarClienteWeb(String nomUsuario, String psw) {
+        
+        Object[] datosUsuarioWeb = DaoCliente.buscarUsuarioWeb(nomUsuario);
+
+        if (datosUsuarioWeb == null) {
+            return null; // Usuario no encontrado
+        }
+
+        // Elementos del array: [0] codCliente, [1] nomUsuario, [2] claveWeb (Hash), [3] codEstado
+        String claveHashAlmacenada = datosUsuarioWeb[2].toString();
+        String estado = datosUsuarioWeb[3].toString();
+
+        // 1. Verificar estado
+        if ("S0003".equalsIgnoreCase(estado)) { // Asumiendo S0003 = BLOQUEADO
+            return null; 
+        }
+
+        // 2. Validar contraseña usando BCrypt
+        if (Encriptacion.validar(psw, claveHashAlmacenada)) {
+            // Éxito. Buscamos los datos completos del cliente (t_cliente) para la sesión
+            String codCliente = datosUsuarioWeb[0].toString();
+            return DaoCliente.buscar(codCliente); // Reutiliza el método buscar de DaoCliente
+        } else {
+            // Contraseña inválida
+            return null;
+        }
+    }
 }
