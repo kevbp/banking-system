@@ -17,17 +17,15 @@ public class DaoCuenta {
     public static List<CuentasBancarias> listarCuentas(String numCuenta, String docCliente, String tipoCuenta, String estado) {
         List<CuentasBancarias> lista = new ArrayList<>();
 
-        // Construimos la consulta SQL dinámicamente según los filtros
         StringBuilder sql = new StringBuilder(
                 "SELECT c.numCuenta, cl.nomCompleto, tc.descTipo, m.descMoneda, c.salAct, e.des as estadoDes, c.fecApe "
                 + "FROM t_cuentas c "
-                + "INNER JOIN t_cliente cl ON c.codCliente = cl.codCliente "
-                + "INNER JOIN t_tipocuenta tc ON c.codTipCuenta = tc.codTipCuenta "
-                + "INNER JOIN t_moneda m ON c.codMoneda = m.codMoneda "
-                + "INNER JOIN t_estado e ON c.codEstado = e.codEstado "
+                + "LEFT JOIN t_cliente cl ON c.codCliente = cl.codCliente "
+                + "LEFT JOIN t_tipocuenta tc ON c.codTipCuenta = tc.codTipCuenta "
+                + "LEFT JOIN t_moneda m ON c.codMoneda = m.codMoneda "
+                + "LEFT JOIN t_estado e ON c.codEstado = e.codEstado "
                 + "WHERE 1=1 ");
 
-        // Aplicamos filtros si no son nulos ni vacíos
         if (numCuenta != null && !numCuenta.isEmpty()) {
             sql.append(" AND c.numCuenta LIKE '%").append(numCuenta).append("%'");
         }
@@ -35,7 +33,7 @@ public class DaoCuenta {
             sql.append(" AND cl.numDoc LIKE '%").append(docCliente).append("%'");
         }
         if (tipoCuenta != null && !tipoCuenta.isEmpty()) {
-            sql.append(" AND tc.descTipo LIKE '%").append(tipoCuenta).append("%'"); // Asegúrate que coincida con los valores del <select>
+            sql.append(" AND tc.descTipo LIKE '%").append(tipoCuenta).append("%'");
         }
         if (estado != null && !estado.isEmpty()) {
             sql.append(" AND e.des = '").append(estado).append("'");
@@ -43,40 +41,25 @@ public class DaoCuenta {
 
         sql.append(" ORDER BY c.fecApe DESC");
 
-        // Ejecutamos la consulta usando tu clase Acceso
-        List<Object[]> filas = (List<Object[]>) Acceso.listar(sql.toString());
-
+        List<Object[]> filas = Acceso.listar(sql.toString());
         if (filas != null) {
             for (Object[] f : filas) {
                 CuentasBancarias c = new CuentasBancarias();
+                c.setNumCuenta(validarNull(f[0]));
 
-                // Mapeamos los resultados del Object[] a la entidad CuentasBancarias
-                c.setNumCuenta(f[0] != null ? f[0].toString() : "");
-
-                // Creamos un cliente temporal solo para transportar el nombre a la vista
                 Cliente cli = new Cliente();
-                cli.setNombre(f[1] != null ? f[1].toString() : "");
+                cli.setNombre(validarNull(f[1]));
                 c.setCliente(cli);
 
-                c.setDesTipoCuenta(f[2] != null ? f[2].toString() : "");
-                c.setDesMoneda(f[3] != null ? f[3].toString() : "");
+                c.setDesTipoCuenta(validarNull(f[2]));
+                c.setDesMoneda(validarNull(f[3]));
+                c.setSalAct(f[4] != null ? new BigDecimal(f[4].toString()) : BigDecimal.ZERO);
+                c.setDesEstado(validarNull(f[5]));
 
-                // Conversión segura de BigDecimal para el saldo
-                if (f[4] != null) {
-                    c.setSalAct(new BigDecimal(f[4].toString()));
-                } else {
-                    c.setSalAct(BigDecimal.ZERO);
-                }
-
-                c.setDesEstado(f[5] != null ? f[5].toString() : "");
-
-                // Conversión de fecha
-                if (f[6] != null) {
-                    try {
-                        c.setFecApe(java.sql.Timestamp.valueOf(f[6].toString()));
-                    } catch (Exception e) {
-                        c.setFecApe(null);
-                    }
+                // Fecha segura
+                try {
+                    c.setFecApe(f[6] != null ? java.sql.Timestamp.valueOf(f[6].toString()) : null);
+                } catch (Exception e) {
                 }
 
                 lista.add(c);
@@ -166,63 +149,38 @@ public class DaoCuenta {
     // Obtener una sola cuenta (usado en Detalle/Operaciones)
     public static CuentasBancarias obtenerCuenta(String numCuenta, Connection cn) {
         CuentasBancarias cuenta = null;
-
-        // CORRECCIÓN: Eliminamos 'cl.ape' y usamos LEFT JOIN para evitar errores si faltan datos relacionados
-        String sql = "SELECT c.numCuenta, c.codCliente, c.codTipCuenta, c.codMoneda, c.salAct, c.fecApe, c.codEstado, "
-                + "tc.descTipo AS desTipCuenta, m.descMoneda, e.des AS desEstado, "
-                + "cl.nomCompleto, cl.numDoc "
+        // Consulta simplificada y segura
+        String sql = "SELECT c.numCuenta, c.salAct, c.fecApe, "
+                + "cl.nomCompleto, cl.numDoc, "
+                + "tc.descTipo, m.descMoneda, e.des "
                 + "FROM t_cuentas c "
+                + "LEFT JOIN t_cliente cl ON c.codCliente = cl.codCliente "
                 + "LEFT JOIN t_tipocuenta tc ON c.codTipCuenta = tc.codTipCuenta "
                 + "LEFT JOIN t_moneda m ON c.codMoneda = m.codMoneda "
                 + "LEFT JOIN t_estado e ON c.codEstado = e.codEstado "
-                + "LEFT JOIN t_cliente cl ON c.codCliente = cl.codCliente "
                 + "WHERE c.numCuenta = ?";
 
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-
-        try {
-            ps = cn.prepareStatement(sql);
+        try (PreparedStatement ps = cn.prepareStatement(sql)) {
             ps.setString(1, numCuenta);
-            rs = ps.executeQuery();
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    cuenta = new CuentasBancarias();
+                    cuenta.setNumCuenta(rs.getString(1));
+                    cuenta.setSalAct(rs.getBigDecimal(2));
+                    cuenta.setFecApe(rs.getTimestamp(3));
 
-            if (rs.next()) {
-                cuenta = new CuentasBancarias();
+                    Cliente cli = new Cliente();
+                    cli.setNombre(rs.getString(4));
+                    cli.setNumDocumento(rs.getString(5));
+                    cuenta.setCliente(cli);
 
-                // Mapeo seguro de datos (validando nulos)
-                cuenta.setNumCuenta(rs.getString("numCuenta"));
-                cuenta.setCodCliente(rs.getString("codCliente"));
-                cuenta.setCodTipoCuenta(rs.getString("codTipCuenta"));
-                cuenta.setCodMoneda(rs.getString("codMoneda"));
-                cuenta.setSalAct(rs.getBigDecimal("salAct"));
-                cuenta.setFecApe(rs.getTimestamp("fecApe"));
-                cuenta.setCodEstado(rs.getString("codEstado"));
-
-                cuenta.setDesTipoCuenta(rs.getString("desTipCuenta"));
-                cuenta.setDesMoneda(rs.getString("descMoneda"));
-                cuenta.setDesEstado(rs.getString("desEstado"));
-
-                // Mapeo del Cliente
-                entidad.Cliente cliente = new entidad.Cliente();
-                cliente.setCodigo(rs.getString("codCliente"));
-                cliente.setNombre(rs.getString("nomCompleto")); // Solo usamos nomCompleto
-                cliente.setNumDocumento(rs.getString("numDoc"));
-
-                cuenta.setCliente(cliente);
+                    cuenta.setDesTipoCuenta(rs.getString(6));
+                    cuenta.setDesMoneda(rs.getString(7));
+                    cuenta.setDesEstado(rs.getString(8));
+                }
             }
         } catch (SQLException e) {
-            System.err.println("❌ Error CRÍTICO en DaoCuenta.obtenerCuenta: " + e.getMessage());
-            e.printStackTrace();
-        } finally {
-            try {
-                if (rs != null) {
-                    rs.close();
-                }
-                if (ps != null) {
-                    ps.close();
-                }
-            } catch (SQLException e) {
-            }
+            System.err.println("ERROR SQL Detalle: " + e.getMessage());
         }
         return cuenta;
     }
@@ -245,6 +203,10 @@ public class DaoCuenta {
     public static String cambiarEstado(String numCuenta, String nuevoEstado) {
         String sql = "UPDATE t_cuentas SET codEstado = '" + nuevoEstado + "', fecUsuMod = NOW() WHERE numCuenta = '" + numCuenta + "'";
         return Acceso.ejecutar(sql);
+    }
+
+    private static String validarNull(Object obj) {
+        return obj != null ? obj.toString() : "";
     }
 
 }

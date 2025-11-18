@@ -1,15 +1,18 @@
 package servicio;
 
+import conexion.Acceso; // Necesario para gestionar la conexión
 import conexion.DaoCuenta;
-import conexion.DaoEmbargo; // Nuevo import
-import entidad.CuentasBancarias;
-import entidad.Embargo; // Nuevo import
+import conexion.DaoEmbargo;
+import entidad.CuentasBancarias; // Importante: Usar la nueva entidad
+import entidad.Embargo;
 import utilitarios.Utiles;
 import java.math.BigDecimal;
+import java.sql.Connection;
 import java.util.List;
 
 public class ServicioCuenta {
 
+    // --- 1. APERTURA DE CUENTAS ---
     public String crearNumeroCuentaUnico() {
         String nuevoNumeroCuenta;
         boolean existe;
@@ -25,9 +28,9 @@ public class ServicioCuenta {
             int plazo, double interes, String codUsuario) {
 
         String numCuenta = crearNumeroCuentaUnico();
-        String cci = "002" + numCuenta + "15";
+        String cci = "002" + numCuenta + "15"; // Generación simple de CCI
 
-        CuentasBancarias c = new CuentasBancarias(); // <--- Uso de la nueva clase
+        CuentasBancarias c = new CuentasBancarias();
         c.setNumCuenta(numCuenta);
         c.setCodCliente(codCliente);
         c.setCodTipoCuenta(tipoCuenta);
@@ -37,62 +40,63 @@ public class ServicioCuenta {
         c.setCodUsuCre(codUsuario);
 
         if (saldo < 0) {
-            return "El saldo inicial no puede ser negativo.";
+            return "Error: El saldo inicial no puede ser negativo.";
         }
 
         return DaoCuenta.crearCuenta(c, interes, plazo, 0.0);
     }
 
-    // Lógica para Cerrar Cuenta
-    public String cerrarCuenta(String numCuenta) {
-        // Regla: No se puede cerrar si tiene saldo (opcional, depende del banco)
-        // Aquí asumimos cierre directo a estado 'S0005' (Cerrado)
-        String res = DaoCuenta.cambiarEstado(numCuenta, "S0005");
-        return res == null ? "Cuenta cerrada correctamente." : "Error al cerrar cuenta.";
-    }
-
-    // Lógica para Inactivar Cuenta
-    public String inactivarCuenta(String numCuenta) {
-        // Estado 'S0002' (Inactivo)
-        String res = DaoCuenta.cambiarEstado(numCuenta, "S0002");
-        return res == null ? "Cuenta inactivada correctamente." : "Error al inactivar cuenta.";
-    }
-
-    // Lógica para Embargar (Compleja: Inserta embargo + Cambia estado cuenta)
-    public String ejecutarEmbargo(String numCuenta, double monto, String expediente, String motivo, String usuario) {
-
-        // 1. Registrar el embargo en el historial
-        Embargo e = new Embargo();
-        e.setNumCuenta(numCuenta);
-        e.setMonto(new BigDecimal(monto));
-        e.setExpediente(expediente);
-        e.setDescripcion(motivo);
-        e.setCodUsuCre(usuario);
-
-        String codEmbargo = DaoEmbargo.registrarEmbargo(e);
-
-        if (codEmbargo != null) {
-            // 2. Cambiar estado de la cuenta a 'S0006' (Embargado)
-            DaoCuenta.cambiarEstado(numCuenta, "S0006");
-            return "OK";
-        } else {
-            return "Error al registrar el embargo en base de datos.";
-        }
-    }
-
-    // Método para obtener detalles JSON (para el modal)
+    // --- 2. GESTIÓN DE CUENTAS (Estos métodos faltaban) ---
+    // Obtener detalle para el Modal (Conexión segura)
     public CuentasBancarias obtenerDetalle(String numCuenta) {
-        // Usamos una conexión temporal solo para lectura rápida
-        java.sql.Connection cn = conexion.Acceso.getConexion();
-        CuentasBancarias cb = DaoCuenta.obtenerCuenta(numCuenta, cn);
+        Connection cn = null;
+        CuentasBancarias cb = null;
         try {
-            cn.close();
-        } catch (Exception ex) {
+            cn = Acceso.getConexion();
+            cb = DaoCuenta.obtenerCuenta(numCuenta, cn);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (cn != null) {
+                    cn.close();
+                }
+            } catch (Exception e) {
+            }
         }
         return cb;
     }
 
-    // Obtener embargos activos para mostrar en el modal
+    public String cerrarCuenta(String numCuenta) {
+        String res = DaoCuenta.cambiarEstado(numCuenta, "S0005"); // Cerrado
+        return res == null ? "Cuenta CERRADA correctamente." : "Error al cerrar.";
+    }
+
+    public String activarCuenta(String numCuenta) {
+        String res = DaoCuenta.cambiarEstado(numCuenta, "S0001"); // S0001 = Activo
+        return res == null ? "Cuenta ACTIVADA correctamente." : "Error al activar cuenta.";
+    }
+
+    public String inactivarCuenta(String numCuenta) {
+        String res = DaoCuenta.cambiarEstado(numCuenta, "S0002"); // Inactivo
+        return res == null ? "Cuenta INACTIVADA correctamente." : "Error al inactivar.";
+    }
+
+    public String ejecutarEmbargo(String num, double monto, String exp, String mot, String user) {
+        Embargo e = new Embargo();
+        e.setNumCuenta(num);
+        e.setMonto(new BigDecimal(monto));
+        e.setExpediente(exp);
+        e.setDescripcion(mot);
+        e.setCodUsuCre(user);
+
+        if (DaoEmbargo.registrarEmbargo(e) != null) {
+            DaoCuenta.cambiarEstado(num, "S0006"); // Embargado
+            return "Embargo registrado correctamente.";
+        }
+        return "Error al registrar embargo.";
+    }
+
     public List<Object[]> listarEmbargos(String numCuenta) {
         return DaoEmbargo.listarPorCuenta(numCuenta);
     }

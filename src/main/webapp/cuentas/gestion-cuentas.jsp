@@ -2,21 +2,17 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html lang="es-ES">
+<html lang="es">
     <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Gestión de Cuentas - Quantum Bank</title>
-
+        <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Gestión de Cuentas</title>
         <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet">
         <link href="${pageContext.request.contextPath}/css/estilos.css" rel="stylesheet">
         <link href="${pageContext.request.contextPath}/css/sidebar.css" rel="stylesheet">
         <link href="${pageContext.request.contextPath}/css/header.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     </head>
-
     <body data-active-page="cuentas-gestion">
         <%@ include file="../util/theme.jsp" %>
         <div class="d-flex">
@@ -25,186 +21,138 @@
                 <%@ include file="../util/header.jsp" %>
 
                 <div class="content-area p-4">
-                    <div class="card shadow-sm border-0">
-                        <div class="card-header bg-dark text-light text-center">
-                            <h4 class="mb-0">Cartera de Cuentas</h4>
+                    <c:if test="${not empty param.msg}">
+                        <div class="alert alert-info alert-dismissible fade show">${param.msg}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                         </div>
-                        <div class="card-body p-4">
+                    </c:if>
 
-                            <c:if test="${not empty param.msg}">
-                                <div class="alert alert-info alert-dismissible fade show">
-                                    ${param.msg}
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                                </div>
-                            </c:if>
-
-                            <form action="${pageContext.request.contextPath}/ControlCuenta" method="get" class="mb-4">
+                    <div class="card mb-4 border-0 shadow-sm">
+                        <div class="card-body">
+                            <form action="${pageContext.request.contextPath}/ControlCuenta" method="get">
                                 <input type="hidden" name="accion" value="listar">
-                                <div class="row g-3 align-items-end">
-                                    <div class="col-md-3">
-                                        <label class="form-label">N° Cuenta</label>
-                                        <input type="text" class="form-control" name="numCuenta" value="${param.numCuenta}">
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label class="form-label">DNI Cliente</label>
-                                        <input type="text" class="form-control" name="numDoc" value="${param.numDoc}">
-                                    </div>
-                                    <div class="col-md-2">
-                                        <button type="submit" class="btn btn-primary w-100"><i class="bi bi-search"></i> Filtrar</button>
-                                    </div>
+                                <div class="row g-2">
+                                    <div class="col-md-4"><input type="text" class="form-control" name="numCuenta" placeholder="N° Cuenta" value="${param.numCuenta}"></div>
+                                    <div class="col-md-4"><input type="text" class="form-control" name="numDoc" placeholder="DNI Cliente" value="${param.numDoc}"></div>
+                                    <div class="col-md-4"><button type="submit" class="btn btn-primary w-100"><i class="bi bi-search"></i> Buscar</button></div>
                                 </div>
                             </form>
+                        </div>
+                    </div>
 
-                            <hr>
-
-                            <div class="table-responsive">
-                                <table class="table table-hover table-bordered align-middle">
-                                    <thead class="table-light text-center">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header bg-white fw-bold">Resultados</div>
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="table-light">
+                                    <tr><th>Cuenta</th><th>Cliente</th><th>Producto</th><th>Moneda</th><th>Estado</th><th>Acción</th></tr>
+                                </thead>
+                                <tbody>
+                                    <c:forEach var="c" items="${listaCuentas}">
                                         <tr>
-                                            <th>N° Cuenta</th>
-                                            <th>Cliente</th>
-                                            <th>Producto</th>
-                                            <th>Moneda</th>
-                                            <th>Saldo</th>
-                                            <th>Estado</th>
-                                            <th>Acción</th>
+                                            <td class="font-monospace fw-bold text-primary">${c.numCuenta}</td>
+                                            <td>${c.cliente.nombre}</td>
+                                            <td><small>${c.desTipoCuenta}</small></td>
+                                            <td>${c.desMoneda}</td>
+                                            <td><span class="badge bg-secondary">${c.desEstado}</span></td>
+                                            <td>
+                                                <button type="button" class="btn btn-sm btn-primary w-100 btn-ver" data-id="${c.numCuenta}">
+                                                    <i class="bi bi-eye-fill me-1"></i> Ver cuenta
+                                                </button>
+                                            </td>
                                         </tr>
-                                    </thead>
-                                    <tbody>
-                                        <c:forEach var="c" items="${listaCuentas}">
-                                            <tr>
-                                                <td class="fw-bold">${c.numCuenta}</td>
-                                                <td>${c.cliente.nombre}</td>
-                                                <td>${c.desTipoCuenta}</td>
-                                                <td>${c.desMoneda}</td>
-                                                <td class="text-end">
-                                                    ${c.desMoneda eq 'Dólares' ? '$' : 'S/'} 
-                                                    <fmt:formatNumber value="${c.salAct}" minFractionDigits="2"/>
-                                                </td>
-                                                <td class="text-center">
-                                                    <span class="badge ${c.desEstado eq 'Activo' ? 'bg-success' : (c.desEstado eq 'Embargado' ? 'bg-danger' : 'bg-secondary')}">
-                                                        ${c.desEstado}
-                                                    </span>
-                                                </td>
-                                                <td class="text-center">
-                                                    <button class="btn btn-sm btn-info text-white btn-detalle" 
-                                                            data-num="${c.numCuenta}" 
-                                                            data-bs-toggle="modal" 
-                                                            data-bs-target="#modalDetalle">
-                                                        <i class="bi bi-eye"></i> Ver
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        </c:forEach>
-                                        <c:if test="${empty listaCuentas}">
-                                            <tr><td colspan="7" class="text-center text-muted">No se encontraron cuentas.</td></tr>
-                                        </c:if>
-                                    </tbody>
-                                </table>
-                            </div>
+                                    </c:forEach>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="modal fade" id="modalDetalle" tabindex="-1" aria-hidden="true">
+        <div class="modal fade" id="modalGestion" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-lg modal-dialog-centered">
                 <div class="modal-content">
-                    <div class="modal-header bg-primary text-white">
-                        <h5 class="modal-title">Gestión de Cuenta: <span id="lblNumCuenta" class="fw-bold"></span></h5>
+                    <div class="modal-header bg-dark text-white">
+                        <h5 class="modal-title">Cuenta: <span id="lblCuenta" class="font-monospace text-warning">...</span></h5>
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body bg-light">
 
-                        <div class="row">
-                            <%-- COLUMNA 1: DATOS DE LA CUENTA --%>
-                            <div class="col-md-6 border-end">
-                                <h6 class="text-primary mb-3"><i class="bi bi-info-circle me-1"></i> Información General</h6>
-                                <table class="table table-sm table-borderless small">
-                                    <tr><th>Cliente</th><td id="valCliente" class="fw-medium"></td></tr>
-                                    <tr><th>Tipo de Producto</th><td id="valTipo"></td></tr>
-                                    <tr><th>Moneda</th><td id="valMoneda"></td></tr>
-                                    <tr><th>Fecha Apertura</th><td id="valFecha"></td></tr>
-                                </table>
-                            </div>
-
-                            <%-- COLUMNA 2: ESTATUS FINANCIERO Y ESTADO --%>
-                            <div class="col-md-6">
-                                <h6 class="text-primary mb-3"><i class="bi bi-bar-chart-line me-1"></i> Estatus Actual</h6>
-                                <div class="p-3 bg-light rounded mb-3">
-                                    <strong>SALDO DISPONIBLE:</strong>
-                                    <p class="fs-4 fw-bolder mb-0 text-success" id="valSaldo"></p>
+                        <div class="card border-0 shadow-sm mb-3">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <label class="small text-muted fw-bold">TITULAR</label>
+                                        <h5 class="fw-bold text-dark mb-1" id="valCli">...</h5>
+                                        <small class="text-muted" id="valDoc">...</small>
+                                    </div>
+                                    <div class="col-md-4 text-end border-start">
+                                        <label class="small text-muted fw-bold">ESTADO ACTUAL</label>
+                                        <h5 id="valEstBadged">...</h5>
+                                    </div>
                                 </div>
-                                <table class="table table-sm table-borderless small">
-                                    <tr><th>Estado General</th><td id="valEstado"></td></tr>
-                                    <tr><th>N° Documento</th><td id="valDoc"></td></tr>
-                                </table>
+                                <hr class="my-2">
+                                <div class="row small">
+                                    <div class="col-6"><strong>Producto:</strong> <span id="valTip">...</span></div>
+                                    <div class="col-6"><strong>Moneda:</strong> <span id="valMon">...</span></div>
+                                    <div class="col-6"><strong>Fecha Apertura:</strong> <span id="valFec">...</span></div>
+                                </div>
                             </div>
                         </div>
 
-                        <hr>
-
-                        <%-- SECCIÓN DE EMBARGOS (CONDICIONAL) --%>
-                        <div id="alertEmbargoInfo" class="alert alert-danger d-none small">
-                            <strong><i class="bi bi-lock-fill me-1"></i> ALERTA: CUENTA EMBARGADA</strong>
-                            <ul class="mb-0 mt-1">
-                                <li><strong>Monto Retenido:</strong> <span id="embMonto"></span></li>
-                                <li><strong>N° Expediente:</strong> <span id="embExp"></span></li>
-                                <li><strong>Motivo Judicial:</strong> <span id="embMot"></span></li>
+                        <div id="alertEmbargo" class="alert alert-danger d-none border-danger">
+                            <strong><i class="bi bi-exclamation-triangle-fill"></i> CUENTA EMBARGADA</strong>
+                            <ul class="mb-0 small mt-1">
+                                <li>Expediente: <span id="embExp"></span></li>
+                                <li>Monto Retenido: <span id="embMonto"></span></li>
+                                <li>Motivo: <span id="embMot"></span></li>
                             </ul>
                         </div>
 
-                        <%-- FORMULARIO DE EMBARGO (SE MUESTRA AL HACER CLIC EN BOTÓN) --%>
-                        <div id="formEmbargoSection" class="card d-none mt-3 border-danger">
-                            <div class="card-body bg-light">
-                                <h6 class="text-danger fw-bold mb-3">Registrar Nuevo Embargo Judicial</h6>
+                        <div id="formEmbargo" class="card border-danger d-none shadow-sm mb-3">
+                            <div class="card-header bg-danger text-white py-1 fw-bold small">Nuevo Embargo</div>
+                            <div class="card-body">
                                 <form action="${pageContext.request.contextPath}/ControlCuenta" method="post">
                                     <input type="hidden" name="accion" value="embargar">
-                                    <input type="hidden" name="numCuentaEmbargo" id="inputNumCuentaEmbargo">
-
+                                    <input type="hidden" name="numCuentaEmbargo" id="inEmbargoNum">
                                     <div class="row g-2">
-                                        <div class="col-md-4">
-                                            <label class="small">Monto a Retener</label>
-                                            <input type="number" step="0.01" class="form-control form-control-sm" name="monto" required>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="small">N° Expediente</label>
-                                            <input type="text" class="form-control form-control-sm" name="expediente" required>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <label class="small">Motivo / Descripción</label>
-                                            <input type="text" class="form-control form-control-sm" name="motivo" required>
-                                        </div>
+                                        <div class="col-4"><input type="number" step="0.01" class="form-control form-control-sm" name="monto" placeholder="Monto" required></div>
+                                        <div class="col-8"><input type="text" class="form-control form-control-sm" name="expediente" placeholder="N° Expediente" required></div>
+                                        <div class="col-12"><input type="text" class="form-control form-control-sm" name="motivo" placeholder="Motivo" required></div>
                                     </div>
-                                    <div class="text-end mt-3">
-                                        <button type="button" class="btn btn-sm btn-secondary" id="btnCancelarEmbargo">Cancelar</button>
-                                        <button type="submit" class="btn btn-sm btn-danger">Ejecutar Retención</button>
+                                    <div class="text-end mt-2">
+                                        <button type="button" class="btn btn-sm btn-secondary" onclick="$('#formEmbargo').addClass('d-none')">Cancelar</button>
+                                        <button class="btn btn-sm btn-danger">Confirmar</button>
                                     </div>
                                 </form>
                             </div>
                         </div>
 
-                    </div>
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-center">
 
-                    <div class="modal-footer d-flex justify-content-between" id="actionsPanel">
+                            <form action="${pageContext.request.contextPath}/ControlCuenta" method="post" id="formEstado">
+                                <input type="hidden" name="accion" value="cambiarEstado">
+                                <input type="hidden" name="tipo" id="inTipoEstado"> <input type="hidden" name="numCuenta" id="inEstadoNum">
+                                <button id="btnToggleEstado" class="btn btn-warning px-4 fw-bold">
+                                    <i class="bi bi-power me-1"></i> <span id="lblToggleEstado">Desactivar</span>
+                                </button>
+                            </form>
 
-                        <%-- FORMULARIOS DE ACCIÓN --%>
-                        <form action="${pageContext.request.contextPath}/ControlCuenta" method="post" onsubmit="return confirm('ATENCIÓN: Esto cerrará la cuenta definitivamente. ¿Desea continuar?');">
-                            <input type="hidden" name="accion" value="cambiarEstado">
-                            <input type="hidden" name="tipo" value="cerrar">
-                            <input type="hidden" name="numCuenta" id="inputNumCuentaCerrar">
-                            <button class="btn btn-danger action-btn" id="btnCerrarCuenta" title="Cerrar Cuenta"><i class="bi bi-x-circle me-1"></i> Cerrar Cuenta</button>
-                        </form>
+                            <button class="btn btn-danger px-4 fw-bold" id="btnShowEmbargo">
+                                <i class="bi bi-hammer me-1"></i> Embargar
+                            </button>
 
-                        <form action="${pageContext.request.contextPath}/ControlCuenta" method="post" onsubmit="return confirm('¿Seguro que desea Inactivar la cuenta? No se podrán hacer operaciones.');">
-                            <input type="hidden" name="accion" value="cambiarEstado">
-                            <input type="hidden" name="tipo" value="inactivar">
-                            <input type="hidden" name="numCuenta" id="inputNumCuentaInactivar">
-                            <button class="btn btn-warning action-btn" id="btnInactivarCuenta" title="Inactivar"><i class="bi bi-pause-circle me-1"></i> Inactivar</button>
-                        </form>
+                            <form action="${pageContext.request.contextPath}/ControlCuenta" method="post" onsubmit="return confirm('¿CERRAR DEFINITIVAMENTE esta cuenta?');">
+                                <input type="hidden" name="accion" value="cambiarEstado">
+                                <input type="hidden" name="tipo" value="cerrar">
+                                <input type="hidden" name="numCuenta" id="inCerrarNum">
+                                <button class="btn btn-dark px-4 fw-bold">
+                                    <i class="bi bi-archive-fill me-1"></i> Cerrar
+                                </button>
+                            </form>
+                        </div>
 
-                        <button class="btn btn-outline-danger action-btn" id="btnShowEmbargo" title="Embargar"><i class="bi bi-hammer me-1"></i> Embargar</button>
                     </div>
                 </div>
             </div>
@@ -214,8 +162,91 @@
         <script src="${pageContext.request.contextPath}/js/bootstrap.bundle.min.js"></script>
         <script src="${pageContext.request.contextPath}/js/sidebar.js"></script>
 
-        <script>const contextPath = "${pageContext.request.contextPath}";</script>
-        <script src="${pageContext.request.contextPath}/js/gestion-cuentas.js"></script>
+        <script>
+                                $(document).ready(function () {
+                                    $('.btn-ver').click(function () {
+                                        let num = $(this).data('id');
+
+                                        // 1. Pre-asignar IDs a formularios
+                                        $('#lblCuenta').text(num);
+                                        $('#inEmbargoNum').val(num);
+                                        $('#inCerrarNum').val(num);
+                                        $('#inEstadoNum').val(num);
+
+                                        // Resetear UI
+                                        $('#formEmbargo').addClass('d-none');
+                                        $('#alertEmbargo').addClass('d-none');
+                                        $('#valCli').text('Cargando...');
+
+                                        // 2. AJAX
+                                        $.ajax({
+                                            url: '${pageContext.request.contextPath}/ControlCuenta',
+                                            data: {accion: 'detalle', num: num},
+                                            dataType: 'json',
+                                            success: function (data) {
+                                                if (data.exito) {
+                                                    $('#valCli').text(data.cli);
+                                                    $('#valDoc').text(data.doc);
+                                                    $('#valTip').text(data.tipo);
+                                                    $('#valMon').text(data.moneda);
+                                                    $('#valFec').text(data.fecha.substring(0, 10));
+
+                                                    // Lógica de Estado (Badge)
+                                                    let color = 'bg-secondary';
+                                                    if (data.codEstado === 'S0001')
+                                                        color = 'bg-success'; // Activo
+                                                    else if (data.codEstado === 'S0002')
+                                                        color = 'bg-warning text-dark'; // Inactivo
+                                                    else if (data.codEstado === 'S0006')
+                                                        color = 'bg-danger'; // Embargado
+
+                                                    $('#valEstBadged').html(`<span class="badge ${color} fs-6">${data.estado}</span>`);
+
+                                                    // Lógica de Botón Activar/Desactivar
+                                                    if (data.codEstado === 'S0002') { // Si está INACTIVO
+                                                        $('#lblToggleEstado').text('Activar');
+                                                        $('#inTipoEstado').val('activar');
+                                                        $('#btnToggleEstado').removeClass('btn-warning').addClass('btn-success');
+                                                    } else { // Si está ACTIVO (o cualquier otro)
+                                                        $('#lblToggleEstado').text('Desactivar');
+                                                        $('#inTipoEstado').val('inactivar');
+                                                        $('#btnToggleEstado').removeClass('btn-success').addClass('btn-warning');
+                                                    }
+
+                                                    // Lógica Embargo
+                                                    if (data.embargo && data.embargo.activo) {
+                                                        $('#alertEmbargo').removeClass('d-none');
+                                                        $('#embExp').text(data.embargo.expediente);
+                                                        $('#embMonto').text(data.embargo.monto);
+                                                        $('#embMot').text(data.embargo.motivo);
+                                                        $('#btnShowEmbargo').prop('disabled', true);
+                                                    } else {
+                                                        $('#btnShowEmbargo').prop('disabled', false);
+                                                    }
+
+                                                    // Deshabilitar acciones si está cerrada
+                                                    if (data.codEstado === 'S0005') {
+                                                        $('button').not('.btn-close').prop('disabled', true);
+                                                    }
+
+                                                } else {
+                                                    alert('No se pudieron cargar los datos.');
+                                                }
+                                            },
+                                            error: function () {
+                                                alert('Error de conexión.');
+                                            }
+                                        });
+
+                                        new bootstrap.Modal(document.getElementById('modalGestion')).show();
+                                    });
+
+                                    // Botón Mostrar Embargo
+                                    $('#btnShowEmbargo').click(function () {
+                                        $('#formEmbargo').removeClass('d-none');
+                                    });
+                                });
+        </script>
         <script src="${pageContext.request.contextPath}/js/session-timer.js"></script>
     </body>
 </html>
