@@ -67,7 +67,7 @@
 
                             <div class="text-center">
                                 <p class="small text-muted mb-2">¿No tienes cuenta?</p>
-                                <a href="registro-clientes.jsp" class="btn btn-outline-secondary w-100">Registrarse</a>
+                                <a href="${pageContext.request.contextPath}/modulo-clientes/registro-clientes.jsp" class="btn btn-outline-secondary w-100">Registrarse</a>
                             </div>
                         </form>
                     </div>
