@@ -97,7 +97,7 @@ public class ServicioCuenta {
         return "Error al registrar embargo.";
     }
 
-    public List<Object[]> listarEmbargos(String numCuenta) {
-        return DaoEmbargo.listarPorCuenta(numCuenta);
+    public List<Embargo> listarEmbargos(String numCuenta) {
+        return DaoEmbargo.listarEmbargos(numCuenta);
     }
 }

@@ -1,5 +1,6 @@
 package control;
 
+import entidad.Embargo;
 import conexion.DaoCuenta;
 import conexion.DaoCliente;
 import conexion.DaoParametros;
@@ -119,8 +120,21 @@ public class ControlCuenta extends HttpServlet {
 
         try (PrintWriter out = response.getWriter()) {
             if (c != null) {
-                List<Object[]> embargos = servicio.listarEmbargos(numCuenta);
-                boolean tieneEmbargo = (embargos != null && !embargos.isEmpty());
+                // 1. OBTENER LISTA DE OBJETOS EMBARGO
+                List<Embargo> embargos = servicio.listarEmbargos(numCuenta);
+
+                // 2. BUSCAR SI EXISTE ALGUNO ACTIVO (S0001)
+                Embargo embargoActivo = null;
+                if (embargos != null) {
+                    for (Embargo e : embargos) {
+                        if ("S0001".equals(e.getCodEstado())) {
+                            embargoActivo = e;
+                            break; // Tomamos el primero activo que encontremos
+                        }
+                    }
+                }
+
+                boolean tieneEmbargo = (embargoActivo != null);
 
                 StringBuilder json = new StringBuilder();
                 json.append("{");
@@ -130,19 +144,21 @@ public class ControlCuenta extends HttpServlet {
                 json.append("\"doc\": \"").append(limpiarTexto(c.getCliente() != null ? c.getCliente().getNumDocumento() : "")).append("\",");
                 json.append("\"tipo\": \"").append(limpiarTexto(c.getDesTipoCuenta())).append("\",");
                 json.append("\"moneda\": \"").append(limpiarTexto(c.getDesMoneda())).append("\",");
+
                 BigDecimal saldo = c.getSalAct() != null ? c.getSalAct() : BigDecimal.ZERO;
-                json.append("\"saldo\": ").append(saldo).append(","); // Saldo visible
+                json.append("\"saldo\": ").append(saldo).append(",");
+
                 json.append("\"codEstado\": \"").append(c.getCodEstado()).append("\",");
                 json.append("\"estado\": \"").append(limpiarTexto(c.getDesEstado())).append("\",");
                 json.append("\"fecha\": \"").append(c.getFecApe()).append("\"");
 
+                // 3. JSON DEL EMBARGO (USANDO GETTERS)
                 if (tieneEmbargo) {
-                    Object[] ult = embargos.get(embargos.size() - 1);
                     json.append(", \"embargo\": {");
                     json.append("\"activo\": true,");
-                    json.append("\"monto\": \"").append(ult[1]).append("\",");
-                    json.append("\"expediente\": \"").append(limpiarTexto(ult[2])).append("\",");
-                    json.append("\"motivo\": \"").append(limpiarTexto(ult[3])).append("\"");
+                    json.append("\"monto\": \"").append(embargoActivo.getMonto()).append("\",");
+                    json.append("\"expediente\": \"").append(limpiarTexto(embargoActivo.getExpediente())).append("\",");
+                    json.append("\"motivo\": \"").append(limpiarTexto(embargoActivo.getDescripcion())).append("\"");
                     json.append("}");
                 } else {
                     json.append(", \"embargo\": {\"activo\": false}");

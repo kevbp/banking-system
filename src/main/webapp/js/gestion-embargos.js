@@ -1,37 +1,44 @@
-/*
- * ===================================================
+/**
  * gestion-embargos.js
- * Lógica de UI para la página de Gestión de Embargos
- *
- * Funcionalidad:
- * 1. Poblado dinámico del Modal "Editar Embargo".
- * ===================================================
+ * Lógica para la vista de Gestión de Embargos
  */
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    // 1. Lógica del Modal Editar Embargo
+    // --- LÓGICA PARA EL MODAL DE EDITAR / LEVANTAR ---
     const modalEditar = document.getElementById('modalEditarEmbargo');
 
     if (modalEditar) {
-        modalEditar.addEventListener('show.bs.modal', (event) => {
-            // Botón que disparó el modal
-            const button = event.relatedTarget;
+        modalEditar.addEventListener('show.bs.modal', (evt) => {
+            // Botón que disparó el evento
+            const btn = evt.relatedTarget;
 
             // Extraer datos de los atributos data-*
-            const id = button.dataset.id;
-            const monto = button.dataset.monto;
-            const estado = button.dataset.estado;
-            const descripcion = button.dataset.descripcion;
-            const expediente = button.dataset.expediente;
+            const cod = btn.getAttribute('data-cod');
+            const monto = btn.getAttribute('data-monto');
+            const exp = btn.getAttribute('data-exp');
+            const cta = btn.getAttribute('data-cta');
 
-            // Poblar el formulario del modal
-            modalEditar.querySelector('#modalEditarEmbargoLabel').textContent = `Editar Embargo - ID ${id}`;
-            modalEditar.querySelector('#editEmbargoId').value = id;
-            modalEditar.querySelector('#editEmbargoMonto').value = monto;
-            modalEditar.querySelector('#editEmbargoEstado').value = estado;
-            modalEditar.querySelector('#editEmbargoDescripcion').value = descripcion;
-            modalEditar.querySelector('#editEmbargoExpediente').value = expediente;
+            // Referencias a los campos del formulario
+            const inputCod = document.getElementById('editCod');
+            const inputMonto = document.getElementById('editMonto');
+            const inputExp = document.getElementById('editExp');
+            const inputCta = document.getElementById('editCta');
+            const selectEstado = document.getElementById('editEstado');
+
+            // Asignar valores (validando que el campo exista)
+            if (inputCod)
+                inputCod.value = cod || '';
+            if (inputMonto)
+                inputMonto.value = monto || '';
+            if (inputExp)
+                inputExp.value = exp || '';
+            if (inputCta)
+                inputCta.value = cta || '';
+
+            // Resetear el select siempre a 'ACTIVO' (opción por defecto) al abrir el modal
+            if (selectEstado)
+                selectEstado.value = 'ACTIVO';
         });
     }
 });
