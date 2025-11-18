@@ -15,6 +15,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 @WebServlet(name = "ControlEmbargo", urlPatterns = {"/ControlEmbargo"})
 public class ControlEmbargo extends HttpServlet {
@@ -22,7 +23,13 @@ public class ControlEmbargo extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        
+        HttpSession session = request.getSession();
+        if (session.getAttribute("msg") != null) {
+            request.setAttribute("msg", session.getAttribute("msg"));
+            session.removeAttribute("msg"); // ¡Importante! Borrarlo para que no salga siempre
+        }
+        
         String accion = request.getParameter("accion");
         if (accion == null) {
             accion = "vista";
