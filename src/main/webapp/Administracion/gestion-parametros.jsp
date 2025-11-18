@@ -218,459 +218,503 @@
                                             <i class="bi bi-plus-circle me-1"></i> Nuevo Tipo de Cuenta
                                         </button>
                                     </div>
+                                    <hr>
 
-                                </div>
-
-                                <div class="tab-pane fade" id="pane-movimientos" role="tabpanel" aria-labelledby="tab-movimientos">
-                                    <h5 class="mb-3">Tipos de Movimiento</h5>
+                                    <h5 class="mb-3">Cuentas del Sistema</h5>
 
                                     <div class="table-responsive mb-3">
                                         <table class="table table-bordered table-striped align-middle">
                                             <thead class="table-light text-center">
                                                 <tr>
-                                                    <th>ID</th>
-                                                    <th>Descripción</th>
-                                                    <th>Signo</th>
+                                                    <th>N° Cuenta</th>
+                                                    <th>Tipo de Cuenta</th>
+                                                    <th>Moneda</th>
+                                                    <th>Tasa (%)</th>
                                                     <th>Estado</th>
                                                     <th>Acciones</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <c:forEach var="tm" items="${listaMovimientos}">
-                                                    <tr>
-                                                        <td>${tm.codTipMovimiento}</td>
-                                                        <td>${tm.des}</td>
-                                                        <td>${tm.signo}</td>
-                                                        <td>${tm.codEstado eq 'S0001' ? 'Activo' : 'Inactivo'}</td>
-                                                        <td class="text-center">
-                                                            <button class="btn btn-sm btn-outline-warning" 
-                                                                    data-bs-toggle="modal" data-bs-target="#modalEditarTipoMovimiento"
-                                                                    data-id="${tm.codTipMovimiento}"
-                                                                    data-descripcion="${tm.des}"
-                                                                    data-signo="${tm.signo}"
-                                                                    data-estado="${tm.codEstado eq 'S0001' ? 'Activo' : 'Inactivo'}">
-                                                                Editar
-                                                            </button>
-                                                        </td>
-                                                    </tr>
-                                                </c:forEach>
+                                                <tr>
+                                                    <td>000-001</td>
+                                                    <td>Ahorros</td>
+                                                    <td>Soles</td>
+                                                    <td>1.50</td>
+                                                    <td>Activa</td>
+                                                    <td class="text-center">
+                                                        <button class="btn btn-sm btn-outline-warning" 
+                                                                data-bs-toggle="modal" 
+                                                                data-bs-target="#modalEditarCuentaSistema"
+                                                                data-numero="000-001"
+                                                                data-tipo="Ahorros"
+                                                                data-moneda="Soles"
+                                                                data-tasa="1.50">
+                                                            Editar
+                                                        </button>
+                                                    </td>
+                                                </tr>
                                             </tbody>
                                         </table>
                                     </div>
                                     <div class="text-end mb-1">
-                                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalNuevoMovimiento">
-                                            <i class="bi bi-plus-circle me-1"></i> Nuevo Tipo de Movimiento
+                                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalNuevaCuenta">
+                                            <i class="bi bi-plus-circle me-1"></i> Nueva Cuenta del Sistema
                                         </button>
                                     </div>
                                 </div>
+
                             </div>
 
-                            <div class="text-center mt-4">
-                                <a href="${pageContext.request.contextPath}/home.jsp" class="btn btn-secondary px-4">
-                                    Volver al Panel
-                                </a>
+                            <div class="tab-pane fade" id="pane-movimientos" role="tabpanel" aria-labelledby="tab-movimientos">
+                                <h5 class="mb-3">Tipos de Movimiento</h5>
+
+                                <div class="table-responsive mb-3">
+                                    <table class="table table-bordered table-striped align-middle">
+                                        <thead class="table-light text-center">
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Descripción</th>
+                                                <th>Signo</th>
+                                                <th>Estado</th>
+                                                <th>Acciones</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <c:forEach var="tm" items="${listaMovimientos}">
+                                                <tr>
+                                                    <td>${tm.codTipMovimiento}</td>
+                                                    <td>${tm.des}</td>
+                                                    <td>${tm.signo}</td>
+                                                    <td>${tm.codEstado eq 'S0001' ? 'Activo' : 'Inactivo'}</td>
+                                                    <td class="text-center">
+                                                        <button class="btn btn-sm btn-outline-warning" 
+                                                                data-bs-toggle="modal" data-bs-target="#modalEditarTipoMovimiento"
+                                                                data-id="${tm.codTipMovimiento}"
+                                                                data-descripcion="${tm.des}"
+                                                                data-signo="${tm.signo}"
+                                                                data-estado="${tm.codEstado eq 'S0001' ? 'Activo' : 'Inactivo'}">
+                                                            Editar
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            </c:forEach>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="text-end mb-1">
+                                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalNuevoMovimiento">
+                                        <i class="bi bi-plus-circle me-1"></i> Nuevo Tipo de Movimiento
+                                    </button>
+                                </div>
                             </div>
+                        </div>
+
+                        <div class="text-center mt-4">
+                            <a href="${pageContext.request.contextPath}/home.jsp" class="btn btn-secondary px-4">
+                                Volver al Panel
+                            </a>
                         </div>
                     </div>
-                </div> </div> </div> <div class="modal fade" id="modalNuevaMoneda" tabindex="-1" aria-labelledby="modalNuevaMonedaLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header bg-dark text-light">
-                        <h5 class="modal-title" id="modalNuevaMonedaLabel">Nueva Moneda</h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <form action="${pageContext.request.contextPath}/ControlParametros" method="post">
-                        <input type="hidden" name="accion" value="agregarMoneda">
-                        <div class="modal-body">
-                            <div class="mb-3">
-                                <label for="codMoneda" class="form-label">Código de Moneda</label>
-                                <input type="text" class="form-control" id="codMoneda" name="codMoneda" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="descMoneda" class="form-label">Descripción</label>
-                                <input type="text" class="form-control" id="descMoneda" name="descMoneda" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="simbolo" class="form-label">Símbolo</label>
-                                <input type="text" class="form-control" id="simbolo" name="simbolo" required>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary">Guardar</button>
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                        </div>
-                    </form>
                 </div>
+            </div> </div> </div> <div class="modal fade" id="modalNuevaMoneda" tabindex="-1" aria-labelledby="modalNuevaMonedaLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-dark text-light">
+                    <h5 class="modal-title" id="modalNuevaMonedaLabel">Nueva Moneda</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="${pageContext.request.contextPath}/ControlParametros" method="post">
+                    <input type="hidden" name="accion" value="agregarMoneda">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="codMoneda" class="form-label">Código de Moneda</label>
+                            <input type="text" class="form-control" id="codMoneda" name="codMoneda" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="descMoneda" class="form-label">Descripción</label>
+                            <input type="text" class="form-control" id="descMoneda" name="descMoneda" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="simbolo" class="form-label">Símbolo</label>
+                            <input type="text" class="form-control" id="simbolo" name="simbolo" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
+                </form>
             </div>
         </div>
+    </div>
 
-        <div class="modal fade" id="modalEditarMoneda" tabindex="-1" aria-labelledby="modalEditarMonedaLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header bg-dark text-light">
-                        <h5 class="modal-title" id="modalEditarMonedaLabel">Editar Moneda</h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <form action="${pageContext.request.contextPath}/ControlParametros" method="post">
-                        <input type="hidden" name="accion" value="editarMoneda">
-                        <div class="modal-body">
-                            <div class="mb-3">
-                                <label for="editMonedaCodigo" class="form-label">Código de Moneda</label>
-                                <input type="text" class="form-control" id="editMonedaCodigo" name="codMoneda" readonly>
-                            </div>
-                            <div class="mb-3">
-                                <label for="editMonedaDesc" class="form-label">Descripción</label>
-                                <input type="text" class="form-control" id="editMonedaDesc" name="descMoneda" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="editMonedaSimbolo" class="form-label">Símbolo</label>
-                                <input type="text" class="form-control" id="editMonedaSimbolo" name="simbolo" required>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary">Actualizar</button>
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                        </div>
-                    </form>
+    <div class="modal fade" id="modalEditarMoneda" tabindex="-1" aria-labelledby="modalEditarMonedaLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-dark text-light">
+                    <h5 class="modal-title" id="modalEditarMonedaLabel">Editar Moneda</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+                <form action="${pageContext.request.contextPath}/ControlParametros" method="post">
+                    <input type="hidden" name="accion" value="editarMoneda">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="editMonedaCodigo" class="form-label">Código de Moneda</label>
+                            <input type="text" class="form-control" id="editMonedaCodigo" name="codMoneda" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editMonedaDesc" class="form-label">Descripción</label>
+                            <input type="text" class="form-control" id="editMonedaDesc" name="descMoneda" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editMonedaSimbolo" class="form-label">Símbolo</label>
+                            <input type="text" class="form-control" id="editMonedaSimbolo" name="simbolo" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Actualizar</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
+                </form>
             </div>
         </div>
+    </div>
 
-        <div class="modal fade" id="modalNuevoTipoCambio" tabindex="-1" aria-labelledby="modalNuevoTipoCambioLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header bg-dark text-light">
-                        <h5 class="modal-title" id="modalNuevoTipoCambioLabel">Registrar Tipo de Cambio</h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <form action="${pageContext.request.contextPath}/ControlParametros" method="post">
-                        <input type="hidden" name="accion" value="registrarTipoCambio">
-                        <div class="modal-body">
-                            <div class="mb-3">
-                                <label for="newTCMoneda" class="form-label">Moneda</label>
-                                <select class="form-select" id="newTCMoneda" name="codMoneda" required>
-                                    <option value="">Seleccione...</option>
-                                    <c:forEach var="m" items="${listaMonedas}">
-                                        <c:if test="${m.codEstado eq 'S0001' and m.codMoneda ne 'PEN'}">
-                                            <option value="${m.codMoneda}">${m.codMoneda} - ${m.descMoneda}</option>
-                                        </c:if>
-                                    </c:forEach>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label for="newTCCompra" class="form-label">Tasa de Compra (PEN)</label>
-                                <input type="number" step="0.0001" class="form-control" id="newTCCompra" name="tasaCompra" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="newTCVenta" class="form-label">Tasa de Venta (PEN)</label>
-                                <input type="number" step="0.0001" class="form-control" id="newTCVenta" name="tasaVenta" required>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary">Guardar</button>
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                        </div>
-                    </form>
+    <div class="modal fade" id="modalNuevoTipoCambio" tabindex="-1" aria-labelledby="modalNuevoTipoCambioLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-dark text-light">
+                    <h5 class="modal-title" id="modalNuevoTipoCambioLabel">Registrar Tipo de Cambio</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+                <form action="${pageContext.request.contextPath}/ControlParametros" method="post">
+                    <input type="hidden" name="accion" value="registrarTipoCambio">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="newTCMoneda" class="form-label">Moneda</label>
+                            <select class="form-select" id="newTCMoneda" name="codMoneda" required>
+                                <option value="">Seleccione...</option>
+                                <c:forEach var="m" items="${listaMonedas}">
+                                    <c:if test="${m.codEstado eq 'S0001' and m.codMoneda ne 'PEN'}">
+                                        <option value="${m.codMoneda}">${m.codMoneda} - ${m.descMoneda}</option>
+                                    </c:if>
+                                </c:forEach>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="newTCCompra" class="form-label">Tasa de Compra (PEN)</label>
+                            <input type="number" step="0.0001" class="form-control" id="newTCCompra" name="tasaCompra" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="newTCVenta" class="form-label">Tasa de Venta (PEN)</label>
+                            <input type="number" step="0.0001" class="form-control" id="newTCVenta" name="tasaVenta" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
+                </form>
             </div>
         </div>
+    </div>
 
-        <div class="modal fade" id="modalEditarTipoCambio" tabindex="-1" aria-labelledby="modalEditarTipoCambioLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header bg-dark text-light">
-                        <h5 class="modal-title" id="modalEditarTipoCambioLabel">Actualizar Tipo de Cambio</h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <form action="${pageContext.request.contextPath}/ControlParametros" method="post">
-                        <input type="hidden" name="accion" value="actualizarTipoCambio">
-                        <div class="modal-body">
-                            <div class="mb-3">
-                                <label for="editTCCodigo" class="form-label">Moneda</label>
-                                <input type="hidden" id="editTCCodigo" name="codMoneda"> 
-                                <input type="text" class="form-control" id="editTCDesc" disabled> </div>
-                            <div class="mb-3">
-                                <label for="editTCCompra" class="form-label">Tasa de Compra (PEN)</label>
-                                <input type="number" step="0.0001" class="form-control" id="editTCCompra" name="tasaCompra" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="editTCVenta" class="form-label">Tasa de Venta (PEN)</label>
-                                <input type="number" step="0.0001" class="form-control" id="editTCVenta" name="tasaVenta" required>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary">Actualizar</button>
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                        </div>
-                    </form>
+    <div class="modal fade" id="modalEditarTipoCambio" tabindex="-1" aria-labelledby="modalEditarTipoCambioLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-dark text-light">
+                    <h5 class="modal-title" id="modalEditarTipoCambioLabel">Actualizar Tipo de Cambio</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+                <form action="${pageContext.request.contextPath}/ControlParametros" method="post">
+                    <input type="hidden" name="accion" value="actualizarTipoCambio">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="editTCCodigo" class="form-label">Moneda</label>
+                            <input type="hidden" id="editTCCodigo" name="codMoneda"> 
+                            <input type="text" class="form-control" id="editTCDesc" disabled> </div>
+                        <div class="mb-3">
+                            <label for="editTCCompra" class="form-label">Tasa de Compra (PEN)</label>
+                            <input type="number" step="0.0001" class="form-control" id="editTCCompra" name="tasaCompra" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editTCVenta" class="form-label">Tasa de Venta (PEN)</label>
+                            <input type="number" step="0.0001" class="form-control" id="editTCVenta" name="tasaVenta" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Actualizar</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
+                </form>
             </div>
         </div>
+    </div>
 
-        <div class="modal fade" id="modalNuevoTipo" tabindex="-1">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header bg-dark text-light">
-                        <h5 class="modal-title">Nuevo Tipo de Cuenta</h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                    </div>
-                    <form action="${pageContext.request.contextPath}/ControlParametros" method="post">
-                        <input type="hidden" name="accion" value="agregarTipoCuenta">
-                        <div class="modal-body">
-                            <div class="mb-3">
-                                <label class="form-label">Descripción</label>
-                                <input type="text" class="form-control" name="descripcion" required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Moneda</label>
-                                <select class="form-select" name="moneda" id="editTipoCuentaMoneda" required>
-                                    <c:forEach var="m" items="${listaMonedas}">
-                                        <option value="${m.codMoneda}">${m.descMoneda}</option>
-                                    </c:forEach>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Tasa de Interés (%)</label>
-                                <input type="number" step="0.01" class="form-control" name="tasa" required>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary">Guardar</button>
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                        </div>
-                    </form>
+    <div class="modal fade" id="modalNuevoTipo" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-dark text-light">
+                    <h5 class="modal-title">Nuevo Tipo de Cuenta</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
+                <form action="${pageContext.request.contextPath}/ControlParametros" method="post">
+                    <input type="hidden" name="accion" value="agregarTipoCuenta">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label">Descripción</label>
+                            <input type="text" class="form-control" name="descripcion" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Moneda</label>
+                            <select class="form-select" name="moneda" id="editTipoCuentaMoneda" required>
+                                <c:forEach var="m" items="${listaMonedas}">
+                                    <option value="${m.codMoneda}">${m.descMoneda}</option>
+                                </c:forEach>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Tasa de Interés (%)</label>
+                            <input type="number" step="0.01" class="form-control" name="tasa" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
+                </form>
             </div>
         </div>
+    </div>
 
-        <div class="modal fade" id="modalEditarTipoCuenta" tabindex="-1">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header bg-dark text-light">
-                        <h5 class="modal-title">Editar Tipo de Cuenta</h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                    </div>
-                    <form action="${pageContext.request.contextPath}/ControlParametros" method="post">
-                        <input type="hidden" name="accion" value="editarTipoCuenta">
-                        <div class="modal-body">
-                            <div class="mb-3">
-                                <label class="form-label">ID</label>
-                                <input type="text" class="form-control" id="editTipoCuentaID" name="id" readonly>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Descripción</label>
-                                <input type="text" class="form-control" id="editTipoCuentaDesc" name="descripcion" required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Moneda</label>
-                                <select class="form-select" name="moneda" id="editTipoCuentaMoneda" required>
-                                    <c:forEach var="m" items="${listaMonedas}">
-                                        <option value="${m.codMoneda}">${m.descMoneda}</option>
-                                    </c:forEach>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Tasa de Interés (%)</label>
-                                <input type="number" step="0.01" class="form-control" id="editTipoCuentaTasa" name="tasa" required>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary">Actualizar</button>
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                        </div>
-                    </form>
+    <div class="modal fade" id="modalEditarTipoCuenta" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-dark text-light">
+                    <h5 class="modal-title">Editar Tipo de Cuenta</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
+                <form action="${pageContext.request.contextPath}/ControlParametros" method="post">
+                    <input type="hidden" name="accion" value="editarTipoCuenta">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label">ID</label>
+                            <input type="text" class="form-control" id="editTipoCuentaID" name="id" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Descripción</label>
+                            <input type="text" class="form-control" id="editTipoCuentaDesc" name="descripcion" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Moneda</label>
+                            <select class="form-select" name="moneda" id="editTipoCuentaMoneda" required>
+                                <c:forEach var="m" items="${listaMonedas}">
+                                    <option value="${m.codMoneda}">${m.descMoneda}</option>
+                                </c:forEach>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Tasa de Interés (%)</label>
+                            <input type="number" step="0.01" class="form-control" id="editTipoCuentaTasa" name="tasa" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Actualizar</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
+                </form>
             </div>
         </div>
+    </div>
 
-        <div class="modal fade" id="modalNuevaCuenta" tabindex="-1">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header bg-dark text-light">
-                        <h5 class="modal-title">Nueva Cuenta del Sistema</h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                    </div>
-                    <form action="${pageContext.request.contextPath}/ControlParametros" method="post">
-                        <input type="hidden" name="accion" value="agregarCuentaBase">
-                        <div class="modal-body">
-                            <div class="mb-3">
-                                <label class="form-label">Número de Cuenta</label>
-                                <input type="text" class="form-control" name="numCuenta" required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Tipo de Cuenta</label>
-                                <select class="form-select" name="tipoCuenta" required>
-                                    <option value="">Seleccione...</option>
-                                    <option>Ahorros</option>
-                                    <option>Corriente</option>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Moneda</label>
-                                <select class="form-select" name="moneda" required>
-                                    <option value="">Seleccione...</option>
-                                    <option>Soles</option>
-                                    <option>Dólares</option>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Tasa de Interés (%)</label>
-                                <input type="number" step="0.01" class="form-control" name="tasa" required>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary">Guardar</button>
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                        </div>
-                    </form>
+    <div class="modal fade" id="modalNuevaCuenta" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-dark text-light">
+                    <h5 class="modal-title">Nueva Cuenta del Sistema</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
+                <form action="${pageContext.request.contextPath}/ControlParametros" method="post">
+                    <input type="hidden" name="accion" value="agregarCuentaBase">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label">Número de Cuenta</label>
+                            <input type="text" class="form-control" name="numCuenta" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Tipo de Cuenta</label>
+                            <select class="form-select" name="tipoCuenta" required>
+                                <option value="">Seleccione...</option>
+                                <option>Ahorros</option>
+                                <option>Corriente</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Moneda</label>
+                            <select class="form-select" name="moneda" required>
+                                <option value="">Seleccione...</option>
+                                <option>Soles</option>
+                                <option>Dólares</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Tasa de Interés (%)</label>
+                            <input type="number" step="0.01" class="form-control" name="tasa" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
+                </form>
             </div>
         </div>
+    </div>
 
-        <div class="modal fade" id="modalEditarCuentaSistema" tabindex="-1">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header bg-dark text-light">
-                        <h5 class="modal-title">Editar Cuenta del Sistema</h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                    </div>
-                    <form action="${pageContext.request.contextPath}/ControlParametros" method="post">
-                        <input type="hidden" name="accion" value="editarCuentaBase">
-                        <div class="modal-body">
-                            <div class="mb-3">
-                                <label class="form-label">Número de Cuenta</label>
-                                <input type="text" class="form-control" id="editCuentaNum" name="numCuenta" readonly>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Tipo de Cuenta</label>
-                                <select class="form-select" id="editCuentaTipo" name="tipoCuenta" required>
-                                    <option>Ahorros</option>
-                                    <option>Corriente</option>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Moneda</label>
-                                <select class="form-select" id="editCuentaMoneda" name="moneda" required>
-                                    <option>Soles</option>
-                                    <option>Dólares</option>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Tasa de Interés (%)</label>
-                                <input type="number" step="0.01" class="form-control" id="editCuentaTasa" name="tasa" required>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary">Actualizar</button>
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                        </div>
-                    </form>
+    <div class="modal fade" id="modalEditarCuentaSistema" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-dark text-light">
+                    <h5 class="modal-title">Editar Cuenta del Sistema</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
+                <form action="${pageContext.request.contextPath}/ControlParametros" method="post">
+                    <input type="hidden" name="accion" value="editarCuentaBase">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label">Número de Cuenta</label>
+                            <input type="text" class="form-control" id="editCuentaNum" name="numCuenta" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Tipo de Cuenta</label>
+                            <select class="form-select" id="editCuentaTipo" name="tipoCuenta" required>
+                                <option>Ahorros</option>
+                                <option>Corriente</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Moneda</label>
+                            <select class="form-select" id="editCuentaMoneda" name="moneda" required>
+                                <option>Soles</option>
+                                <option>Dólares</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Tasa de Interés (%)</label>
+                            <input type="number" step="0.01" class="form-control" id="editCuentaTasa" name="tasa" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Actualizar</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
+                </form>
             </div>
         </div>
+    </div>
 
-        <div class="modal fade" id="modalNuevoMovimiento" tabindex="-1">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header bg-dark text-light">
-                        <h5 class="modal-title">Nuevo Tipo de Movimiento</h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                    </div>
-                    <form action="${pageContext.request.contextPath}/ControlParametros" method="post">
-                        <input type="hidden" name="accion" value="agregarTipoMovimiento">
-                        <div class="modal-body">
-                            <div class="mb-3">
-                                <label class="form-label">Descripción</label>
-                                <input type="text" class="form-control" name="descripcion" required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Signo</label>
-                                <select class="form-select" name="signo" required>
-                                    <option value="">Seleccione...</option>
-                                    <option value="+">+</option>
-                                    <option value="-">-</option>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Estado</label>
-                                <select class="form-select" name="estado" required>
-                                    <option>Activo</option>
-                                    <option>Inactivo</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary">Guardar</button>
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                        </div>
-                    </form>
+    <div class="modal fade" id="modalNuevoMovimiento" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-dark text-light">
+                    <h5 class="modal-title">Nuevo Tipo de Movimiento</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
+                <form action="${pageContext.request.contextPath}/ControlParametros" method="post">
+                    <input type="hidden" name="accion" value="agregarTipoMovimiento">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label">Descripción</label>
+                            <input type="text" class="form-control" name="descripcion" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Signo</label>
+                            <select class="form-select" name="signo" required>
+                                <option value="">Seleccione...</option>
+                                <option value="+">+</option>
+                                <option value="-">-</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Estado</label>
+                            <select class="form-select" name="estado" required>
+                                <option>Activo</option>
+                                <option>Inactivo</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
+                </form>
             </div>
         </div>
+    </div>
 
-        <div class="modal fade" id="modalEditarTipoMovimiento" tabindex="-1">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header bg-dark text-light">
-                        <h5 class="modal-title">Editar Tipo de Movimiento</h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                    </div>
-                    <form action="${pageContext.request.contextPath}/ControlParametros" method="post">
-                        <input type="hidden" name="accion" value="editarTipoMovimiento">
-                        <div class="modal-body">
-                            <div class="mb-3">
-                                <label class="form-label">ID</label>
-                                <input type="text" class="form-control" id="editMovID" name="id" readonly>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Descripción</label>
-                                <input type="text" class="form-control" id="editMovDesc" name="descripcion" required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Signo</label>
-                                <select class="form-select" id="editMovSigno" name="signo" required>
-                                    <option value="+">+</option>
-                                    <option value="-">-</option>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Estado</label>
-                                <select class="form-select" id="editMovEstado" name="estado" required>
-                                    <option>Activo</option>
-                                    <option>Inactivo</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary">Actualizar</button>
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                        </div>
-                    </form>
+    <div class="modal fade" id="modalEditarTipoMovimiento" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-dark text-light">
+                    <h5 class="modal-title">Editar Tipo de Movimiento</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
+                <form action="${pageContext.request.contextPath}/ControlParametros" method="post">
+                    <input type="hidden" name="accion" value="editarTipoMovimiento">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label">ID</label>
+                            <input type="text" class="form-control" id="editMovID" name="id" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Descripción</label>
+                            <input type="text" class="form-control" id="editMovDesc" name="descripcion" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Signo</label>
+                            <select class="form-select" id="editMovSigno" name="signo" required>
+                                <option value="+">+</option>
+                                <option value="-">-</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Estado</label>
+                            <select class="form-select" id="editMovEstado" name="estado" required>
+                                <option>Activo</option>
+                                <option>Inactivo</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Actualizar</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
+                </form>
             </div>
         </div>
-        <%@ include file="../util/cont-sesion.jsp" %>
-        <script src="${pageContext.request.contextPath}/js/bootstrap.bundle.min.js"></script>
-        <script src="${pageContext.request.contextPath}/js/sidebar.js"></script>
-        <script src="${pageContext.request.contextPath}/js/gestion-parametros.js"></script>
-        <script src="${pageContext.request.contextPath}/js/session-timer.js"></script>
-        <script>
-            // Recuperar pestaña activa desde el parámetro URL enviado por el Servlet
-            const urlParams = new URLSearchParams(window.location.search);
-            const activeTab = urlParams.get('tab');
-            if (activeTab) {
-                // Desactivar todos
-                document.querySelectorAll('.nav-link').forEach(btn => btn.classList.remove('active'));
-                document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('show', 'active'));
+    </div>
+    <%@ include file="../util/cont-sesion.jsp" %>
+    <script src="${pageContext.request.contextPath}/js/bootstrap.bundle.min.js"></script>
+    <script src="${pageContext.request.contextPath}/js/sidebar.js"></script>
+    <script src="${pageContext.request.contextPath}/js/gestion-parametros.js"></script>
+    <script src="${pageContext.request.contextPath}/js/session-timer.js"></script>
+    <script>
+        // Recuperar pestaña activa desde el parámetro URL enviado por el Servlet
+        const urlParams = new URLSearchParams(window.location.search);
+        const activeTab = urlParams.get('tab');
+        if (activeTab) {
+            // Desactivar todos
+            document.querySelectorAll('.nav-link').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('show', 'active'));
 
-                // Activar el correcto
-                const tabBtn = document.querySelector(`#tab-${activeTab}`);
-                const tabPane = document.querySelector(`#pane-${activeTab}`);
-                if (tabBtn && tabPane) {
-                    tabBtn.classList.add('active');
-                    tabPane.classList.add('show', 'active');
-                }
+            // Activar el correcto
+            const tabBtn = document.querySelector(`#tab-${activeTab}`);
+            const tabPane = document.querySelector(`#pane-${activeTab}`);
+            if (tabBtn && tabPane) {
+                tabBtn.classList.add('active');
+                tabPane.classList.add('show', 'active');
             }
-        </script>
-    </body>
+        }
+    </script>
+</body>
 </html>
