@@ -79,7 +79,8 @@
                     <ul class="nav-sub list-unstyled">
                         <c:url var="urlRegistroUsuario" value="/ControlUsuario"><c:param name="op" value="RegistrarUsuario"/></c:url>
                         <li><a class="nav-sub-link" href="${urlRegistroUsuario}" data-page-id="admin-usuarios">Usuarios</a></li>
-                        <li><a class="nav-sub-link" href="${pageContext.request.contextPath}/Administracion/gestion-parametros.jsp" data-page-id="admin-parametros">Parámetros</a></li>
+                        <c:url var="urlParametros" value="/ControlParametros"><c:param name="op" value="Parametros"/></c:url>
+                        <li><a class="nav-sub-link" href="${urlParametros}" data-page-id="admin-parametros">Parámetros</a></li>
                         <li><a class="nav-sub-link" href="${pageContext.request.contextPath}/Administracion/gestion-accesos.jsp" data-page-id="admin-accesos">Control de accesos</a></li>
                     </ul>
                 </div>

@@ -94,54 +94,28 @@
                                                 </tr>
                                             </thead>
                                             <tbody class="text-center">
-                                                <tr>
-                                                    <td>PEN</td>
-                                                    <td>Soles</td>
-                                                    <td>S/</td>
-                                                    <td><span class="badge bg-success">Activa</span></td>
-                                                    <td>
-                                                        <button class="btn btn-sm btn-outline-warning" 
-                                                                data-bs-toggle="modal" 
-                                                                data-bs-target="#modalEditarMoneda"
-                                                                data-codigo="PEN"
-                                                                data-descripcion="Soles"
-                                                                data-simbolo="S/">
-                                                            Editar
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>USD</td>
-                                                    <td>Dólares</td>
-                                                    <td>$</td>
-                                                    <td><span class="badge bg-success">Activa</span></td>
-                                                    <td>
-                                                        <button class="btn btn-sm btn-outline-warning" 
-                                                                data-bs-toggle="modal" 
-                                                                data-bs-target="#modalEditarMoneda"
-                                                                data-codigo="USD"
-                                                                data-descripcion="Dólares"
-                                                                data-simbolo="$">
-                                                            Editar
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>EUR</td>
-                                                    <td>Euros</td>
-                                                    <td>€</td>
-                                                    <td><span class="badge bg-success">Activa</span></td>
-                                                    <td>
-                                                        <button class="btn btn-sm btn-outline-warning" 
-                                                                data-bs-toggle="modal" 
-                                                                data-bs-target="#modalEditarMoneda"
-                                                                data-codigo="EUR"
-                                                                data-descripcion="Euros"
-                                                                data-simbolo="€">
-                                                            Editar
-                                                        </button>
-                                                    </td>
-                                                </tr>
+                                                <c:forEach var="m" items="${listaMonedas}">
+                                                    <tr>
+                                                        <td>${m.codMoneda}</td>
+                                                        <td>${m.descMoneda}</td>
+                                                        <td>${m.simbolo}</td>
+                                                        <td>
+                                                            <c:choose>
+                                                                <c:when test="${m.codEstado eq 'S0001'}"><span class="badge bg-success">Activa</span></c:when>
+                                                                <c:otherwise><span class="badge bg-danger">Inactiva</span></c:otherwise>
+                                                            </c:choose>
+                                                        </td>
+                                                        <td>
+                                                            <button class="btn btn-sm btn-outline-warning" 
+                                                                    data-bs-toggle="modal" data-bs-target="#modalEditarMoneda"
+                                                                    data-codigo="${m.codMoneda}"
+                                                                    data-descripcion="${m.descMoneda}"
+                                                                    data-simbolo="${m.simbolo}">
+                                                                Editar
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                </c:forEach>
                                             </tbody>
                                         </table>
                                     </div>
@@ -166,42 +140,36 @@
                                                 </tr>
                                             </thead>
                                             <tbody class="text-center">
-                                                <tr>
-                                                    <td>Dólares</td>
-                                                    <td>USD</td>
-                                                    <td>3.7200</td>
-                                                    <td>3.7500</td>
-                                                    <td>13/11/2025 09:15</td>
-                                                    <td>
-                                                        <button class="btn btn-sm btn-outline-primary" 
-                                                                data-bs-toggle="modal" 
-                                                                data-bs-target="#modalEditarTipoCambio"
-                                                                data-codigo="USD"
-                                                                data-descripcion="Dólares"
-                                                                data-compra="3.7200"
-                                                                data-venta="3.7500">
-                                                            Actualizar
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Euros</td>
-                                                    <td>EUR</td>
-                                                    <td>4.0000</td>
-                                                    <td>4.0500</td>
-                                                    <td>13/11/2025 09:20</td>
-                                                    <td>
-                                                        <button class="btn btn-sm btn-outline-primary" 
-                                                                data-bs-toggle="modal" 
-                                                                data-bs-target="#modalEditarTipoCambio"
-                                                                data-codigo="EUR"
-                                                                data-descripcion="Euros"
-                                                                data-compra="4.0000"
-                                                                data-venta="4.0500">
-                                                            Actualizar
-                                                        </button>
-                                                    </td>
-                                                </tr>
+                                                <c:forEach var="tc" items="${listaTiposCambio}">
+                                                    <tr>
+                                                        <td>
+                                                            <c:choose>
+                                                                <c:when test="${tc.monedaOrigen eq 'USD'}">Dólares</c:when>
+                                                                <c:when test="${tc.monedaOrigen eq 'EUR'}">Euros</c:when>
+                                                                <c:otherwise>${tc.monedaOrigen}</c:otherwise>
+                                                            </c:choose>
+                                                        </td>
+                                                        <td>${tc.monedaOrigen}</td>
+                                                        <td><fmt:formatNumber value="${tc.tasaCompra}" minFractionDigits="4"/></td>
+                                                        <td><fmt:formatNumber value="${tc.tasaVenta}" minFractionDigits="4"/></td>
+                                                        <td>${tc.fecha} ${tc.hora}</td>
+                                                        <td>
+                                                            <button class="btn btn-sm btn-outline-primary" 
+                                                                    data-bs-toggle="modal" 
+                                                                    data-bs-target="#modalEditarTipoCambio"
+                                                                    data-codigo="${tc.monedaOrigen}"
+                                                                    data-descripcion="${tc.monedaOrigen eq 'USD' ? 'Dólares' : (tc.monedaOrigen eq 'EUR' ? 'Euros' : tc.monedaOrigen)}"
+                                                                    data-compra="${tc.tasaCompra}"
+                                                                    data-venta="${tc.tasaVenta}">
+                                                                Actualizar
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                </c:forEach>
+
+                                                <c:if test="${empty listaTiposCambio}">
+                                                    <tr><td colspan="6" class="text-muted">No hay tasas registradas hoy.</td></tr>
+                                                </c:if>
                                             </tbody>
                                         </table>
                                     </div>
@@ -223,24 +191,25 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
-                                                    <td>1</td>
-                                                    <td>Ahorros</td>
-                                                    <td>Soles</td>
-                                                    <td>1.50</td>
-                                                    <td>Activa</td>
-                                                    <td class="text-center">
-                                                        <button class="btn btn-sm btn-outline-warning" 
-                                                                data-bs-toggle="modal" 
-                                                                data-bs-target="#modalEditarTipoCuenta"
-                                                                data-id="1"
-                                                                data-descripcion="Ahorros"
-                                                                data-moneda="Soles"
-                                                                data-tasa="1.50">
-                                                            Editar
-                                                        </button>
-                                                    </td>
-                                                </tr>
+                                                <c:forEach var="tc" items="${listaTiposCuenta}">
+                                                    <tr>
+                                                        <td>${tc.codTipCuenta}</td>
+                                                        <td>${tc.descTipo}</td>
+                                                        <td>${tc.codMoneda}</td>
+                                                        <td><fmt:formatNumber value="${tc.tasaInt}" minFractionDigits="2"/>%</td>
+                                                        <td>${tc.codEstado eq 'S0001' ? 'Activa' : 'Inactiva'}</td>
+                                                        <td class="text-center">
+                                                            <button class="btn btn-sm btn-outline-warning" 
+                                                                    data-bs-toggle="modal" data-bs-target="#modalEditarTipoCuenta"
+                                                                    data-id="${tc.codTipCuenta}"
+                                                                    data-descripcion="${tc.descTipo}"
+                                                                    data-moneda="${tc.codMoneda}"
+                                                                    data-tasa="${tc.tasaInt}">
+                                                                Editar
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                </c:forEach>
                                             </tbody>
                                         </table>
                                     </div>
@@ -250,49 +219,6 @@
                                         </button>
                                     </div>
 
-                                    <hr>
-
-                                    <h5 class="mb-3">Cuentas del Sistema</h5>
-
-                                    <div class="table-responsive mb-3">
-                                        <table class="table table-bordered table-striped align-middle">
-                                            <thead class="table-light text-center">
-                                                <tr>
-                                                    <th>N° Cuenta</th>
-                                                    <th>Tipo de Cuenta</th>
-                                                    <th>Moneda</th>
-                                                    <th>Tasa (%)</th>
-                                                    <th>Estado</th>
-                                                    <th>Acciones</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>000-001</td>
-                                                    <td>Ahorros</td>
-                                                    <td>Soles</td>
-                                                    <td>1.50</td>
-                                                    <td>Activa</td>
-                                                    <td class="text-center">
-                                                        <button class="btn btn-sm btn-outline-warning" 
-                                                                data-bs-toggle="modal" 
-                                                                data-bs-target="#modalEditarCuentaSistema"
-                                                                data-numero="000-001"
-                                                                data-tipo="Ahorros"
-                                                                data-moneda="Soles"
-                                                                data-tasa="1.50">
-                                                            Editar
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <div class="text-end mb-1">
-                                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalNuevaCuenta">
-                                            <i class="bi bi-plus-circle me-1"></i> Nueva Cuenta del Sistema
-                                        </button>
-                                    </div>
                                 </div>
 
                                 <div class="tab-pane fade" id="pane-movimientos" role="tabpanel" aria-labelledby="tab-movimientos">
@@ -310,40 +236,24 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
-                                                    <td>1</td>
-                                                    <td>Depósito</td>
-                                                    <td>+</td>
-                                                    <td>Activo</td>
-                                                    <td class="text-center">
-                                                        <button class="btn btn-sm btn-outline-warning" 
-                                                                data-bs-toggle="modal" 
-                                                                data-bs-target="#modalEditarTipoMovimiento"
-                                                                data-id="1"
-                                                                data-descripcion="Depósito"
-                                                                data-signo="+"
-                                                                data-estado="Activo">
-                                                            Editar
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>2</td>
-                                                    <td>Retiro</td>
-                                                    <td>-</td>
-                                                    <td>Activo</td>
-                                                    <td class="text-center">
-                                                        <button class="btn btn-sm btn-outline-warning" 
-                                                                data-bs-toggle="modal" 
-                                                                data-bs-target="#modalEditarTipoMovimiento"
-                                                                data-id="2"
-                                                                data-descripcion="Retiro"
-                                                                data-signo="-"
-                                                                data-estado="Activo">
-                                                            Editar
-                                                        </button>
-                                                    </td>
-                                                </tr>
+                                                <c:forEach var="tm" items="${listaMovimientos}">
+                                                    <tr>
+                                                        <td>${tm.codTipMovimiento}</td>
+                                                        <td>${tm.des}</td>
+                                                        <td>${tm.signo}</td>
+                                                        <td>${tm.codEstado eq 'S0001' ? 'Activo' : 'Inactivo'}</td>
+                                                        <td class="text-center">
+                                                            <button class="btn btn-sm btn-outline-warning" 
+                                                                    data-bs-toggle="modal" data-bs-target="#modalEditarTipoMovimiento"
+                                                                    data-id="${tm.codTipMovimiento}"
+                                                                    data-descripcion="${tm.des}"
+                                                                    data-signo="${tm.signo}"
+                                                                    data-estado="${tm.codEstado eq 'S0001' ? 'Activo' : 'Inactivo'}">
+                                                                Editar
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                </c:forEach>
                                             </tbody>
                                         </table>
                                     </div>
@@ -440,8 +350,11 @@
                                 <label for="newTCMoneda" class="form-label">Moneda</label>
                                 <select class="form-select" id="newTCMoneda" name="codMoneda" required>
                                     <option value="">Seleccione...</option>
-                                    <option value="USD">USD - Dólares</option>
-                                    <option value="EUR">EUR - Euros</option>
+                                    <c:forEach var="m" items="${listaMonedas}">
+                                        <c:if test="${m.codEstado eq 'S0001' and m.codMoneda ne 'PEN'}">
+                                            <option value="${m.codMoneda}">${m.codMoneda} - ${m.descMoneda}</option>
+                                        </c:if>
+                                    </c:forEach>
                                 </select>
                             </div>
                             <div class="mb-3">
@@ -474,9 +387,8 @@
                         <div class="modal-body">
                             <div class="mb-3">
                                 <label for="editTCCodigo" class="form-label">Moneda</label>
-                                <input type="hidden" id="editTCCodigo" name="codMoneda">
-                                <input type="text" class="form-control" id="editTCDesc" disabled>
-                            </div>
+                                <input type="hidden" id="editTCCodigo" name="codMoneda"> 
+                                <input type="text" class="form-control" id="editTCDesc" disabled> </div>
                             <div class="mb-3">
                                 <label for="editTCCompra" class="form-label">Tasa de Compra (PEN)</label>
                                 <input type="number" step="0.0001" class="form-control" id="editTCCompra" name="tasaCompra" required>
@@ -511,10 +423,10 @@
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Moneda</label>
-                                <select class="form-select" name="moneda" required>
-                                    <option value="">Seleccione...</option>
-                                    <option>Soles</option>
-                                    <option>Dólares</option>
+                                <select class="form-select" name="moneda" id="editTipoCuentaMoneda" required>
+                                    <c:forEach var="m" items="${listaMonedas}">
+                                        <option value="${m.codMoneda}">${m.descMoneda}</option>
+                                    </c:forEach>
                                 </select>
                             </div>
                             <div class="mb-3">
@@ -551,9 +463,10 @@
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Moneda</label>
-                                <select class="form-select" id="editTipoCuentaMoneda" name="moneda" required>
-                                    <option>Soles</option>
-                                    <option>Dólares</option>
+                                <select class="form-select" name="moneda" id="editTipoCuentaMoneda" required>
+                                    <c:forEach var="m" items="${listaMonedas}">
+                                        <option value="${m.codMoneda}">${m.descMoneda}</option>
+                                    </c:forEach>
                                 </select>
                             </div>
                             <div class="mb-3">
@@ -741,5 +654,23 @@
         <script src="${pageContext.request.contextPath}/js/sidebar.js"></script>
         <script src="${pageContext.request.contextPath}/js/gestion-parametros.js"></script>
         <script src="${pageContext.request.contextPath}/js/session-timer.js"></script>
+        <script>
+            // Recuperar pestaña activa desde el parámetro URL enviado por el Servlet
+            const urlParams = new URLSearchParams(window.location.search);
+            const activeTab = urlParams.get('tab');
+            if (activeTab) {
+                // Desactivar todos
+                document.querySelectorAll('.nav-link').forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('show', 'active'));
+
+                // Activar el correcto
+                const tabBtn = document.querySelector(`#tab-${activeTab}`);
+                const tabPane = document.querySelector(`#pane-${activeTab}`);
+                if (tabBtn && tabPane) {
+                    tabBtn.classList.add('active');
+                    tabPane.classList.add('show', 'active');
+                }
+            }
+        </script>
     </body>
 </html>

@@ -1,61 +1,35 @@
-
 package entidad;
 
 public class TipoCambio {
-    private Integer idTipoCambio;
-    private String fecha;
-    private String horaRegistro;
+
+    private int idTipoCambio;
     private String monedaOrigen;
     private String monedaDestino;
-    private Double tasaCompra;
-    private Double tasaVenta;
-    private String codUsuCre;
-    private String fecUsuCre;
+    private double tasaCompra;
+    private double tasaVenta;
+    private String fecha; // Para mostrar "13/11/2025"
+    private String hora;  // Para mostrar "09:15"
 
     public TipoCambio() {
     }
 
-    public TipoCambio(String fecha, String horaRegistro, String monedaOrigen, String monedaDestino, Double tasaCompra, Double tasaVenta, String codUsuCre, String fecUsuCre) {
+    public TipoCambio(int id, String origen, String destino, double compra, double venta, String fecha, String hora) {
+        this.idTipoCambio = id;
+        this.monedaOrigen = origen;
+        this.monedaDestino = destino;
+        this.tasaCompra = compra;
+        this.tasaVenta = venta;
         this.fecha = fecha;
-        this.horaRegistro = horaRegistro;
-        this.monedaOrigen = monedaOrigen;
-        this.monedaDestino = monedaDestino;
-        this.tasaCompra = tasaCompra;
-        this.tasaVenta = tasaVenta;
-        this.codUsuCre = codUsuCre;
-        this.fecUsuCre = fecUsuCre;
+        this.hora = hora;
     }
 
-    public String getFecUsuCre() {
-        return fecUsuCre;
-    }
-
-    public void setFecUsuCre(String fecUsuCre) {
-        this.fecUsuCre = fecUsuCre;
-    }
-
-    public Integer getIdTipoCambio() {
+    // Getters y Setters
+    public int getIdTipoCambio() {
         return idTipoCambio;
     }
 
-    public void setIdTipoCambio(Integer idTipoCambio) {
+    public void setIdTipoCambio(int idTipoCambio) {
         this.idTipoCambio = idTipoCambio;
-    }
-
-    public String getFecha() {
-        return fecha;
-    }
-
-    public void setFecha(String fecha) {
-        this.fecha = fecha;
-    }
-
-    public String getHoraRegistro() {
-        return horaRegistro;
-    }
-
-    public void setHoraRegistro(String horaRegistro) {
-        this.horaRegistro = horaRegistro;
     }
 
     public String getMonedaOrigen() {
@@ -74,28 +48,35 @@ public class TipoCambio {
         this.monedaDestino = monedaDestino;
     }
 
-    public Double getTasaCompra() {
+    public double getTasaCompra() {
         return tasaCompra;
     }
 
-    public void setTasaCompra(Double tasaCompra) {
+    public void setTasaCompra(double tasaCompra) {
         this.tasaCompra = tasaCompra;
     }
 
-    public Double getTasaVenta() {
+    public double getTasaVenta() {
         return tasaVenta;
     }
 
-    public void setTasaVenta(Double tasaVenta) {
+    public void setTasaVenta(double tasaVenta) {
         this.tasaVenta = tasaVenta;
     }
 
-    public String getCodUsuCre() {
-        return codUsuCre;
+    public String getFecha() {
+        return fecha;
     }
 
-    public void setCodUsuCre(String codUsuCre) {
-        this.codUsuCre = codUsuCre;
+    public void setFecha(String fecha) {
+        this.fecha = fecha;
     }
-    
+
+    public String getHora() {
+        return hora;
+    }
+
+    public void setHora(String hora) {
+        this.hora = hora;
+    }
 }
