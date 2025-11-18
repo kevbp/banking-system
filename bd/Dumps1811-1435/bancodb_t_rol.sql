@@ -16,35 +16,31 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `t_moneda`
+-- Table structure for table `t_rol`
 --
 
-DROP TABLE IF EXISTS `t_moneda`;
+DROP TABLE IF EXISTS `t_rol`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `t_moneda` (
-  `codMoneda` varchar(20) NOT NULL,
-  `descMoneda` varchar(50) DEFAULT NULL,
-  `simbolo` varchar(5) DEFAULT NULL,
-  `codEstado` varchar(20) DEFAULT NULL,
+CREATE TABLE `t_rol` (
+  `codRol` varchar(20) NOT NULL,
+  `des` varchar(100) DEFAULT NULL,
   `codUsuCre` varchar(20) DEFAULT NULL,
   `fecUsuCre` datetime DEFAULT NULL,
   `codUsuMod` varchar(20) DEFAULT NULL,
   `fecUsuMod` datetime DEFAULT NULL,
-  PRIMARY KEY (`codMoneda`),
-  KEY `codEstado` (`codEstado`),
-  CONSTRAINT `t_moneda_ibfk_1` FOREIGN KEY (`codEstado`) REFERENCES `t_estado` (`codEstado`)
+  PRIMARY KEY (`codRol`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `t_moneda`
+-- Dumping data for table `t_rol`
 --
 
-LOCK TABLES `t_moneda` WRITE;
-/*!40000 ALTER TABLE `t_moneda` DISABLE KEYS */;
-INSERT INTO `t_moneda` VALUES ('PEN','Soles','S/','S0001',NULL,NULL,NULL,NULL),('USD','Dólares','$','S0001',NULL,NULL,NULL,NULL);
-/*!40000 ALTER TABLE `t_moneda` ENABLE KEYS */;
+LOCK TABLES `t_rol` WRITE;
+/*!40000 ALTER TABLE `t_rol` DISABLE KEYS */;
+INSERT INTO `t_rol` VALUES ('R0001','Administrador','U0001',NULL,'',NULL),('R0002','Supervisor','U0001',NULL,'',NULL),('R0003','Cajero','U0001',NULL,'',NULL),('R0004','Consultor','U0001',NULL,NULL,NULL);
+/*!40000 ALTER TABLE `t_rol` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -56,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-11-18 10:54:02
+-- Dump completed on 2025-11-18 14:35:31

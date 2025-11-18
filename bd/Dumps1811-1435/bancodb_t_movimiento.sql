@@ -16,31 +16,42 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `t_rol`
+-- Table structure for table `t_movimiento`
 --
 
-DROP TABLE IF EXISTS `t_rol`;
+DROP TABLE IF EXISTS `t_movimiento`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `t_rol` (
-  `codRol` varchar(20) NOT NULL,
-  `des` varchar(100) DEFAULT NULL,
-  `codUsuCre` varchar(20) DEFAULT NULL,
-  `fecUsuCre` datetime DEFAULT NULL,
-  `codUsuMod` varchar(20) DEFAULT NULL,
-  `fecUsuMod` datetime DEFAULT NULL,
-  PRIMARY KEY (`codRol`)
+CREATE TABLE `t_movimiento` (
+  `codMovimiento` varchar(20) NOT NULL,
+  `codTransaccion` varchar(20) DEFAULT NULL,
+  `numCuenta` varchar(20) DEFAULT NULL,
+  `fec` datetime DEFAULT NULL,
+  `codTipMovimiento` varchar(20) DEFAULT NULL,
+  `monto` decimal(18,4) DEFAULT NULL,
+  `salFin` decimal(18,4) DEFAULT NULL,
+  `des` varchar(255) DEFAULT NULL,
+  `numCueDes` varchar(20) DEFAULT NULL,
+  `codEstado` varchar(20) DEFAULT NULL,
+  PRIMARY KEY (`codMovimiento`),
+  KEY `codTransaccion` (`codTransaccion`),
+  KEY `codTipMovimiento` (`codTipMovimiento`),
+  KEY `codEstado` (`codEstado`),
+  KEY `idx_movimiento_cuenta` (`numCuenta`),
+  CONSTRAINT `t_movimiento_ibfk_1` FOREIGN KEY (`codTransaccion`) REFERENCES `t_transaccion` (`codTransaccion`),
+  CONSTRAINT `t_movimiento_ibfk_2` FOREIGN KEY (`numCuenta`) REFERENCES `t_cuentas` (`numCuenta`),
+  CONSTRAINT `t_movimiento_ibfk_3` FOREIGN KEY (`codTipMovimiento`) REFERENCES `t_tipomovimiento` (`codTipMovimiento`),
+  CONSTRAINT `t_movimiento_ibfk_4` FOREIGN KEY (`codEstado`) REFERENCES `t_estado` (`codEstado`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `t_rol`
+-- Dumping data for table `t_movimiento`
 --
 
-LOCK TABLES `t_rol` WRITE;
-/*!40000 ALTER TABLE `t_rol` DISABLE KEYS */;
-INSERT INTO `t_rol` VALUES ('R0001','Administrador','U0001',NULL,'',NULL),('R0002','Supervisor','U0001',NULL,'',NULL),('R0003','Cajero','U0001',NULL,'',NULL),('R0004','Consultor','U0001',NULL,NULL,NULL);
-/*!40000 ALTER TABLE `t_rol` ENABLE KEYS */;
+LOCK TABLES `t_movimiento` WRITE;
+/*!40000 ALTER TABLE `t_movimiento` DISABLE KEYS */;
+/*!40000 ALTER TABLE `t_movimiento` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -52,4 +63,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-11-18 10:54:04
+-- Dump completed on 2025-11-18 14:35:30

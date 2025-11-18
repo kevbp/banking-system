@@ -16,30 +16,41 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `t_cuentas_plazos`
+-- Table structure for table `t_transaccion`
 --
 
-DROP TABLE IF EXISTS `t_cuentas_plazos`;
+DROP TABLE IF EXISTS `t_transaccion`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `t_cuentas_plazos` (
-  `numCuenta` varchar(20) NOT NULL,
-  `tasaInt` decimal(5,2) DEFAULT NULL,
-  `plazoMeses` int DEFAULT NULL,
-  `fecVenc` date DEFAULT NULL,
-  `intFinal` decimal(18,4) DEFAULT NULL,
-  PRIMARY KEY (`numCuenta`),
-  CONSTRAINT `t_cuentas_plazos_ibfk_1` FOREIGN KEY (`numCuenta`) REFERENCES `t_cuentas` (`numCuenta`)
+CREATE TABLE `t_transaccion` (
+  `codTransaccion` varchar(20) NOT NULL,
+  `numCuentaOrigen` varchar(20) DEFAULT NULL,
+  `numCuentaDestino` varchar(20) DEFAULT NULL,
+  `codTipMovimiento` varchar(20) DEFAULT NULL,
+  `fec` datetime DEFAULT NULL,
+  `monto` decimal(18,4) DEFAULT NULL,
+  `canal` varchar(50) DEFAULT NULL,
+  `codEstado` varchar(20) DEFAULT NULL,
+  PRIMARY KEY (`codTransaccion`),
+  KEY `numCuentaOrigen` (`numCuentaOrigen`),
+  KEY `numCuentaDestino` (`numCuentaDestino`),
+  KEY `codTipMovimiento` (`codTipMovimiento`),
+  KEY `codEstado` (`codEstado`),
+  KEY `idx_transaccion_fecha` (`fec`),
+  CONSTRAINT `t_transaccion_ibfk_1` FOREIGN KEY (`numCuentaOrigen`) REFERENCES `t_cuentas` (`numCuenta`),
+  CONSTRAINT `t_transaccion_ibfk_2` FOREIGN KEY (`numCuentaDestino`) REFERENCES `t_cuentas` (`numCuenta`),
+  CONSTRAINT `t_transaccion_ibfk_3` FOREIGN KEY (`codTipMovimiento`) REFERENCES `t_tipomovimiento` (`codTipMovimiento`),
+  CONSTRAINT `t_transaccion_ibfk_4` FOREIGN KEY (`codEstado`) REFERENCES `t_estado` (`codEstado`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `t_cuentas_plazos`
+-- Dumping data for table `t_transaccion`
 --
 
-LOCK TABLES `t_cuentas_plazos` WRITE;
-/*!40000 ALTER TABLE `t_cuentas_plazos` DISABLE KEYS */;
-/*!40000 ALTER TABLE `t_cuentas_plazos` ENABLE KEYS */;
+LOCK TABLES `t_transaccion` WRITE;
+/*!40000 ALTER TABLE `t_transaccion` DISABLE KEYS */;
+/*!40000 ALTER TABLE `t_transaccion` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -51,4 +62,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-11-18 10:54:03
+-- Dump completed on 2025-11-18 14:35:30

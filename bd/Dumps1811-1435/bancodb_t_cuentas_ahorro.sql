@@ -16,27 +16,28 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `t_cuentas_corriente`
+-- Table structure for table `t_cuentas_ahorro`
 --
 
-DROP TABLE IF EXISTS `t_cuentas_corriente`;
+DROP TABLE IF EXISTS `t_cuentas_ahorro`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `t_cuentas_corriente` (
+CREATE TABLE `t_cuentas_ahorro` (
   `numCuenta` varchar(20) NOT NULL,
-  `limSobregiro` decimal(18,4) DEFAULT NULL,
+  `tasaInt` decimal(5,2) DEFAULT NULL,
   PRIMARY KEY (`numCuenta`),
-  CONSTRAINT `t_cuentas_corriente_ibfk_1` FOREIGN KEY (`numCuenta`) REFERENCES `t_cuentas` (`numCuenta`)
+  CONSTRAINT `t_cuentas_ahorro_ibfk_1` FOREIGN KEY (`numCuenta`) REFERENCES `t_cuentas` (`numCuenta`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `t_cuentas_corriente`
+-- Dumping data for table `t_cuentas_ahorro`
 --
 
-LOCK TABLES `t_cuentas_corriente` WRITE;
-/*!40000 ALTER TABLE `t_cuentas_corriente` DISABLE KEYS */;
-/*!40000 ALTER TABLE `t_cuentas_corriente` ENABLE KEYS */;
+LOCK TABLES `t_cuentas_ahorro` WRITE;
+/*!40000 ALTER TABLE `t_cuentas_ahorro` DISABLE KEYS */;
+INSERT INTO `t_cuentas_ahorro` VALUES ('96409957196140',1.50);
+/*!40000 ALTER TABLE `t_cuentas_ahorro` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -48,4 +49,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-11-18 10:54:03
+-- Dump completed on 2025-11-18 14:35:29

@@ -16,27 +16,39 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `t_cuentas_ahorro`
+-- Table structure for table `t_embargo`
 --
 
-DROP TABLE IF EXISTS `t_cuentas_ahorro`;
+DROP TABLE IF EXISTS `t_embargo`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `t_cuentas_ahorro` (
-  `numCuenta` varchar(20) NOT NULL,
-  `tasaInt` decimal(5,2) DEFAULT NULL,
-  PRIMARY KEY (`numCuenta`),
-  CONSTRAINT `t_cuentas_ahorro_ibfk_1` FOREIGN KEY (`numCuenta`) REFERENCES `t_cuentas` (`numCuenta`)
+CREATE TABLE `t_embargo` (
+  `codEmbargo` varchar(20) NOT NULL,
+  `numCuenta` varchar(20) DEFAULT NULL,
+  `mon` decimal(18,4) DEFAULT NULL,
+  `expedienteJudicial` varchar(50) DEFAULT NULL,
+  `descripcion` varchar(255) DEFAULT NULL,
+  `montoLiberado` decimal(18,4) DEFAULT '0.0000',
+  `codEstado` varchar(20) DEFAULT NULL,
+  `codUsuCre` varchar(20) DEFAULT NULL,
+  `fecUsuCre` datetime DEFAULT NULL,
+  `codUsuMod` varchar(20) DEFAULT NULL,
+  `fecUsuMod` datetime DEFAULT NULL,
+  PRIMARY KEY (`codEmbargo`),
+  KEY `codEstado` (`codEstado`),
+  KEY `idx_embargo_cuenta` (`numCuenta`),
+  CONSTRAINT `t_embargo_ibfk_1` FOREIGN KEY (`numCuenta`) REFERENCES `t_cuentas` (`numCuenta`),
+  CONSTRAINT `t_embargo_ibfk_2` FOREIGN KEY (`codEstado`) REFERENCES `t_estado` (`codEstado`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `t_cuentas_ahorro`
+-- Dumping data for table `t_embargo`
 --
 
-LOCK TABLES `t_cuentas_ahorro` WRITE;
-/*!40000 ALTER TABLE `t_cuentas_ahorro` DISABLE KEYS */;
-/*!40000 ALTER TABLE `t_cuentas_ahorro` ENABLE KEYS */;
+LOCK TABLES `t_embargo` WRITE;
+/*!40000 ALTER TABLE `t_embargo` DISABLE KEYS */;
+/*!40000 ALTER TABLE `t_embargo` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -48,4 +60,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-11-18 10:54:03
+-- Dump completed on 2025-11-18 14:35:31
