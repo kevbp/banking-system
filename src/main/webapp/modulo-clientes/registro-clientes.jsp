@@ -61,7 +61,8 @@
 
                         <c:if test="${empty mensajeCuentasInactivas}">
 
-                            <form action="${pageContext.request.contextPath}/ControlRegistrarme" method="POST">
+                            <form action="${pageContext.request.contextPath}/ControlLoginCliente" method="post">
+                                <input type="hidden" name="accion" value="registrar">
                                 <p class="text-center text-muted">Cree su acceso a la Banca por Internet.</p>
 
                                 <div class="row g-2 mb-3">
@@ -108,7 +109,7 @@
                                 </c:if>
 
                                 <div class="text-center mt-3">
-                                    <a href="login-clientes.jsp" class="text-decoration-none small text-secondary">Volver al Login</a>
+                                    <a href="${pageContext.request.contextPath}/modulo-clientes/login-clientes.jsp" class="text-decoration-none small text-secondary">Volver al Login</a>
                                 </div>
                             </form>
                         </c:if>

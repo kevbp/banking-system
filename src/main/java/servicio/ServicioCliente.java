@@ -4,6 +4,7 @@ import utilitarios.InsecureTrustManager;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import conexion.DaoCliente;
 import entidad.Cliente;
+import entidad.UsuarioCliente;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
+import utilitarios.Encriptacion;
 import utilitarios.Utiles;    
 
 public class ServicioCliente {
@@ -183,5 +185,79 @@ public class ServicioCliente {
     public static int contarClientesActivos() {
         String condicion = "WHERE codEstado = 'S0001'";
         return DaoCliente.contar(condicion);
+    }
+    
+    // --- MÉTODO NUEVO PARA REGISTRO WEB ---
+    public static String registrarAccesoWeb(String dni, UsuarioCliente uc) {
+        
+        // 1. Validar que el DNI corresponda a un Cliente existente
+        List<Object[]> clientes = DaoCliente.listar(" WHERE numDoc = '" + dni + "'", 1, 0);
+        
+        if (clientes == null || clientes.isEmpty()) {
+            return "El DNI ingresado no pertenece a un cliente registrado en el banco.";
+        }
+
+        // Obtener el codCliente
+        String codCliente = clientes.get(0)[0].toString();
+        uc.setCodCliente(codCliente); // Asignamos la FK a la entidad
+
+        // 2. Validar duplicados
+        if (DaoCliente.clienteTieneUsuarioWeb(codCliente)) {
+            return "Usted ya tiene una cuenta web activa. Use la opción de recuperar contraseña.";
+        }
+        if (DaoCliente.existeUsuarioWeb(uc.getNomUsuario())) {
+            return "El nombre de usuario ya está en uso. Por favor elija otro.";
+        }
+
+        // 3. Encriptar y actualizar la entidad antes de guardar
+        uc.setClaveWeb(Encriptacion.encriptar(uc.getClaveWeb()));
+        uc.setPalabraRecuperacion(Encriptacion.encriptar(uc.getPalabraRecuperacion()));
+
+        // 4. Registrar en BD
+        String errorBD = DaoCliente.registrarUsuarioWeb(uc);
+        
+        return errorBD; 
+    }
+    
+    public static String recuperarContrasenaWeb(String accion, String dni, UsuarioCliente uc) {
+        
+        // 1. Obtener codCliente por DNI
+        List<Object[]> clientes = DaoCliente.listar(" WHERE numDoc = '" + dni + "'", 1, 0);
+        
+        if (clientes == null || clientes.isEmpty()) {
+            return "El DNI ingresado no está registrado como cliente.";
+        }
+        String codCliente = clientes.get(0)[0].toString();
+        
+        // 2. Buscar credenciales web asociadas
+        Object[] credencialesWeb = DaoCliente.buscarCredencialesWeb(codCliente); 
+        
+        if (credencialesWeb == null) {
+            return "No tiene una cuenta web asociada. Por favor, regístrese.";
+        }
+        
+        // Elemento [2] contiene la palabra de recuperación encriptada
+        String palabraHashAlmacenada = credencialesWeb[2].toString();
+        
+        // --- LÓGICA DE VERIFICACIÓN (PASO 1) ---
+        if ("verificar".equalsIgnoreCase(accion)) {
+            // uc.getPalabraRecuperacion() trae el valor sin encriptar del formulario
+            if (Encriptacion.validar(uc.getPalabraRecuperacion(), palabraHashAlmacenada)) {
+                return null; // Éxito
+            } else {
+                return "Palabra clave secreta incorrecta.";
+            }
+        } 
+        
+        // --- LÓGICA DE RECUPERACIÓN (PASO 2) ---
+        else if ("recuperar".equalsIgnoreCase(accion)) {
+            // uc.getClaveWeb() trae la nueva clave sin encriptar del formulario
+            String nuevaClaveHash = Encriptacion.encriptar(uc.getClaveWeb());
+            String errorBD = DaoCliente.actualizarClaveWeb(codCliente, nuevaClaveHash);
+            
+            return errorBD; // null si éxito, mensaje si error
+        }
+        
+        return "Acción de servicio no reconocida.";
     }
 }

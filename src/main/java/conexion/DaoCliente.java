@@ -1,6 +1,7 @@
 package conexion;
 
 import entidad.Cliente;
+import entidad.UsuarioCliente;
 import java.util.List;
 
 public class DaoCliente {
@@ -69,6 +70,43 @@ public class DaoCliente {
         }
         return 0;
     }
+    
+    // --- MÉTODOS NUEVOS PARA EL REGISTRO WEB ---
+
+    // 1. Registrar credenciales en t_usuario_cliente
+    public static String registrarUsuarioWeb(UsuarioCliente u) {
+        String sql = "INSERT INTO t_usuario_cliente (codCliente, nomUsuario, claveWeb, palabraRecuperacion) " +
+                     "VALUES ('" + u.getCodCliente() + "', '" + u.getNomUsuario() + "', '" + 
+                     u.getClaveWeb() + "', '" + u.getPalabraRecuperacion() + "')";
+        return Acceso.ejecutar(sql);
+    }
+
+    // 2. Verificar si el nombre de usuario ya existe
+    public static boolean existeUsuarioWeb(String nomUsuario) {
+        String sql = "SELECT codUsuarioWeb FROM t_usuario_cliente WHERE nomUsuario = '" + nomUsuario + "'";
+        Object[] res = Acceso.buscar(sql);
+        return (res != null);
+    }
+
+    // 3. Verificar si el cliente (por código) ya tiene cuenta web
+    public static boolean clienteTieneUsuarioWeb(String codCliente) {
+        String sql = "SELECT codUsuarioWeb FROM t_usuario_cliente WHERE codCliente = '" + codCliente + "'";
+        Object[] res = Acceso.buscar(sql);
+        return (res != null);
+    }
+    
+    // 4. Buscar credenciales web por codCliente para verificación
+    // Devuelve: [0] codCliente, [1] claveWeb, [2] palabraRecuperacion
+    public static Object[] buscarCredencialesWeb(String codCliente) {
+        // Seleccionamos los campos necesarios para la validación y la actualización
+        String sql = "SELECT codCliente, claveWeb, palabraRecuperacion FROM t_usuario_cliente WHERE codCliente = '" + codCliente + "'";
+        return Acceso.buscar(sql); 
+    }
+
+    // 5. Actualizar la contraseña web del cliente
+    public static String actualizarClaveWeb(String codCliente, String nuevaClaveHash) {
+        String sql = "UPDATE t_usuario_cliente SET claveWeb = '" + nuevaClaveHash + "', estado = 'ACTIVO' WHERE codCliente = '" + codCliente + "'";
+        return Acceso.ejecutar(sql);
 
     // Método para el buscador AJAX de Apertura de Cuentas
     public static Object[] buscarPorDocumento(String nroDoc) {

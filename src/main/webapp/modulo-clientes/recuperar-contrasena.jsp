@@ -42,8 +42,8 @@
                             <p class="h5 fw-light text-muted">Recuperación de Contraseña</p>
                         </div>
 
-                        <form action="${pageContext.request.contextPath}/ControlRecuperarContrasena" method="POST">
-
+                        <form action="${pageContext.request.contextPath}/ControlLoginCliente" method="post">
+                            <input type="hidden" name="accion" value="recuperar">
                             <c:if test="${empty requestScope.showNewPasswordForm}">
                                 <p class="text-center text-muted small mt-3">Ingrese su DNI y su palabra secreta para verificar su identidad.</p>
 
@@ -56,7 +56,7 @@
                                     <label for="inpClave">Palabra Clave (Secreta)</label>
                                 </div>
                                 <div class="d-grid mt-4">
-                                    <button type="submit" name="action" value="verificar" class="btn btn-login">Verificar</button>
+                                    <button type="submit" name="actionStep" value="verificar" class="btn btn-login">Verificar</button>
                                 </div>
                             </c:if>
 
@@ -75,7 +75,7 @@
                                     <label for="inpConfirmarPwd">Confirmar Contraseña</label>
                                 </div>
                                 <div class="d-grid mt-4">
-                                    <button type="submit" name="action" value="recuperar" class="btn btn-login">Recuperar Contraseña</button>
+                                    <button type="submit" name="actionStep" value="recuperar" class="btn btn-login">Recuperar Contraseña</button>
                                 </div>
                             </c:if>
 
@@ -84,7 +84,7 @@
                             </c:if>
 
                             <div class="text-center mt-3">
-                                <a href="login-clientes.jsp" class="text-decoration-none small text-secondary">Volver al Login</a>
+                                <a href="${pageContext.request.contextPath}/modulo-clientes/login-clientes.jsp" class="text-decoration-none small text-secondary">Volver al Login</a>
                             </div>
                         </form>
                     </div>
