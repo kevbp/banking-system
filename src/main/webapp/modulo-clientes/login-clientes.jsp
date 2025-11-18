@@ -40,6 +40,7 @@
                         </div>
 
                         <form action="${pageContext.request.contextPath}/ControlLoginCliente" method="post">
+                            <input type="hidden" name="accion" value="login">
                             <div class="form-floating mb-3">
                                 <input type="text" class="form-control" name="inpUsu" id="inpUsu" placeholder="Ingresa tu DNI" required>
                                 <label for="inpUsu">Usuario</label>
@@ -59,7 +60,7 @@
                             </c:if>
 
                             <div class="text-center mt-3">
-                                <a href="recuperar-contrasena.jsp" class="text-decoration-none small text-secondary">¿Olvidaste tu contraseña?</a>
+                                <a href="${pageContext.request.contextPath}/modulo-clientes/recuperar-contrasena.jsp" class="text-decoration-none small text-secondary">¿Olvidaste tu contraseña?</a>
                             </div>
 
                             <hr class="my-4">

@@ -7,6 +7,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import servicio.ServicioCliente;
 
 @WebServlet(name = "ControlLoginCliente", urlPatterns = {"/ControlLoginCliente"})
@@ -37,8 +38,7 @@ public class ControlLoginCliente extends HttpServlet {
                 procesarRecuperacion(request, response);
                 break;
             case "login":
-                // Aquí iría la lógica de login
-                response.sendRedirect("modulo-clientes/dashboard-cliente.jsp");
+                procesarLogin(request, response);
                 break;
             default:
                 response.sendRedirect("modulo-clientes/login-clientes.jsp");
@@ -139,6 +139,32 @@ public class ControlLoginCliente extends HttpServlet {
                 request.setAttribute("inpDNI", dni);
                 request.getRequestDispatcher(urlDestino).forward(request, response);
             }
+        }
+    }
+    
+    private void procesarLogin(HttpServletRequest request, HttpServletResponse response) 
+            throws ServletException, IOException {
+        
+        String nomUsuario = request.getParameter("inpUsu");
+        String psw = request.getParameter("inpPwd");
+        
+        // Llamada al servicio de autenticación
+        Object[] datosCliente = ServicioCliente.autenticarClienteWeb(nomUsuario, psw);
+
+        if (datosCliente != null) {
+            // 1. Login Exitoso: Crear Sesión
+            HttpSession session = request.getSession(true);
+            
+            // Guardamos los datos del cliente en la sesión
+            session.setAttribute("cliAut", datosCliente);
+            
+            // 2. Redirigir al dashboard
+            response.sendRedirect("modulo-clientes/dashboard-cliente.jsp");
+            
+        } else {
+            // Login Fallido
+            request.setAttribute("mensaje", "Usuario o contraseña inválidos o cuenta bloqueada.");
+            request.getRequestDispatcher("modulo-clientes/login-clientes.jsp").forward(request, response);
         }
     }
 }
