@@ -48,7 +48,6 @@
         </div>
 
         <script src="${pageContext.request.contextPath}/js/bootstrap.bundle.min.js"></script>
-
         <script src="${pageContext.request.contextPath}/js/selec-rol.js"></script>
     </body>
 </html>

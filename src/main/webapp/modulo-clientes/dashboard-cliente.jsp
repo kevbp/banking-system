@@ -20,13 +20,6 @@
 
         <%@ include file="../util/header-cliente.jsp" %>
 
-        <div class="tc-banner">
-            <div class="container-fluid px-4">
-                <i class="bi bi-graph-up me-1"></i>
-                <strong>T.C. Referencial:</strong> Compra S/ 3.314 | Venta S/ 3.414
-            </div>
-        </div>
-
         <div class="container-fluid p-4 client-portal-content">
 
             <h2 class="h4 fw-bold mb-4">Bienvenido, ${sessionScope.nombreClienteReal}</h2>

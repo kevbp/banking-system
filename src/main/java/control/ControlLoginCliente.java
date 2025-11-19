@@ -1,16 +1,14 @@
 package control;
 
-import conexion.DaoCuenta;
-import entidad.CuentasBancarias;
 import entidad.UsuarioCliente;
 import java.io.IOException;
+import java.util.List;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import java.util.List;
 import servicio.ServicioCliente;
 
 @WebServlet(name = "ControlLoginCliente", urlPatterns = {"/ControlLoginCliente"})
@@ -28,7 +26,8 @@ public class ControlLoginCliente extends HttpServlet {
         switch (accion) {
             case "dashboard":
                 mostrarDashboard(request, response);
-            case "detalle":  // NUEVO CASO
+                break;
+            case "detalle":
                 verDetalleCuenta(request, response);
                 break;
             case "logout":
@@ -46,7 +45,6 @@ public class ControlLoginCliente extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
 
         String accion = request.getParameter("accion");
-
         if (accion == null) {
             response.sendRedirect("modulo-clientes/login-clientes.jsp");
             return;
@@ -68,101 +66,39 @@ public class ControlLoginCliente extends HttpServlet {
         }
     }
 
-    private void verDetalleCuenta(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-
-        HttpSession session = request.getSession();
-        UsuarioCliente usu = (UsuarioCliente) session.getAttribute("clienteAut");
-
-        if (usu == null) {
-            response.sendRedirect("ControlLoginCliente");
-            return;
-        }
-
-        // 1. Obtener todas las cuentas del cliente (Para el Dropdown)
-        List<CuentasBancarias> misCuentas = DaoCuenta.listarPorCliente(usu.getCodCliente());
-        request.setAttribute("misCuentas", misCuentas);
-
-        // 2. Determinar qué cuenta mostrar
-        String numCuentaSeleccionada = request.getParameter("num");
-        CuentasBancarias cuentaActual = null;
-
-        if (misCuentas != null && !misCuentas.isEmpty()) {
-            if (numCuentaSeleccionada == null || numCuentaSeleccionada.isEmpty()) {
-                // Por defecto la primera
-                cuentaActual = misCuentas.get(0);
-            } else {
-                // Buscar la seleccionada en la lista (Seguridad: evita ver cuentas de otros)
-                for (CuentasBancarias c : misCuentas) {
-                    if (c.getNumCuenta().equals(numCuentaSeleccionada)) {
-                        cuentaActual = c;
-                        break;
-                    }
-                }
-                // Si no la encontró (ej: manipuló URL), volvemos a la primera
-                if (cuentaActual == null) {
-                    cuentaActual = misCuentas.get(0);
-                }
-            }
-
-            // Si es necesario obtener más detalles que no vienen en la lista (ej: CCI, fecha apertura completa)
-            // podemos hacer una consulta extra, o usar lo que ya tenemos en listarPorCliente.
-            // Para estar seguros de tener todo (incluyendo sobregiro si es corriente), llamamos a obtenerCuenta:
-            cuentaActual = DaoCuenta.obtenerCuenta(cuentaActual.getNumCuenta(), conexion.Acceso.getConexion());
-        }
-
-        request.setAttribute("cuentaActual", cuentaActual);
-
-        // 3. Cargar Movimientos de esa cuenta
-        if (cuentaActual != null) {
-            List<entidad.Movimiento> movimientos = conexion.DaoMovimiento.listarUltimosMovimientos(cuentaActual.getNumCuenta());
-            request.setAttribute("movimientos", movimientos);
-        }
-
-        request.getRequestDispatcher("modulo-clientes/detalle-cuenta.jsp").forward(request, response);
-    }
-
-    // --- MÉTODOS DE PROCESAMIENTO ---
+    // --- MÉTODOS DE LÓGICA ---
     private void procesarLogin(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         String nomUsuario = request.getParameter("inpUsu");
         String psw = request.getParameter("inpPwd");
 
-        // 1. Autenticar
         Object[] datos = ServicioCliente.autenticarClienteWeb(nomUsuario, psw);
 
         if (datos != null) {
             HttpSession session = request.getSession(true);
             UsuarioCliente usu = new UsuarioCliente();
 
-            // --- CORRECCIÓN DE MAPEO: DETECCIÓN DE TIPO DE DATO ---
-            // Esto soluciona el error "For input string: C0001"
+            // 1. Mapeo inteligente (Soluciona error de número vs string)
             try {
-                // Intento 1: El orden estándar (ID, Codigo, Nombre...)
                 usu.setCodUsuarioCliente(Integer.parseInt(datos[0].toString()));
                 usu.setCodCliente(datos[1].toString());
                 usu.setNomUsuario(datos[2].toString());
             } catch (NumberFormatException e) {
-                // Intento 2: Si falla, es porque datos[0] es el Código de Cliente (String)
-                // Esto ocurre si tu consulta SQL devuelve primero el código "C..."
                 usu.setCodCliente(datos[0].toString());
                 usu.setNomUsuario(datos[1].toString());
-                // El ID numérico lo dejamos en 0 o lo buscamos si está en otra posición, 
-                // pero para la sesión lo vital es el codCliente.
             }
-            // -------------------------------------------------------
 
-            // 2. Obtener Nombre Real del Cliente (Para el saludo)
+            // 2. Obtener nombre real
             String sqlNom = "SELECT nomCompleto FROM t_cliente WHERE codCliente = '" + usu.getCodCliente() + "'";
             Object[] datosCli = conexion.Acceso.buscar(sqlNom);
             String nombreReal = (datosCli != null) ? datosCli[0].toString() : usu.getNomUsuario();
 
-            // 3. Guardar en sesión
-            session.setAttribute("clienteAut", usu);
+            // 3. GUARDAR SESIÓN (CORRECCIÓN DE COMPATIBILIDAD)
+            session.setAttribute("clienteAut", usu);   // Para el nuevo código
+            session.setAttribute("cliAut", datos);     // Para tu Filtro antiguo (¡ESTO ARREGLA EL ERROR!)
             session.setAttribute("nombreClienteReal", nombreReal);
 
-            // 4. Redirigir al Dashboard
             response.sendRedirect("ControlLoginCliente?accion=dashboard");
 
         } else {
@@ -178,15 +114,66 @@ public class ControlLoginCliente extends HttpServlet {
         UsuarioCliente usu = (UsuarioCliente) session.getAttribute("clienteAut");
 
         if (usu == null) {
-            response.sendRedirect("ControlLoginCliente");
+            // Intento de recuperación si el filtro dejó pasar pero clienteAut es nulo
+            Object[] oldSession = (Object[]) session.getAttribute("cliAut");
+            if (oldSession != null) {
+                // Reconstruir si es necesario, o redirigir al login
+                // Para seguridad, mejor reenviar al login
+            }
+            response.sendRedirect("modulo-clientes/login-clientes.jsp");
             return;
         }
 
-        // Cargar Cuentas Reales
-        java.util.List<entidad.CuentasBancarias> misCuentas = conexion.DaoCuenta.listarPorCliente(usu.getCodCliente());
+        List<entidad.CuentasBancarias> misCuentas = conexion.DaoCuenta.listarPorCliente(usu.getCodCliente());
         request.setAttribute("misCuentas", misCuentas);
 
         request.getRequestDispatcher("modulo-clientes/dashboard-cliente.jsp").forward(request, response);
+    }
+
+    private void verDetalleCuenta(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        HttpSession session = request.getSession();
+        UsuarioCliente usu = (UsuarioCliente) session.getAttribute("clienteAut");
+
+        if (usu == null) {
+            response.sendRedirect("modulo-clientes/login-clientes.jsp");
+            return;
+        }
+
+        // 1. Obtener todas las cuentas
+        List<entidad.CuentasBancarias> misCuentas = conexion.DaoCuenta.listarPorCliente(usu.getCodCliente());
+        request.setAttribute("misCuentas", misCuentas);
+
+        // 2. Cuenta seleccionada
+        String numCuentaSeleccionada = request.getParameter("num");
+        entidad.CuentasBancarias cuentaActual = null;
+
+        if (misCuentas != null && !misCuentas.isEmpty()) {
+            if (numCuentaSeleccionada == null || numCuentaSeleccionada.isEmpty()) {
+                cuentaActual = misCuentas.get(0);
+            } else {
+                for (entidad.CuentasBancarias c : misCuentas) {
+                    if (c.getNumCuenta().equals(numCuentaSeleccionada)) {
+                        cuentaActual = c;
+                        break;
+                    }
+                }
+                if (cuentaActual == null) {
+                    cuentaActual = misCuentas.get(0);
+                }
+            }
+            cuentaActual = conexion.DaoCuenta.obtenerCuenta(cuentaActual.getNumCuenta(), conexion.Acceso.getConexion());
+        }
+        request.setAttribute("cuentaActual", cuentaActual);
+
+        // 3. Movimientos
+        if (cuentaActual != null) {
+            List<entidad.Movimiento> movimientos = conexion.DaoMovimiento.listarUltimosMovimientos(cuentaActual.getNumCuenta());
+            request.setAttribute("movimientos", movimientos);
+        }
+
+        request.getRequestDispatcher("modulo-clientes/detalle-cuenta.jsp").forward(request, response);
     }
 
     private void procesarRegistro(HttpServletRequest request, HttpServletResponse response)
@@ -250,7 +237,6 @@ public class ControlLoginCliente extends HttpServlet {
                 request.getRequestDispatcher(urlDestino).forward(request, response);
                 return;
             }
-
             uc.setClaveWeb(nuevaClave);
             mensajeResultado = ServicioCliente.recuperarContrasenaWeb("recuperar", dni, uc);
 

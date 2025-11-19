@@ -23,13 +23,6 @@
 
     <%@ include file="../util/header-cliente.jsp" %>
 
-    <div class="tc-banner">
-        <div class="container-fluid px-4">
-            <i class="bi bi-graph-up me-1"></i>
-            <strong>T.C. Referencial:</strong> Compra S/ 3.314 | Venta S/ 3.414
-        </div>
-    </div>
-
     <div class="container py-4">
         
         <div class="mb-3">
