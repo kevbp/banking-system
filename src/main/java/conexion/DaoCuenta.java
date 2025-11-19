@@ -151,7 +151,7 @@ public class DaoCuenta {
     // --- OBTENER CUENTA INDIVIDUAL (PARA OPERACIONES) ---
     public static CuentasBancarias obtenerCuenta(String numCuenta, Connection cn) {
         CuentasBancarias cuenta = null;
-
+        System.out.println("DEBUG DAO: Buscando cuenta: " + numCuenta); // DEBUG
         // Consulta completa incluyendo Limite Sobregiro y CODIGO MONEDA
         String sql = "SELECT c.numCuenta, c.salAct, c.fecApe, "
                 + "cl.nomCompleto, cl.numDoc, "
@@ -169,6 +169,7 @@ public class DaoCuenta {
             ps.setString(1, numCuenta);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
+                    System.out.println("DEBUG DAO: ¡Cuenta encontrada!");
                     cuenta = new CuentasBancarias();
                     cuenta.setNumCuenta(rs.getString(1));
                     cuenta.setSalAct(rs.getBigDecimal(2));
@@ -190,10 +191,14 @@ public class DaoCuenta {
 
                     // Asignar Código de Moneda (Fundamental para validaciones)
                     cuenta.setCodMoneda(rs.getString(12));
+                    System.out.println("DEBUG DAO: Moneda asignada: " + cuenta.getCodMoneda());
+                } else {
+                    System.out.println("DEBUG DAO: Consulta ejecutada pero NO trajo resultados."); // DEBUG
                 }
             }
         } catch (SQLException e) {
-            System.err.println("ERROR SQL Detalle: " + e.getMessage());
+            System.err.println("DEBUG DAO ERROR: " + e.getMessage());
+            e.printStackTrace();
         }
         return cuenta;
     }

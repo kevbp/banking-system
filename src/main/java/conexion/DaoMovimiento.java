@@ -50,9 +50,9 @@ public class DaoMovimiento {
     }
 
     public static java.util.List<Movimiento> listarUltimosMovimientos(String numCuenta) {
+        System.out.println("DEBUG DAO MOV: Buscando movimientos para: " + numCuenta);
         java.util.List<Movimiento> lista = new java.util.ArrayList<>();
 
-        // JOIN con t_tipomovimiento para saber si es + o -
         String sql = "SELECT m.codMovimiento, m.fec, m.des, m.monto, tm.signo, m.codTransaccion, m.salFin "
                 + "FROM t_movimiento m "
                 + "INNER JOIN t_tipomovimiento tm ON m.codTipMovimiento = tm.codTipMovimiento "
@@ -68,11 +68,12 @@ public class DaoMovimiento {
                     m.setFec(rs.getTimestamp("fec"));
                     m.setDes(rs.getString("des"));
                     m.setMonto(rs.getBigDecimal("monto"));
-                    m.setSigno(rs.getString("signo")); // Usamos el campo auxiliar que agregamos a la Entidad
+                    m.setSigno(rs.getString("signo"));
                     m.setCodTransaccion(rs.getString("codTransaccion"));
                     m.setSalFin(rs.getBigDecimal("salFin"));
                     lista.add(m);
                 }
+                System.out.println("DEBUG DAO MOV: Total filas leídas: " + lista.size()); // DEBUG
             }
         } catch (SQLException e) {
             e.printStackTrace();

@@ -22,51 +22,48 @@ public class AuthenticationFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
 
-        // 1. Evitar caché para que no puedan volver atrás tras logout
         res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
         res.setHeader("Pragma", "no-cache");
         res.setDateHeader("Expires", 0);
 
-        // 2. Definir rutas clave
         String path = req.getRequestURI().substring(req.getContextPath().length());
 
-        // Rutas de Login y Recursos Públicos (CSS, JS, Imágenes)
         boolean isStaticResource = path.startsWith("/css") || path.startsWith("/js") || path.startsWith("/img");
         boolean isLoginEmpleado = path.equals("/login.jsp") || path.equals("/ControlLogin");
-        boolean isLoginCliente = path.contains("/modulo-clientes/login-clientes.jsp") || path.contains("/ControlLoginCliente")
-                || path.contains("/modulo-clientes/registro-clientes.jsp") || path.contains("/modulo-clientes/recuperar-contrasena.jsp");
+
+        // Agregamos ControlLoginCliente a la lista de "cosas de clientes"
+        boolean isLoginCliente = path.contains("/modulo-clientes/") || path.contains("/ControlLoginCliente");
+
         boolean isSeleccionRol = path.equals("/selec-roles.jsp");
 
-        // 3. Obtener sesión (sin crear una nueva si no existe)
         HttpSession session = req.getSession(false);
         boolean isEmpleadoLogueado = (session != null && session.getAttribute("usuAut") != null);
         boolean isClienteLogueado = (session != null && session.getAttribute("clienteAut") != null);
 
-        // 4. LÓGICA DE PROTECCIÓN DIFERENCIADA
-        // A. Si pide recursos estáticos o selección de rol -> Dejar pasar
+        // A. Recursos públicos
         if (isStaticResource || isSeleccionRol) {
             chain.doFilter(request, response);
             return;
         }
 
-        // B. ¿Está intentando entrar al MÓDULO DE CLIENTES?
-        if (path.startsWith("/modulo-clientes")) {
+        // B. PROTECCIÓN MÓDULO CLIENTES (Corregido)
+        // Si la ruta empieza con /modulo-clientes O es el Controlador de Clientes
+        if (path.startsWith("/modulo-clientes") || path.startsWith("/ControlLoginCliente")) {
+
             if (isClienteLogueado || isLoginCliente) {
-                // Tiene permiso o está intentando loguearse/registrarse como cliente
+                // Si ya entró o está intentando loguearse/registrarse -> Pase
                 chain.doFilter(request, response);
             } else {
-                // No es cliente y quiere entrar -> Al Login de Clientes
+                // Si no tiene sesión y quiere entrar a algo privado -> Login Clientes
                 res.sendRedirect(req.getContextPath() + "/modulo-clientes/login-clientes.jsp");
             }
             return;
         }
 
-        // C. Para el resto (MÓDULO EMPLEADOS/ADMIN)
-        // Si es empleado logueado o está en el login de empleado -> Dejar pasar
+        // C. PROTECCIÓN MÓDULO EMPLEADOS (El resto)
         if (isEmpleadoLogueado || isLoginEmpleado) {
             chain.doFilter(request, response);
         } else {
-            // No es empleado -> Al Login de Empleados
             res.sendRedirect(req.getContextPath() + "/login.jsp");
         }
     }

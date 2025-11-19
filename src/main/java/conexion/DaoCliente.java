@@ -1,8 +1,11 @@
 package conexion;
 
 import entidad.Cliente;
+import entidad.CuentasBancarias;
 import entidad.UsuarioCliente;
 import java.util.List;
+import java.sql.*;
+import java.util.ArrayList;
 
 public class DaoCliente {
 
@@ -107,16 +110,47 @@ public class DaoCliente {
         String sql = "UPDATE t_usuario_cliente SET claveWeb = '" + nuevaClaveHash + "', estado = 'ACTIVO' WHERE codCliente = '" + codCliente + "'";
         return Acceso.ejecutar(sql);
     }
-    public static Object[] buscarUsuarioWeb(String nomUsuario) {
-        String sql = "SELECT u.codCliente, nomUsuario, claveWeb, c.codEstado FROM t_usuario_cliente as u inner join t_cliente as c on u.codCliente = c.codCliente WHERE nomUsuario = '"+nomUsuario+"';";
 
-        return Acceso.buscar(sql); 
+    public static Object[] buscarUsuarioWeb(String nomUsuario) {
+        String sql = "SELECT u.codCliente, nomUsuario, claveWeb, c.codEstado FROM t_usuario_cliente as u inner join t_cliente as c on u.codCliente = c.codCliente WHERE nomUsuario = '" + nomUsuario + "';";
+
+        return Acceso.buscar(sql);
     }
-    
+
     // Método para el buscador AJAX de Apertura de Cuentas
     public static Object[] buscarPorDocumento(String nroDoc) {
         // Solo necesitamos el código y el nombre para el formulario
         String sql = "SELECT codCliente, nomCompleto FROM t_cliente WHERE numDoc = '" + nroDoc + "' AND codEstado = 'S0001'";
         return Acceso.buscar(sql);
+    }
+
+    public static List<CuentasBancarias> listarPorCliente(String codCliente) {
+        List<CuentasBancarias> lista = new ArrayList<>();
+        String sql = "SELECT c.numCuenta, tc.descTipo, m.descMoneda, c.salAct, e.des, c.codMoneda "
+                + "FROM t_cuentas c "
+                + "INNER JOIN t_tipocuenta tc ON c.codTipCuenta = tc.codTipCuenta "
+                + "INNER JOIN t_moneda m ON c.codMoneda = m.codMoneda "
+                + "INNER JOIN t_estado e ON c.codEstado = e.codEstado "
+                + "WHERE c.codCliente = ? AND c.codEstado = 'S0001' "
+                + "ORDER BY c.fecApe DESC";
+
+        try (Connection cn = Acceso.getConexion(); PreparedStatement ps = cn.prepareStatement(sql)) {
+            ps.setString(1, codCliente);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    CuentasBancarias c = new CuentasBancarias();
+                    c.setNumCuenta(rs.getString(1));
+                    c.setDesTipoCuenta(rs.getString(2));
+                    c.setDesMoneda(rs.getString(3));
+                    c.setSalAct(rs.getBigDecimal(4));
+                    c.setDesEstado(rs.getString(5));
+                    c.setCodMoneda(rs.getString(6));
+                    lista.add(c);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return lista;
     }
 }

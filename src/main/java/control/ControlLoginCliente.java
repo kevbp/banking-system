@@ -109,22 +109,16 @@ public class ControlLoginCliente extends HttpServlet {
 
     private void mostrarDashboard(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
         HttpSession session = request.getSession();
         UsuarioCliente usu = (UsuarioCliente) session.getAttribute("clienteAut");
 
         if (usu == null) {
-            // Intento de recuperación si el filtro dejó pasar pero clienteAut es nulo
-            Object[] oldSession = (Object[]) session.getAttribute("cliAut");
-            if (oldSession != null) {
-                // Reconstruir si es necesario, o redirigir al login
-                // Para seguridad, mejor reenviar al login
-            }
-            response.sendRedirect("modulo-clientes/login-clientes.jsp");
+            response.sendRedirect("ControlLoginCliente");
             return;
         }
 
-        List<entidad.CuentasBancarias> misCuentas = conexion.DaoCuenta.listarPorCliente(usu.getCodCliente());
+        // Cargar Cuentas
+        java.util.List<entidad.CuentasBancarias> misCuentas = conexion.DaoCuenta.listarPorCliente(usu.getCodCliente());
         request.setAttribute("misCuentas", misCuentas);
 
         request.getRequestDispatcher("modulo-clientes/dashboard-cliente.jsp").forward(request, response);
@@ -133,47 +127,70 @@ public class ControlLoginCliente extends HttpServlet {
     private void verDetalleCuenta(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        System.out.println("--- DEBUG: INICIO verDetalleCuenta ---"); // DEBUG
+
         HttpSession session = request.getSession();
         UsuarioCliente usu = (UsuarioCliente) session.getAttribute("clienteAut");
 
         if (usu == null) {
+            System.out.println("--- DEBUG: Usuario es NULL. Redirigiendo al login ---"); // DEBUG
             response.sendRedirect("modulo-clientes/login-clientes.jsp");
             return;
         }
 
+        System.out.println("--- DEBUG: Usuario: " + usu.getCodCliente() + " ---"); // DEBUG
+
         // 1. Obtener todas las cuentas
-        List<entidad.CuentasBancarias> misCuentas = conexion.DaoCuenta.listarPorCliente(usu.getCodCliente());
+        java.util.List<entidad.CuentasBancarias> misCuentas = conexion.DaoCuenta.listarPorCliente(usu.getCodCliente());
+        System.out.println("--- DEBUG: Cuentas encontradas: " + (misCuentas != null ? misCuentas.size() : "NULL") + " ---"); // DEBUG
+
         request.setAttribute("misCuentas", misCuentas);
 
-        // 2. Cuenta seleccionada
-        String numCuentaSeleccionada = request.getParameter("num");
+        // 2. Determinar qué cuenta mostrar
+        String num = request.getParameter("num");
+        System.out.println("--- DEBUG: Parametro 'num' recibido: " + num + " ---"); // DEBUG
+
         entidad.CuentasBancarias cuentaActual = null;
 
         if (misCuentas != null && !misCuentas.isEmpty()) {
-            if (numCuentaSeleccionada == null || numCuentaSeleccionada.isEmpty()) {
+            if (num == null || num.isEmpty()) {
                 cuentaActual = misCuentas.get(0);
+                System.out.println("--- DEBUG: Usando cuenta por defecto (la primera): " + cuentaActual.getNumCuenta() + " ---"); // DEBUG
             } else {
                 for (entidad.CuentasBancarias c : misCuentas) {
-                    if (c.getNumCuenta().equals(numCuentaSeleccionada)) {
+                    if (c.getNumCuenta().equals(num)) {
                         cuentaActual = c;
                         break;
                     }
                 }
                 if (cuentaActual == null) {
+                    System.out.println("--- DEBUG: No se encontró la cuenta solicitada en la lista del cliente ---"); // DEBUG
                     cuentaActual = misCuentas.get(0);
                 }
             }
+
+            System.out.println("--- DEBUG: Consultando detalle completo para: " + cuentaActual.getNumCuenta() + " ---"); // DEBUG
             cuentaActual = conexion.DaoCuenta.obtenerCuenta(cuentaActual.getNumCuenta(), conexion.Acceso.getConexion());
+
+            if (cuentaActual == null) {
+                System.out.println("--- DEBUG: ALERTA - DaoCuenta.obtenerCuenta devolvió NULL ---"); // DEBUG
+            }
+        } else {
+            System.out.println("--- DEBUG: ALERTA - La lista 'misCuentas' está vacía ---"); // DEBUG
         }
+
         request.setAttribute("cuentaActual", cuentaActual);
 
-        // 3. Movimientos
+        // 3. Cargar Movimientos
         if (cuentaActual != null) {
-            List<entidad.Movimiento> movimientos = conexion.DaoMovimiento.listarUltimosMovimientos(cuentaActual.getNumCuenta());
-            request.setAttribute("movimientos", movimientos);
+            System.out.println("--- DEBUG: Buscando movimientos... ---"); // DEBUG
+            java.util.List<entidad.Movimiento> movs = conexion.DaoMovimiento.listarUltimosMovimientos(cuentaActual.getNumCuenta());
+            System.out.println("--- DEBUG: Movimientos encontrados: " + (movs != null ? movs.size() : "NULL") + " ---"); // DEBUG
+            request.setAttribute("movimientos", movs);
         }
 
         request.getRequestDispatcher("modulo-clientes/detalle-cuenta.jsp").forward(request, response);
+        System.out.println("--- DEBUG: FIN verDetalleCuenta (Redirigiendo al JSP) ---"); // DEBUG
     }
 
     private void procesarRegistro(HttpServletRequest request, HttpServletResponse response)
