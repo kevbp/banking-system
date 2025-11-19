@@ -152,4 +152,20 @@ public class DaoParametros {
         return prefijo + String.format("%03d", numero);
     }
 
+    // --- NUEVO MÉTODO PARA OBTENER TASA DE UNA MONEDA ESPECÍFICA ---
+    public static double[] obtenerTasaCambio(String moneda) {
+        // Retorna [compra, venta]
+        double[] tasas = {0.0, 0.0};
+        // Buscamos la última tasa registrada para la moneda dada (vs PEN)
+        String sql = "SELECT tasaCompra, tasaVenta FROM t_tipocambio "
+                + "WHERE monedaOrigen = '" + moneda + "' AND monedaDestino = 'PEN' "
+                + "ORDER BY fecha DESC, horaRegistro DESC LIMIT 1";
+
+        List<Object[]> filas = Acceso.listar(sql);
+        if (filas != null && !filas.isEmpty()) {
+            tasas[0] = Double.parseDouble(filas.get(0)[0].toString()); // Compra
+            tasas[1] = Double.parseDouble(filas.get(0)[1].toString()); // Venta
+        }
+        return tasas;
+    }
 }

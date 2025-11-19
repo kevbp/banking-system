@@ -45,6 +45,9 @@ public class ControlCuenta extends HttpServlet {
             case "detalle":
                 obtenerDetalleCuentaJSON(request, response);
                 break;
+            case "consultar": // NUEVO CASO
+                consultarCuentasCliente(request, response);
+                break;
             default:
                 response.sendRedirect("cuentas/gestion-cuentas.jsp");
         }
@@ -267,5 +270,47 @@ public class ControlCuenta extends HttpServlet {
         }
 
         response.sendRedirect("ControlCuenta?accion=listar&msg=" + java.net.URLEncoder.encode(res, "UTF-8"));
+    }
+
+    private void consultarCuentasCliente(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        String doc = request.getParameter("numDoc");
+        int page = 1;
+        int limit = 10; // Registros por página
+
+        try {
+            if (request.getParameter("page") != null) {
+                page = Integer.parseInt(request.getParameter("page"));
+            }
+        } catch (NumberFormatException e) {
+            page = 1;
+        }
+
+        if (doc != null && !doc.isEmpty()) {
+            // 1. Buscar datos del Cliente (Cabecera)
+            Object[] datosCliente = DaoCliente.buscarPorDocumento(doc);
+
+            if (datosCliente != null) {
+                request.setAttribute("clienteNombre", datosCliente[1]); // Nombre
+                request.setAttribute("clienteId", datosCliente[0]);     // ID Interno
+
+                // 2. Paginación de Cuentas
+                int offset = (page - 1) * limit;
+                List<CuentasBancarias> lista = DaoCuenta.listarPorClientePaginado(doc, limit, offset);
+                int totalRegistros = DaoCuenta.contarCuentasPorCliente(doc);
+                int totalPaginas = (int) Math.ceil((double) totalRegistros / limit);
+
+                request.setAttribute("listaCuentas", lista);
+                request.setAttribute("totalRegistros", totalRegistros);
+                request.setAttribute("currentPage", page);
+                request.setAttribute("totalPages", totalPaginas);
+            } else {
+                request.setAttribute("msgError", "El cliente con documento " + doc + " no existe.");
+            }
+            request.setAttribute("numDocBusqueda", doc);
+        }
+
+        request.getRequestDispatcher("consultas/consulta-cuentas.jsp").forward(request, response);
     }
 }

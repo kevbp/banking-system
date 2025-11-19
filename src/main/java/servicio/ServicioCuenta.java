@@ -298,4 +298,169 @@ public class ServicioCuenta {
         }
         return msg;
     }
+
+    // --- TRANSFERENCIAS ---
+    public String realizarTransferencia(String ctaOrigen, String ctaDestino, double monto, String codUsuario, String obs) {
+        Connection cn = null;
+        String msg = null;
+
+        try {
+            cn = Acceso.getConexion();
+            cn.setAutoCommit(false); // INICIO TRANSACCIÓN
+
+            // -------------------------------------------------------
+            // 1. VALIDAR CUENTAS (Origen y Destino)
+            // -------------------------------------------------------
+            CuentasBancarias ori = DaoCuenta.obtenerCuenta(ctaOrigen, cn);
+            CuentasBancarias des = DaoCuenta.obtenerCuenta(ctaDestino, cn);
+
+            if (ori == null) {
+                throw new Exception("La cuenta de origen no existe.");
+            }
+            if (des == null) {
+                throw new Exception("La cuenta de destino no existe.");
+            }
+            if (ctaOrigen.equals(ctaDestino)) {
+                throw new Exception("No puede transferir a la misma cuenta.");
+            }
+
+            // Validar Estados
+            if (!"S0001".equals(ori.getCodEstado())) {
+                throw new Exception("Cuenta origen no está activa.");
+            }
+            if (!"S0001".equals(des.getCodEstado())) {
+                throw new Exception("Cuenta destino no está activa.");
+            }
+
+            // Validar Tipo (NO PLAZO FIJO - TC003)
+            if ("TC003".equals(ori.getCodTipoCuenta())) {
+                throw new Exception("No se permiten transferencias desde Cuentas a Plazo.");
+            }
+            if ("TC003".equals(des.getCodTipoCuenta())) {
+                throw new Exception("No se permiten transferencias hacia Cuentas a Plazo.");
+            }
+
+            // -------------------------------------------------------
+            // 2. CÁLCULO DE MONTOS Y TIPO DE CAMBIO
+            // -------------------------------------------------------
+            BigDecimal montoSalida = new BigDecimal(monto); // Lo que sale de Origen
+            BigDecimal montoEntrada = montoSalida;          // Lo que entra a Destino (inicialmente igual)
+            String infoCambio = "";
+
+            // Si las monedas son diferentes, aplicar conversión
+            if (!ori.getCodMoneda().equals(des.getCodMoneda())) {
+                // Obtener tasas (asumimos cambio con Dólares USD)
+                String monedaExtranjera = ori.getCodMoneda().equals("PEN") ? des.getCodMoneda() : ori.getCodMoneda();
+                double[] tasas = conexion.DaoParametros.obtenerTasaCambio(monedaExtranjera);
+                double compra = tasas[0];
+                double venta = tasas[1];
+
+                if (compra == 0 || venta == 0) {
+                    throw new Exception("No hay tipo de cambio registrado para hoy.");
+                }
+
+                if (ori.getCodMoneda().equals("USD") && des.getCodMoneda().equals("PEN")) {
+                    // Dólares a Soles -> Banco Compra Dólares
+                    montoEntrada = montoSalida.multiply(new BigDecimal(compra));
+                    infoCambio = " (T.C. Compra: " + compra + ")";
+                } else if (ori.getCodMoneda().equals("PEN") && des.getCodMoneda().equals("USD")) {
+                    // Soles a Dólares -> Banco Vende Dólares
+                    // Entrada = Salida / Venta
+                    montoEntrada = montoSalida.divide(new BigDecimal(venta), 2, java.math.RoundingMode.HALF_DOWN);
+                    infoCambio = " (T.C. Venta: " + venta + ")";
+                }
+            }
+
+            // -------------------------------------------------------
+            // 3. VALIDAR FONDOS EN ORIGEN (Con Sobregiro)
+            // -------------------------------------------------------
+            boolean esCorriente = "TC002".equals(ori.getCodTipoCuenta()) || "TC005".equals(ori.getCodTipoCuenta());
+            BigDecimal capacidadTotal = esCorriente ? ori.getSalAct().add(ori.getSobregiro()) : ori.getSalAct();
+
+            if (capacidadTotal.compareTo(montoSalida) < 0) {
+                throw new Exception("Fondos insuficientes en cuenta origen.");
+            }
+
+            // -------------------------------------------------------
+            // 4. EJECUTAR OPERACIONES
+            // -------------------------------------------------------
+            // A. Descontar de Origen
+            BigDecimal nuevoSaldoOri = ori.getSalAct().subtract(montoSalida);
+            if (!DaoCuenta.actualizarSaldo(ctaOrigen, nuevoSaldoOri, codUsuario, cn)) {
+                throw new Exception("Error al actualizar saldo origen.");
+            }
+
+            // B. Abonar a Destino
+            BigDecimal nuevoSaldoDes = des.getSalAct().add(montoEntrada);
+            if (!DaoCuenta.actualizarSaldo(ctaDestino, nuevoSaldoDes, codUsuario, cn)) {
+                throw new Exception("Error al actualizar saldo destino.");
+            }
+
+            // C. Registrar Transacción (Padre)
+            String idTransaccion = utilitarios.Utiles.generarIdTransaccion();
+            entidad.Transaccion tran = new entidad.Transaccion();
+            tran.setCodTransaccion(idTransaccion);
+            tran.setNumCuentaOrigen(ctaOrigen);
+            tran.setNumCuentaDestino(ctaDestino);
+            tran.setCodTipMovimiento("TM003"); // TM003 = TRANSFERENCIA SALIDA (Principal)
+            tran.setMonto(montoSalida);
+            tran.setCanal("VENTANILLA");
+            tran.setCodEstado("S0008"); // Procesado
+
+            if (!conexion.DaoTransaccion.insertarTransaccion(tran, cn)) {
+                throw new Exception("Error al registrar transacción.");
+            }
+
+            // D. Registrar Movimiento 1 (SALIDA - DEBITO)
+            entidad.Movimiento movSal = new entidad.Movimiento();
+            movSal.setCodMovimiento(conexion.DaoMovimiento.generarCodigoMovimiento());
+            movSal.setCodTransaccion(idTransaccion);
+            movSal.setNumCuenta(ctaOrigen);
+            movSal.setCodTipMovimiento("TM003"); // TM003 = SALIDA
+            movSal.setMonto(montoSalida);
+            movSal.setSalFin(nuevoSaldoOri);
+            movSal.setDes("TRANSF. A " + ctaDestino + infoCambio + " - " + obs);
+            movSal.setNumCueDes(ctaDestino);
+            movSal.setCodEstado("S0008");
+            if (!conexion.DaoMovimiento.insertarMovimiento(movSal, cn)) {
+                throw new Exception("Error mov salida.");
+            }
+
+            // E. Registrar Movimiento 2 (ENTRADA - ABONO)
+            entidad.Movimiento movEnt = new entidad.Movimiento();
+            movEnt.setCodMovimiento(conexion.DaoMovimiento.generarCodigoMovimiento());
+            movEnt.setCodTransaccion(idTransaccion);
+            movEnt.setNumCuenta(ctaDestino);
+            movEnt.setCodTipMovimiento("TM004"); // TM004 = ENTRADA (Asegúrate que exista en BD)
+            movEnt.setMonto(montoEntrada);
+            movEnt.setSalFin(nuevoSaldoDes);
+            movEnt.setDes("TRANSF. DE " + ctaOrigen + " - " + obs);
+            movEnt.setNumCueDes(ctaOrigen);
+            movEnt.setCodEstado("S0008");
+            if (!conexion.DaoMovimiento.insertarMovimiento(movEnt, cn)) {
+                throw new Exception("Error mov entrada.");
+            }
+
+            cn.commit();
+            msg = "Transferencia exitosa. Código: " + idTransaccion;
+
+        } catch (Exception e) {
+            try {
+                if (cn != null) {
+                    cn.rollback();
+                }
+            } catch (Exception ex) {
+            }
+            e.printStackTrace();
+            msg = "Error: " + e.getMessage();
+        } finally {
+            try {
+                if (cn != null) {
+                    cn.close();
+                }
+            } catch (Exception ex) {
+            }
+        }
+        return msg;
+    }
 }

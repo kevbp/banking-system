@@ -1,181 +1,148 @@
-<%-- 
-    Document   : consulta-cuentas
-    Created on : Oct 12, 2025, 6:50:23 PM
-    Author     : kevin
---%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
 <!DOCTYPE html>
-<html lang="es"> 
+<html lang="es">
     <head>
         <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Consulta de Cuentas - Quantum Bank</title>
-
-        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
         <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet">
         <link href="${pageContext.request.contextPath}/css/estilos.css" rel="stylesheet">
+        <link href="${pageContext.request.contextPath}/css/sidebar.css" rel="stylesheet">
         <link href="${pageContext.request.contextPath}/css/header.css" rel="stylesheet">
-        <link href="${pageContext.request.contextPath}/css/sidebar.css" rel="stylesheet"> 
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-
     </head>
     <body data-active-page="consultas-cuentas">
         <%@ include file="../util/theme.jsp" %>
 
         <div class="d-flex">
             <%@ include file="../util/sidebar.jsp" %>
-
             <div class="main-content flex-grow-1">
                 <%@ include file="../util/header.jsp" %>
 
                 <div class="content-area p-4">
-                    <div class="card shadow-sm border-0">
-                        <div class="card-header bg-dark text-light text-center">
-                            <h4 class="mb-0">Consulta de Cuentas</h4>
-                        </div>
+                    <h4 class="mb-3 fw-bold text-dark">Consulta de Cuentas por Cliente</h4>
 
-                        <div class="card-body p-4">
-                            <p class="text-muted">
-                                Consulte las cuentas registradas de un cliente, visualice su información y acceda al detalle de cada cuenta.
-                            </p>
-                            <hr>
-
-                            <h5>Buscar Cliente</h5>
-                            <form action="/ControlConsultaCuenta" method="get" class="mb-4">
-                                <div class="row g-3 align-items-end">
-                                    <div class="col-md-3">
-                                        <label for="tipoDoc" class="form-label">Tipo de Documento</label>
-                                        <select class="form-select" id="tipoDoc" name="tipoDoc">
-                                            <option value="">Seleccione...</option>
-                                            <option value="DNI">DNI</option>
-                                            <option value="RUC">RUC</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label for="numDoc" class="form-label">Número de Documento</label>
-                                        <input type="text" class="form-control" id="numDoc" name="numDoc" placeholder="Ej: 47283910 o 20134567890">
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label for="nombreCliente" class="form-label">Nombre / Razón Social</label>
-                                        <input type="text" class="form-control" id="nombreCliente" name="nombreCliente" placeholder="Juan Pérez o ABC S.A.C.">
-                                    </div>
-                                    <div class="col-md-1 d-grid">
-                                        <button type="submit" class="btn btn-primary">
-                                            <i class="bi bi-search"></i>
-                                        </button>
+                    <div class="card shadow-sm border-0 mb-4">
+                        <div class="card-body">
+                            <form action="${pageContext.request.contextPath}/ControlCuenta" method="get" class="row g-3 align-items-end">
+                                <input type="hidden" name="accion" value="consultar">
+                                <div class="col-md-5">
+                                    <label class="form-label fw-bold text-muted small">DOCUMENTO DE IDENTIDAD</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-white"><i class="bi bi-person-vcard"></i></span>
+                                        <input type="text" class="form-control" name="numDoc" 
+                                               value="${numDocBusqueda}" placeholder="Ingrese DNI o RUC" required>
+                                        <button class="btn btn-primary px-4 fw-bold" type="submit">Buscar</button>
                                     </div>
                                 </div>
                             </form>
+                            <c:if test="${not empty msgError}">
+                                <div class="alert alert-warning mt-3 mb-0"><i class="bi bi-exclamation-triangle"></i> ${msgError}</div>
+                            </c:if>
+                        </div>
+                    </div>
 
-                            <hr>
+                    <c:if test="${not empty clienteNombre}">
 
-                            <h5>Datos del Cliente</h5>
-                            <table class="table table-bordered mb-4">
-                                <tr><th>Tipo de Cliente</th><td>Persona Natural</td></tr>
-                                <tr><th>Nombre / Razón Social</th><td>Juan Pérez</td></tr>
-                                <tr><th>Documento</th><td>DNI 47283910</td></tr>
-                                <tr><th>Teléfono</th><td>987 654 321</td></tr>
-                                <tr><th>Correo</th><td>juanperez@mail.com</td></tr>
-                                <tr><th>Dirección</th><td>Av. Los Olivos 123 - Lima</td></tr>
-                            </table>
+                        <div class="card shadow-sm border-primary mb-4">
+                            <div class="card-body d-flex justify-content-between align-items-center">
+                                <div>
+                                    <small class="text-muted fw-bold">CLIENTE</small>
+                                    <h4 class="text-primary mb-0">${clienteNombre}</h4>
+                                </div>
+                                <div class="text-end">
+                                    <small class="text-muted fw-bold">DOCUMENTO</small>
+                                    <div class="fs-5 font-monospace">${numDocBusqueda}</div>
+                                </div>
+                                <div class="text-end border-start ps-4">
+                                    <small class="text-muted fw-bold">TOTAL CUENTAS</small>
+                                    <div class="fs-4 fw-bold">${totalRegistros}</div>
+                                </div>
+                            </div>
+                        </div>
 
-                            <h5>Cuentas Registradas</h5>
+                        <div class="card shadow-sm border-0">
+                            <div class="card-header bg-white py-3">
+                                <h6 class="mb-0 fw-bold">Listado de Productos</h6>
+                            </div>
                             <div class="table-responsive">
-                                <table class="table table-bordered table-striped align-middle">
-                                    <thead class="table-light text-center">
+                                <table class="table table-hover align-middle mb-0">
+                                    <thead class="table-light">
                                         <tr>
                                             <th>N° Cuenta</th>
-                                            <th>Tipo</th>
+                                            <th>Producto</th>
                                             <th>Moneda</th>
-                                            <th>Saldo</th>
+                                            <th>Saldo Actual</th>
+                                            <th>Fecha Apertura</th>
                                             <th>Estado</th>
-                                            <th>Embargo</th>
-                                            <th>Acción</th>
+                                            <th>Acciones</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>001-00012345</td>
-                                            <td>Ahorros</td>
-                                            <td>Soles</td>
-                                            <td>S/ 1,250.50</td>
-                                            <td>Activa</td>
-                                            <td>No</td>
-                                            <td class="text-center">
-                                                <button type="button" class="btn btn-info btn-sm" 
-                                                        data-bs-toggle="modal" 
-                                                        data-bs-target="#modalVerCuenta"
-                                                        data-nro-cuenta="001-00012345"
-                                                        data-tipo="Ahorros"
-                                                        data-moneda="Soles"
-                                                        data-saldo="S/ 1,250.50"
-                                                        data-fecha-apertura="2024-05-10"
-                                                        data-estado="Activa"
-                                                        data-embargo="No">
-                                                    Ver
-                                                </button>
-                                            </td>
+                                        <c:if test="${empty listaCuentas}">
+                                            <tr><td colspan="7" class="text-center py-4 text-muted">Este cliente no tiene cuentas registradas.</td></tr>
+                                        </c:if>
+
+                                        <c:forEach var="c" items="${listaCuentas}">
+                                            <tr>
+                                                <td class="font-monospace fw-bold text-primary">${c.numCuenta}</td>
+                                                <td>${c.desTipoCuenta}</td>
+                                                <td>${c.desMoneda}</td>
+                                                <td class="fw-bold">
+                                                    ${c.codMoneda eq 'USD' ? '$' : 'S/'} 
+                                        <fmt:formatNumber value="${c.salAct}" minFractionDigits="2" maxFractionDigits="2"/>
+                                        </td>
+                                        <td><fmt:formatDate value="${c.fecApe}" pattern="dd/MM/yyyy"/></td>
+                                        <td>
+                                            <span class="badge ${c.codEstado eq 'S0001' ? 'bg-success' : 'bg-secondary'}">
+                                                ${c.desEstado}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <a href="${pageContext.request.contextPath}/ControlCuenta?accion=detalle&num=${c.numCuenta}" 
+                                               class="btn btn-sm btn-outline-secondary" title="Ver Detalle">
+                                                <i class="bi bi-eye"></i>
+                                            </a>
+                                        </td>
                                         </tr>
-                                        <tr>
-                                            <td>001-00045678</td>
-                                            <td>Corriente</td>
-                                            <td>Dólares</td>
-                                            <td>$ 3,400.00</td>
-                                            <td>Activa</td>
-                                            <td>Parcial</td>
-                                            <td class="text-center">
-                                                <button type="button" class="btn btn-info btn-sm" 
-                                                        data-bs-toggle="modal" 
-                                                        data-bs-target="#modalVerCuenta"
-                                                        data-nro-cuenta="001-00045678"
-                                                        data-tipo="Corriente"
-                                                        data-moneda="Dólares"
-                                                        data-saldo="$ 3,400.00"
-                                                        data-fecha-apertura="2023-11-22"
-                                                        data-estado="Activa"
-                                                        data-embargo="Parcial">
-                                                    Ver
-                                                </button>
-                                            </td>
-                                        </tr>
+                                    </c:forEach>
                                     </tbody>
                                 </table>
                             </div>
 
-                            <div class="text-center mt-4">
-                                <a href="../home.jsp" class="btn btn-secondary px-4">Volver</a>
-                            </div>
+                            <c:if test="${totalPages > 1}">
+                                <div class="card-footer bg-white py-3">
+                                    <nav aria-label="Paginación de cuentas">
+                                        <ul class="pagination justify-content-center mb-0">
+                                            <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
+                                                <a class="page-link" href="ControlCuenta?accion=consultar&numDoc=${numDocBusqueda}&page=${currentPage - 1}">Anterior</a>
+                                            </li>
+
+                                            <c:forEach begin="1" end="${totalPages}" var="i">
+                                                <li class="page-item ${currentPage == i ? 'active' : ''}">
+                                                    <a class="page-link" href="ControlCuenta?accion=consultar&numDoc=${numDocBusqueda}&page=${i}">${i}</a>
+                                                </li>
+                                            </c:forEach>
+
+                                            <li class="page-item ${currentPage == totalPages ? 'disabled' : ''}">
+                                                <a class="page-link" href="ControlCuenta?accion=consultar&numDoc=${numDocBusqueda}&page=${currentPage + 1}">Siguiente</a>
+                                            </li>
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </c:if>
                         </div>
-                    </div>
-                </div> </div> </div> <div class="modal fade" id="modalVerCuenta" tabindex="-1" aria-labelledby="modalVerCuentaLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header bg-dark text-light">
-                        <h5 class="modal-title" id="modalVerCuentaLabel">Detalle de Cuenta</h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                    </div>
-                    <div class="modal-body">
-                        <table class="table table-bordered">
-                            <tr><th>Tipo de Cuenta</th><td id="modalCuentaTipo"></td></tr>
-                            <tr><th>Moneda</th><td id="modalCuentaMoneda"></td></tr>
-                            <tr><th>Saldo Actual</th><td id="modalCuentaSaldo"></td></tr>
-                            <tr><th>Fecha de Apertura</th><td id="modalCuentaFechaApertura"></td></tr>
-                            <tr><th>Estado</th><td id="modalCuentaEstado"></td></tr>
-                            <tr><th>Embargo</th><td id="modalCuentaEmbargo"></td></tr>
-                        </table>
-                        <div class="text-center mt-3">
-                            <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">Cerrar</button>
-                        </div>
-                    </div>
+                    </c:if>
+
                 </div>
             </div>
         </div>
+
         <%@ include file="../util/cont-sesion.jsp" %>
         <script src="${pageContext.request.contextPath}/js/bootstrap.bundle.min.js"></script>
         <script src="${pageContext.request.contextPath}/js/sidebar.js"></script>
-        <script src="${pageContext.request.contextPath}/js/consulta-cuentas.js"></script>
         <script src="${pageContext.request.contextPath}/js/session-timer.js"></script>
     </body>
 </html>
