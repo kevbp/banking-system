@@ -1,6 +1,10 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+
 <script>
     window.APP_CONTEXT_PATH = "${pageContext.request.contextPath}";
+    // Recuperamos el tiempo de sesión del servidor (si no existe, usa 600s por defecto)
+    const SESSION_TIMEOUT_SECONDS = ${pageContext.session.maxInactiveInterval > 0 ? pageContext.session.maxInactiveInterval : 600};
 </script>
 
 <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
@@ -58,9 +62,20 @@
         </div>
     </div>
 </nav>
+
 <div class="tc-banner">
     <div class="container-fluid px-4">
-        <i class="bi bi-graph-up me-1"></i>
-        <strong>T.C. Referencial:</strong> Compra S/ 3.314 | Venta S/ 3.414
+        <c:choose>
+            <c:when test="${not empty tipoCambioDia}">
+                <i class="bi bi-graph-up me-1"></i>
+                <strong>T.C. Hoy:</strong> 
+                Compra S/ <fmt:formatNumber value="${tipoCambioDia.compra}" minFractionDigits="3"/> | 
+                Venta S/ <fmt:formatNumber value="${tipoCambioDia.venta}" minFractionDigits="3"/>
+            </c:when>
+            <c:otherwise>
+                <i class="bi bi-exclamation-circle me-1 text-warning"></i>
+                <strong class="text-warning">T.C. no configurado hoy (Operaciones limitadas)</strong>
+            </c:otherwise>
+        </c:choose>
     </div>
 </div>

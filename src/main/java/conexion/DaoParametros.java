@@ -153,19 +153,19 @@ public class DaoParametros {
     }
 
     // --- NUEVO MÉTODO PARA OBTENER TASA DE UNA MONEDA ESPECÍFICA ---
-    public static double[] obtenerTasaCambio(String moneda) {
-        // Retorna [compra, venta]
-        double[] tasas = {0.0, 0.0};
-        // Buscamos la última tasa registrada para la moneda dada (vs PEN)
-        String sql = "SELECT tasaCompra, tasaVenta FROM t_tipocambio "
-                + "WHERE monedaOrigen = '" + moneda + "' AND monedaDestino = 'PEN' "
-                + "ORDER BY fecha DESC, horaRegistro DESC LIMIT 1";
+    public static TipoCambio obtenerTipoCambioDia() {
+        TipoCambio tc = null;
+        // Consultamos el ÚLTIMO registro (DESC) que coincida con la fecha de HOY (CURDATE)
+        String sql = "SELECT compra, venta FROM t_tipocambio WHERE fecha = CURDATE() ORDER BY codTipoCambio DESC LIMIT 1";
 
         List<Object[]> filas = Acceso.listar(sql);
         if (filas != null && !filas.isEmpty()) {
-            tasas[0] = Double.parseDouble(filas.get(0)[0].toString()); // Compra
-            tasas[1] = Double.parseDouble(filas.get(0)[1].toString()); // Venta
+            Object[] row = filas.get(0);
+            tc = new TipoCambio();
+            // Asumiendo que la columna 0 es compra y 1 es venta. Ajusta según tu BD si es necesario.
+            tc.setTasaCompra(Double.parseDouble(row[0].toString()));
+            tc.setTasaVenta(Double.parseDouble(row[1].toString()));
         }
-        return tasas;
+        return tc;
     }
 }

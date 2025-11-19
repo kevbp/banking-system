@@ -8,6 +8,7 @@ import conexion.DaoTransaccion;
 import entidad.CuentasBancarias; // Importante: Usar la nueva entidad
 import entidad.Embargo;
 import entidad.Movimiento;
+import entidad.TipoCambio;
 import entidad.Transaccion;
 import utilitarios.Utiles;
 import java.math.BigDecimal;
@@ -351,9 +352,9 @@ public class ServicioCuenta {
             if (!ori.getCodMoneda().equals(des.getCodMoneda())) {
                 // Obtener tasas (asumimos cambio con Dólares USD)
                 String monedaExtranjera = ori.getCodMoneda().equals("PEN") ? des.getCodMoneda() : ori.getCodMoneda();
-                double[] tasas = conexion.DaoParametros.obtenerTasaCambio(monedaExtranjera);
-                double compra = tasas[0];
-                double venta = tasas[1];
+                TipoCambio tasas = conexion.DaoParametros.obtenerTipoCambioDia();
+                double compra = tasas.getTasaCompra();
+                double venta = tasas.getTasaVenta();
 
                 if (compra == 0 || venta == 0) {
                     throw new Exception("No hay tipo de cambio registrado para hoy.");

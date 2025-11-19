@@ -60,6 +60,9 @@ public class ControlLoginCliente extends HttpServlet {
             case "login":
                 procesarLogin(request, response);
                 break;
+            case "keepAlive":
+                response.setStatus(HttpServletResponse.SC_OK);
+                break;
             default:
                 response.sendRedirect("modulo-clientes/login-clientes.jsp");
                 break;
@@ -111,6 +114,9 @@ public class ControlLoginCliente extends HttpServlet {
             throws ServletException, IOException {
         HttpSession session = request.getSession();
         UsuarioCliente usu = (UsuarioCliente) session.getAttribute("clienteAut");
+        // 1. Obtener TC del día
+        entidad.TipoCambio tcDia = conexion.DaoParametros.obtenerTipoCambioDia();
+        request.setAttribute("tipoCambioDia", tcDia);
 
         if (usu == null) {
             response.sendRedirect("ControlLoginCliente");
@@ -131,6 +137,10 @@ public class ControlLoginCliente extends HttpServlet {
 
         HttpSession session = request.getSession();
         UsuarioCliente usu = (UsuarioCliente) session.getAttribute("clienteAut");
+
+        // 1. Obtener TC del día
+        entidad.TipoCambio tcDia = conexion.DaoParametros.obtenerTipoCambioDia();
+        request.setAttribute("tipoCambioDia", tcDia);
 
         if (usu == null) {
             System.out.println("--- DEBUG: Usuario es NULL. Redirigiendo al login ---"); // DEBUG
