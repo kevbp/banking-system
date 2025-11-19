@@ -16,8 +16,8 @@
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 
         <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css">
-
         <link rel="stylesheet" href="${pageContext.request.contextPath}/css/estilos.css"/>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     </head>
     <body>
         <div class="container-fluid vh-100 g-0">
@@ -27,7 +27,13 @@
                     <img src="${pageContext.request.contextPath}/img/portada_cliente.jpg" alt="Quantum Bank Clientes" class="img-fluid h-100 w-100 object-fit-cover">
                 </div>
 
-                <div class="col-md-6 d-flex justify-content-center align-items-center bg-gradient">
+                <div class="col-md-6 d-flex justify-content-center align-items-center bg-gradient position-relative">
+
+                    <a href="${pageContext.request.contextPath}/selec-roles.jsp" 
+                       class="text-decoration-none text-secondary position-absolute top-0 start-0 m-4 fw-medium"
+                       style="font-size: 0.9rem;">
+                        <i class="bi bi-chevron-left me-1"></i>Volver a la selección de rol
+                    </a>
 
                     <div class="login-card animate-fade">
 
@@ -41,6 +47,7 @@
 
                         <form action="${pageContext.request.contextPath}/ControlLoginCliente" method="post">
                             <input type="hidden" name="accion" value="login">
+
                             <div class="form-floating mb-3">
                                 <input type="text" class="form-control" name="inpUsu" id="inpUsu" placeholder="Ingresa tu DNI" required>
                                 <label for="inpUsu">Usuario</label>
@@ -56,18 +63,18 @@
                             </div>
 
                             <c:if test="${not empty mensaje}">
-                                <div class="alert alert-warning text-center mt-3">${mensaje}</div>
+                                <div class="alert alert-warning text-center mt-3 small">${mensaje}</div>
                             </c:if>
 
                             <div class="text-center mt-3">
-                                <a href="${pageContext.request.contextPath}/modulo-clientes/recuperar-contrasena.jsp" class="text-decoration-none small text-secondary">¿Olvidaste tu contraseña?</a>
+                                <a href="recuperar-contrasena.jsp" class="text-decoration-none small text-secondary">¿Olvidaste tu contraseña?</a>
                             </div>
 
                             <hr class="my-4">
 
                             <div class="text-center">
                                 <p class="small text-muted mb-2">¿No tienes cuenta?</p>
-                                <a href="${pageContext.request.contextPath}/modulo-clientes/registro-clientes.jsp" class="btn btn-outline-secondary w-100">Registrarse</a>
+                                <a href="registro-clientes.jsp" class="btn btn-outline-secondary w-100">Registrarse</a>
                             </div>
                         </form>
                     </div>

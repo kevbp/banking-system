@@ -2,124 +2,186 @@
  * ===================================================
  * gestion-parametros.js
  * Lógica de UI para la página de Gestión de Parámetros
- *
- * Funcionalidad:
- * 1. Persistencia de Pestañas (Tabs): Recuerda la última pestaña activa
- * después de una recarga de página (ej. al enviar un form).
- * 2. Poblado de Modales: Rellena los modales de "Editar" con
- * la información de la fila seleccionada.
  * ===================================================
  */
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    /*
-     * ----------------------------------------
-     * 1. LÓGICA DE PERSISTENCIA DE PESTAÑAS (TABS)
-     * ----------------------------------------
-     */
+    // =================================================
+    // 1. LÓGICA DE PERSISTENCIA DE PESTAÑAS (TABS)
+    // =================================================
 
     const tabs = document.querySelectorAll('#paramTabs button[data-bs-toggle="tab"]');
 
-    // a. Guardar la pestaña activa en localStorage cuando se cambia
     tabs.forEach(tab => {
         tab.addEventListener('shown.bs.tab', (event) => {
-            // event.target.id será "tab-monedas", "tab-cuentas", etc.
             localStorage.setItem('lastParamTab', event.target.id);
         });
     });
 
-    // b. Al cargar la página, leer de localStorage
     const lastTabId = localStorage.getItem('lastParamTab');
-
     if (lastTabId) {
         const lastTab = document.getElementById(lastTabId);
         if (lastTab) {
-            // c. Activar la pestaña guardada
             new bootstrap.Tab(lastTab).show();
         }
     }
 
-    /*
-     * ----------------------------------------
-     * 2. LÓGICA PARA POBLAR MODALES DE EDICIÓN
-     * ----------------------------------------
-     * Se usa el evento 'show.bs.modal' que se dispara
-     * justo ANTES de que el modal sea visible.
-     */
+    // =================================================
+    // 2. LÓGICA PARA MODALES
+    // =================================================
 
-    // --- Modal: Editar Moneda ---
-    const modalEditarMoneda = document.getElementById('modalEditarMoneda');
-    if (modalEditarMoneda) {
-        modalEditarMoneda.addEventListener('show.bs.modal', (event) => {
-            const button = event.relatedTarget; // El botón que abrió el modal
+    // -------------------------------------------------
+    // A. Modal "NUEVO Tipo de Cuenta"
+    // -------------------------------------------------
+    const modalNuevoTipo = document.getElementById('modalNuevoTipo');
+    const selCategoria = document.getElementById('newTipoCategoria');
+    const inpDesc = document.getElementById('newTipoDesc');
+    const divNewSobregiro = document.getElementById('divNewSobregiro');
+    const inpNewSobregiro = document.getElementById('inpNewSobregiro');
 
-            // Extraer datos del botón
-            const codigo = button.dataset.codigo;
-            const descripcion = button.dataset.descripcion;
-            const simbolo = button.dataset.simbolo;
+    if (modalNuevoTipo && selCategoria) {
 
-            // Poblar el formulario
-            modalEditarMoneda.querySelector('#editMonedaCodigo').value = codigo;
-            modalEditarMoneda.querySelector('#editMonedaDesc').value = descripcion;
-            modalEditarMoneda.querySelector('#editMonedaSimbolo').value = simbolo;
+        // 1. Evento al CAMBIAR la categoría en el select
+        selCategoria.addEventListener('change', () => {
+            const cat = selCategoria.value;
+
+            // Autocompletar descripción sugerida
+            if (inpDesc) {
+                if (cat === 'Corriente')
+                    inpDesc.value = "Cuenta Corriente";
+                else if (cat === 'Ahorros')
+                    inpDesc.value = "Cuenta de Ahorros";
+                else if (cat === 'Plazo')
+                    inpDesc.value = "Cuenta a Plazo Fijo";
+            }
+
+            // Mostrar u Ocultar Sobregiro
+            if (cat === 'Corriente') {
+                if (divNewSobregiro)
+                    divNewSobregiro.classList.remove('d-none');
+                if (inpNewSobregiro) {
+                    inpNewSobregiro.required = true;
+                    inpNewSobregiro.value = "0.00";
+                }
+            } else {
+                if (divNewSobregiro)
+                    divNewSobregiro.classList.add('d-none');
+                if (inpNewSobregiro) {
+                    inpNewSobregiro.required = false;
+                    inpNewSobregiro.value = "0.00";
+                }
+            }
+        });
+
+        // 2. Evento al ABRIR el modal (Resetear estado)
+        modalNuevoTipo.addEventListener('show.bs.modal', () => {
+            // Volver al estado inicial (Ahorros)
+            selCategoria.value = "Ahorros";
+            if (inpDesc)
+                inpDesc.value = "";
+            // Ocultar sobregiro visualmente
+            if (divNewSobregiro)
+                divNewSobregiro.classList.add('d-none');
+            if (inpNewSobregiro)
+                inpNewSobregiro.required = false;
         });
     }
 
-    // --- Modal: Editar Tipo de Cambio ---
-    const modalEditarTC = document.getElementById('modalEditarTipoCambio');
-    if (modalEditarTC) {
-        modalEditarTC.addEventListener('show.bs.modal', (event) => {
-            const button = event.relatedTarget;
-
-            const codigo = button.dataset.codigo;
-            const descripcion = button.dataset.descripcion;
-            const compra = button.dataset.compra;
-            const venta = button.dataset.venta;
-
-            modalEditarTC.querySelector('#editTCCodigo').value = codigo;
-            modalEditarTC.querySelector('#editTCDesc').value = `${codigo} - ${descripcion}`; // Campo visual
-            modalEditarTC.querySelector('#editTCCompra').value = compra;
-            modalEditarTC.querySelector('#editTCVenta').value = venta;
-        });
-    }
-
-    // --- Modal: Editar Tipo de Cuenta ---
+    // -------------------------------------------------
+    // B. Modal "EDITAR Tipo de Cuenta"
+    // -------------------------------------------------
     const modalEditarTipoCuenta = document.getElementById('modalEditarTipoCuenta');
+
     if (modalEditarTipoCuenta) {
         modalEditarTipoCuenta.addEventListener('show.bs.modal', (event) => {
             const button = event.relatedTarget;
 
-            modalEditarTipoCuenta.querySelector('#editTipoCuentaID').value = button.dataset.id;
-            modalEditarTipoCuenta.querySelector('#editTipoCuentaDesc').value = button.dataset.descripcion;
-            modalEditarTipoCuenta.querySelector('#editTipoCuentaMoneda').value = button.dataset.moneda;
-            modalEditarTipoCuenta.querySelector('#editTipoCuentaTasa').value = button.dataset.tasa;
+            // 1. Recuperar datos del botón (data-attributes)
+            const id = button.dataset.id;
+            const desc = button.dataset.descripcion;
+            const moneda = button.dataset.moneda;
+            const tasa = button.dataset.tasa;
+            // Importante: Si no existe el data-sobregiro, asumimos 0
+            const sobregiro = parseFloat(button.dataset.sobregiro || 0);
+
+            // 2. Asignar a los campos básicos
+            modalEditarTipoCuenta.querySelector('#editTipoCuentaID').value = id;
+            modalEditarTipoCuenta.querySelector('#editTipoCuentaDesc').value = desc;
+            modalEditarTipoCuenta.querySelector('#editTipoCuentaMoneda').value = moneda;
+            modalEditarTipoCuenta.querySelector('#editTipoCuentaTasa').value = tasa;
+
+            // 3. Lógica del campo Sobregiro
+            const divSob = modalEditarTipoCuenta.querySelector('#divEditSobregiro');
+            const inpSob = modalEditarTipoCuenta.querySelector('#editTipoCuentaSobregiro');
+
+            // Mostrar SI es "Corriente" O SI ya tiene un sobregiro configurado
+            if (desc.toLowerCase().includes('corriente') || sobregiro > 0) {
+                if (divSob)
+                    divSob.classList.remove('d-none');
+                if (inpSob) {
+                    inpSob.value = sobregiro.toFixed(2);
+                    inpSob.required = true;
+                }
+            } else {
+                if (divSob)
+                    divSob.classList.add('d-none');
+                if (inpSob) {
+                    inpSob.value = "0.00";
+                    inpSob.required = false;
+                }
+            }
         });
     }
 
-    // --- Modal: Editar Cuenta del Sistema ---
+    // -------------------------------------------------
+    // C. Otros Modales (Monedas, Tipos Cambio, etc.)
+    // -------------------------------------------------
+
+    // Editar Moneda
+    const modalEditarMoneda = document.getElementById('modalEditarMoneda');
+    if (modalEditarMoneda) {
+        modalEditarMoneda.addEventListener('show.bs.modal', (evt) => {
+            const btn = evt.relatedTarget;
+            modalEditarMoneda.querySelector('#editMonedaCodigo').value = btn.dataset.codigo;
+            modalEditarMoneda.querySelector('#editMonedaDesc').value = btn.dataset.descripcion;
+            modalEditarMoneda.querySelector('#editMonedaSimbolo').value = btn.dataset.simbolo;
+        });
+    }
+
+    // Editar Tipo Cambio
+    const modalEditarTC = document.getElementById('modalEditarTipoCambio');
+    if (modalEditarTC) {
+        modalEditarTC.addEventListener('show.bs.modal', (evt) => {
+            const btn = evt.relatedTarget;
+            modalEditarTC.querySelector('#editTCCodigo').value = btn.dataset.codigo;
+            modalEditarTC.querySelector('#editTCDesc').value = btn.dataset.descripcion;
+            modalEditarTC.querySelector('#editTCCompra').value = btn.dataset.compra;
+            modalEditarTC.querySelector('#editTCVenta').value = btn.dataset.venta;
+        });
+    }
+
+    // Editar Cuenta Sistema
     const modalEditarCuentaSistema = document.getElementById('modalEditarCuentaSistema');
     if (modalEditarCuentaSistema) {
-        modalEditarCuentaSistema.addEventListener('show.bs.modal', (event) => {
-            const button = event.relatedTarget;
-
-            modalEditarCuentaSistema.querySelector('#editCuentaNum').value = button.dataset.numero;
-            modalEditarCuentaSistema.querySelector('#editCuentaTipo').value = button.dataset.tipo;
-            modalEditarCuentaSistema.querySelector('#editCuentaMoneda').value = button.dataset.moneda;
-            modalEditarCuentaSistema.querySelector('#editCuentaTasa').value = button.dataset.tasa;
+        modalEditarCuentaSistema.addEventListener('show.bs.modal', (evt) => {
+            const btn = evt.relatedTarget;
+            modalEditarCuentaSistema.querySelector('#editCuentaNum').value = btn.dataset.numero;
+            modalEditarCuentaSistema.querySelector('#editCuentaTipo').value = btn.dataset.tipo;
+            modalEditarCuentaSistema.querySelector('#editCuentaMoneda').value = btn.dataset.moneda;
+            modalEditarCuentaSistema.querySelector('#editCuentaTasa').value = btn.dataset.tasa;
         });
     }
 
-    // --- Modal: Editar Tipo de Movimiento ---
+    // Editar Tipo Movimiento
     const modalEditarTipoMovimiento = document.getElementById('modalEditarTipoMovimiento');
     if (modalEditarTipoMovimiento) {
-        modalEditarTipoMovimiento.addEventListener('show.bs.modal', (event) => {
-            const button = event.relatedTarget;
-
-            modalEditarTipoMovimiento.querySelector('#editMovID').value = button.dataset.id;
-            modalEditarTipoMovimiento.querySelector('#editMovDesc').value = button.dataset.descripcion;
-            modalEditarTipoMovimiento.querySelector('#editMovSigno').value = button.dataset.signo;
-            modalEditarTipoMovimiento.querySelector('#editMovEstado').value = button.dataset.estado;
+        modalEditarTipoMovimiento.addEventListener('show.bs.modal', (evt) => {
+            const btn = evt.relatedTarget;
+            modalEditarTipoMovimiento.querySelector('#editMovID').value = btn.dataset.id;
+            modalEditarTipoMovimiento.querySelector('#editMovDesc').value = btn.dataset.descripcion;
+            modalEditarTipoMovimiento.querySelector('#editMovSigno').value = btn.dataset.signo;
+            modalEditarTipoMovimiento.querySelector('#editMovEstado').value = btn.dataset.estado;
         });
     }
 });

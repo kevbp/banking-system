@@ -56,4 +56,8 @@
         <filter-name>AuthFilter</filter-name>
         <url-pattern>/ControlTransferencia</url-pattern> 
     </filter-mapping>
+    <filter-mapping>
+        <filter-name>AuthFilter</filter-name>
+        <url-pattern>/modulo-clientes/*</url-pattern> 
+    </filter-mapping>
 </web-app>

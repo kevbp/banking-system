@@ -1,5 +1,6 @@
 package control;
 
+import entidad.Embargo;
 import conexion.DaoCuenta;
 import conexion.DaoCliente;
 import conexion.DaoParametros;
@@ -43,6 +44,9 @@ public class ControlCuenta extends HttpServlet {
                 break;
             case "detalle":
                 obtenerDetalleCuentaJSON(request, response);
+                break;
+            case "consultar": // NUEVO CASO
+                consultarCuentasCliente(request, response);
                 break;
             default:
                 response.sendRedirect("cuentas/gestion-cuentas.jsp");
@@ -119,8 +123,21 @@ public class ControlCuenta extends HttpServlet {
 
         try (PrintWriter out = response.getWriter()) {
             if (c != null) {
-                List<Object[]> embargos = servicio.listarEmbargos(numCuenta);
-                boolean tieneEmbargo = (embargos != null && !embargos.isEmpty());
+                // 1. OBTENER LISTA DE OBJETOS EMBARGO
+                List<Embargo> embargos = servicio.listarEmbargos(numCuenta);
+
+                // 2. BUSCAR SI EXISTE ALGUNO ACTIVO (S0001)
+                Embargo embargoActivo = null;
+                if (embargos != null) {
+                    for (Embargo e : embargos) {
+                        if ("S0001".equals(e.getCodEstado())) {
+                            embargoActivo = e;
+                            break; // Tomamos el primero activo que encontremos
+                        }
+                    }
+                }
+
+                boolean tieneEmbargo = (embargoActivo != null);
 
                 StringBuilder json = new StringBuilder();
                 json.append("{");
@@ -130,19 +147,21 @@ public class ControlCuenta extends HttpServlet {
                 json.append("\"doc\": \"").append(limpiarTexto(c.getCliente() != null ? c.getCliente().getNumDocumento() : "")).append("\",");
                 json.append("\"tipo\": \"").append(limpiarTexto(c.getDesTipoCuenta())).append("\",");
                 json.append("\"moneda\": \"").append(limpiarTexto(c.getDesMoneda())).append("\",");
+
                 BigDecimal saldo = c.getSalAct() != null ? c.getSalAct() : BigDecimal.ZERO;
-                json.append("\"saldo\": ").append(saldo).append(","); // Saldo visible
+                json.append("\"saldo\": ").append(saldo).append(",");
+
                 json.append("\"codEstado\": \"").append(c.getCodEstado()).append("\",");
                 json.append("\"estado\": \"").append(limpiarTexto(c.getDesEstado())).append("\",");
                 json.append("\"fecha\": \"").append(c.getFecApe()).append("\"");
 
+                // 3. JSON DEL EMBARGO (USANDO GETTERS)
                 if (tieneEmbargo) {
-                    Object[] ult = embargos.get(embargos.size() - 1);
                     json.append(", \"embargo\": {");
                     json.append("\"activo\": true,");
-                    json.append("\"monto\": \"").append(ult[1]).append("\",");
-                    json.append("\"expediente\": \"").append(limpiarTexto(ult[2])).append("\",");
-                    json.append("\"motivo\": \"").append(limpiarTexto(ult[3])).append("\"");
+                    json.append("\"monto\": \"").append(embargoActivo.getMonto()).append("\",");
+                    json.append("\"expediente\": \"").append(limpiarTexto(embargoActivo.getExpediente())).append("\",");
+                    json.append("\"motivo\": \"").append(limpiarTexto(embargoActivo.getDescripcion())).append("\"");
                     json.append("}");
                 } else {
                     json.append(", \"embargo\": {\"activo\": false}");
@@ -182,6 +201,15 @@ public class ControlCuenta extends HttpServlet {
             String saldoStr = request.getParameter("saldoApertura");
             if (saldoStr != null && !saldoStr.isEmpty()) {
                 saldo = Double.parseDouble(saldoStr);
+            }
+        } catch (NumberFormatException e) {
+        }
+
+        double sobregiro = 0.0;
+        try {
+            String s = request.getParameter("sobregiro");
+            if (s != null && !s.isEmpty()) {
+                sobregiro = Double.parseDouble(s);
             }
         } catch (NumberFormatException e) {
         }
@@ -242,5 +270,47 @@ public class ControlCuenta extends HttpServlet {
         }
 
         response.sendRedirect("ControlCuenta?accion=listar&msg=" + java.net.URLEncoder.encode(res, "UTF-8"));
+    }
+
+    private void consultarCuentasCliente(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        String doc = request.getParameter("numDoc");
+        int page = 1;
+        int limit = 10; // Registros por página
+
+        try {
+            if (request.getParameter("page") != null) {
+                page = Integer.parseInt(request.getParameter("page"));
+            }
+        } catch (NumberFormatException e) {
+            page = 1;
+        }
+
+        if (doc != null && !doc.isEmpty()) {
+            // 1. Buscar datos del Cliente (Cabecera)
+            Object[] datosCliente = DaoCliente.buscarPorDocumento(doc);
+
+            if (datosCliente != null) {
+                request.setAttribute("clienteNombre", datosCliente[1]); // Nombre
+                request.setAttribute("clienteId", datosCliente[0]);     // ID Interno
+
+                // 2. Paginación de Cuentas
+                int offset = (page - 1) * limit;
+                List<CuentasBancarias> lista = DaoCuenta.listarPorClientePaginado(doc, limit, offset);
+                int totalRegistros = DaoCuenta.contarCuentasPorCliente(doc);
+                int totalPaginas = (int) Math.ceil((double) totalRegistros / limit);
+
+                request.setAttribute("listaCuentas", lista);
+                request.setAttribute("totalRegistros", totalRegistros);
+                request.setAttribute("currentPage", page);
+                request.setAttribute("totalPages", totalPaginas);
+            } else {
+                request.setAttribute("msgError", "El cliente con documento " + doc + " no existe.");
+            }
+            request.setAttribute("numDocBusqueda", doc);
+        }
+
+        request.getRequestDispatcher("consultas/consulta-cuentas.jsp").forward(request, response);
     }
 }

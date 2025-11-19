@@ -1,83 +1,39 @@
-/*
- * =============================================
- * retiro.js
- * Lógica de UI para la página de Retiros (V-08).
- * =============================================
- */
-
-// Variables globales para almacenar el estado
-let saldoDisponible = 0.0;
-let monedaOrigen = '';
-let montoEsValido = false;
-let origenEsValido = false;
-
 document.addEventListener('DOMContentLoaded', () => {
+    const inputMonto = document.getElementById('montoRetiro');
+    const inputSaldo = document.getElementById('saldoDisponible');
+    const inputSobregiro = document.getElementById('limSobregiro'); // Recuperar sobregiro
+    const feedback = document.getElementById('feedbackSaldo');
+    const btnProcesar = document.getElementById('btnProcesar');
 
-    // --- Elementos del DOM ---
-    const cuentaOrigenSelect = document.getElementById('cuentaOrigen');
-    const saldoDisplayBox = document.getElementById('saldoDisponible');
-    const saldoValor = document.getElementById('saldoValor');
+    if (inputMonto && inputSaldo) {
+        inputMonto.addEventListener('input', () => {
+            const monto = parseFloat(inputMonto.value) || 0;
+            const saldo = parseFloat(inputSaldo.value) || 0;
+            const sobregiro = inputSobregiro ? (parseFloat(inputSobregiro.value) || 0) : 0;
 
-    const montoInput = document.getElementById('monto');
-    const saldoError = document.getElementById('saldoError');
-    const btnContinuar = document.getElementById('btnContinuar');
+            // Capacidad total = Saldo real + Línea de sobregiro
+            const capacidadTotal = saldo + sobregiro;
 
-    // --- 1. Lógica de Cuenta de Origen (Mostrar Saldo) ---
-    if (cuentaOrigenSelect) {
-        cuentaOrigenSelect.addEventListener('change', () => {
-            const selectedOption = cuentaOrigenSelect.options[cuentaOrigenSelect.selectedIndex];
-
-            saldoDisponible = parseFloat(selectedOption.dataset.saldo || 0);
-            monedaOrigen = selectedOption.dataset.moneda || '';
-
-            if (saldoDisponible > 0) {
-                const formatter = new Intl.NumberFormat('es-PE', {
-                    style: 'currency',
-                    currency: monedaOrigen
-                });
-                saldoValor.textContent = formatter.format(saldoDisponible);
-                saldoDisplayBox.classList.remove('d-none');
-                origenEsValido = true;
+            if (monto > capacidadTotal) {
+                inputMonto.classList.add('is-invalid');
+                feedback.classList.remove('d-none');
+                if (sobregiro > 0) {
+                    feedback.innerText = "Excede saldo + sobregiro disponible.";
+                } else {
+                    feedback.innerText = "Fondos insuficientes.";
+                }
+                btnProcesar.disabled = true;
             } else {
-                saldoDisplayBox.classList.add('d-none');
-                origenEsValido = false;
+                inputMonto.classList.remove('is-invalid');
+                feedback.classList.add('d-none');
+                btnProcesar.disabled = false;
             }
-
-            validarFormulario();
         });
-    }
-
-    // --- 2. Lógica de Validación de Monto (Tiempo Real) ---
-    if (montoInput) {
-        montoInput.addEventListener('input', () => {
-            const monto = parseFloat(montoInput.value) || 0;
-
-            // Requerimiento: Monto no puede ser mayor al saldo 
-            if (monto > 0 && monto > saldoDisponible && saldoDisponible > 0) {
-                saldoError.classList.remove('d-none');
-                const formatter = new Intl.NumberFormat('es-PE', {style: 'currency', currency: monedaOrigen});
-                saldoError.innerHTML = `<i class="bi bi-exclamation-circle-fill"></i> El monto es mayor a su saldo disponible (${formatter.format(saldoDisponible)}).`;
-                montoEsValido = false;
-            } else {
-                saldoError.classList.add('d-none');
-                montoEsValido = monto > 0;
-            }
-
-            validarFormulario();
-        });
-    }
-
-    /**
-     * Función central que valida el formulario.
-     */
-    function validarFormulario() {
-        if (!btnContinuar)
-            return;
-
-        if (origenEsValido && montoEsValido) {
-            btnContinuar.disabled = false;
-        } else {
-            btnContinuar.disabled = true;
-        }
     }
 });
+
+// Función global para el onsubmit
+function confirmarRetiro() {
+    const monto = document.getElementById('montoRetiro').value;
+    return confirm(`¿Está seguro de procesar el retiro por ${monto}? \nEsta acción afectará el saldo inmediatamente.`);
+}

@@ -17,6 +17,7 @@ public class CuentasBancarias {
     private BigDecimal salIni;
     private String cci;
     private String codEstado;
+    private BigDecimal sobregiro;
 
     // Auditoría
     private String codUsuCre;
@@ -184,5 +185,13 @@ public class CuentasBancarias {
 
     public void setDesEstado(String desEstado) {
         this.desEstado = desEstado;
+    }
+
+    public BigDecimal getSobregiro() {
+        return sobregiro != null ? sobregiro : BigDecimal.ZERO;
+    }
+
+    public void setSobregiro(BigDecimal sobregiro) {
+        this.sobregiro = sobregiro;
     }
 }

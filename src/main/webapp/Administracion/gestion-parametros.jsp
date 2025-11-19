@@ -22,6 +22,7 @@
         <link href="${pageContext.request.contextPath}/css/sidebar.css" rel="stylesheet">
         <link href="${pageContext.request.contextPath}/css/header.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     </head>
 
     <body data-active-page="admin-parametros">
@@ -186,7 +187,7 @@
                                                     <th>Descripción</th>
                                                     <th>Moneda</th>
                                                     <th>Tasa de Interés (%)</th>
-                                                    <th>Estado</th>
+                                                    <th>Sobregiro</th> <th>Estado</th>
                                                     <th>Acciones</th>
                                                 </tr>
                                             </thead>
@@ -197,6 +198,14 @@
                                                         <td>${tc.descTipo}</td>
                                                         <td>${tc.codMoneda}</td>
                                                         <td><fmt:formatNumber value="${tc.tasaInt}" minFractionDigits="2"/>%</td>
+                                                        <td>
+                                                            <c:choose>
+                                                                <c:when test="${tc.limSobregiro > 0}">
+                                                                    <span class="text-primary fw-bold"><fmt:formatNumber value="${tc.limSobregiro}" minFractionDigits="2"/></span>
+                                                                </c:when>
+                                                                <c:otherwise>-</c:otherwise>
+                                                            </c:choose>
+                                                        </td>
                                                         <td>${tc.codEstado eq 'S0001' ? 'Activa' : 'Inactiva'}</td>
                                                         <td class="text-center">
                                                             <button class="btn btn-sm btn-outline-warning" 
@@ -204,8 +213,8 @@
                                                                     data-id="${tc.codTipCuenta}"
                                                                     data-descripcion="${tc.descTipo}"
                                                                     data-moneda="${tc.codMoneda}"
-                                                                    data-tasa="${tc.tasaInt}">
-                                                                Editar
+                                                                    data-tasa="${tc.tasaInt}"
+                                                                    data-sobregiro="${tc.limSobregiro}"> Editar
                                                             </button>
                                                         </td>
                                                     </tr>
@@ -218,10 +227,10 @@
                                             <i class="bi bi-plus-circle me-1"></i> Nuevo Tipo de Cuenta
                                         </button>
                                     </div>
+
                                     <hr>
 
                                     <h5 class="mb-3">Cuentas del Sistema</h5>
-
                                     <div class="table-responsive mb-3">
                                         <table class="table table-bordered table-striped align-middle">
                                             <thead class="table-light text-center">
@@ -262,7 +271,6 @@
                                         </button>
                                     </div>
                                 </div>
-
                             </div>
 
                             <div class="tab-pane fade" id="pane-movimientos" role="tabpanel" aria-labelledby="tab-movimientos">
@@ -316,7 +324,11 @@
                         </div>
                     </div>
                 </div>
-            </div> </div> </div> <div class="modal fade" id="modalNuevaMoneda" tabindex="-1" aria-labelledby="modalNuevaMonedaLabel" aria-hidden="true">
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalNuevaMoneda" tabindex="-1" aria-labelledby="modalNuevaMonedaLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header bg-dark text-light">
@@ -461,9 +473,19 @@
                 <form action="${pageContext.request.contextPath}/ControlParametros" method="post">
                     <input type="hidden" name="accion" value="agregarTipoCuenta">
                     <div class="modal-body">
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Categoría del Producto</label>
+                            <select class="form-select" id="newTipoCategoria">
+                                <option value="Ahorros">Cuenta de Ahorros / Plazo</option>
+                                <option value="Corriente">Cuenta Corriente</option>
+                            </select>
+                        </div>
+                        <hr>
+
                         <div class="mb-3">
                             <label class="form-label">Descripción</label>
-                            <input type="text" class="form-control" name="descripcion" required>
+                            <input type="text" class="form-control" id="newTipoDesc" name="descripcion" required placeholder="Ej: Cuenta Ahorro Joven">
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Moneda</label>
@@ -473,9 +495,21 @@
                                 </c:forEach>
                             </select>
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label">Tasa de Interés (%)</label>
-                            <input type="number" step="0.01" class="form-control" name="tasa" required>
+
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Tasa de Interés (%)</label>
+                                    <input type="number" step="0.01" class="form-control" name="tasa" required>
+                                </div>
+                            </div>
+                            <div class="col-6 d-none" id="divNewSobregiro">
+                                <div class="mb-3">
+                                    <label class="form-label text-primary fw-bold">Límite Sobregiro</label>
+                                    <input type="number" step="0.01" class="form-control border-primary text-primary fw-bold" 
+                                           id="inpNewSobregiro" name="sobregiro" placeholder="0.00">
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -513,9 +547,21 @@
                                 </c:forEach>
                             </select>
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label">Tasa de Interés (%)</label>
-                            <input type="number" step="0.01" class="form-control" id="editTipoCuentaTasa" name="tasa" required>
+
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Tasa de Interés (%)</label>
+                                    <input type="number" step="0.01" class="form-control" id="editTipoCuentaTasa" name="tasa" required>
+                                </div>
+                            </div>
+                            <div class="col-6 d-none" id="divEditSobregiro">
+                                <div class="mb-3">
+                                    <label class="form-label text-primary fw-bold">Límite Sobregiro</label>
+                                    <input type="number" step="0.01" class="form-control border-primary text-primary fw-bold" 
+                                           id="editTipoCuentaSobregiro" name="sobregiro">
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
