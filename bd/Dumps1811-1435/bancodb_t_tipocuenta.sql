@@ -32,6 +32,7 @@ CREATE TABLE `t_tipocuenta` (
   `fecUsuCre` datetime DEFAULT NULL,
   `codUsuMod` varchar(20) DEFAULT NULL,
   `fecUsuMod` datetime DEFAULT NULL,
+  `limSobregiro` decimal(18,2) DEFAULT '0.00',
   PRIMARY KEY (`codTipCuenta`),
   KEY `codMoneda` (`codMoneda`),
   KEY `codEstado` (`codEstado`),
@@ -46,7 +47,7 @@ CREATE TABLE `t_tipocuenta` (
 
 LOCK TABLES `t_tipocuenta` WRITE;
 /*!40000 ALTER TABLE `t_tipocuenta` DISABLE KEYS */;
-INSERT INTO `t_tipocuenta` VALUES ('TC001','Cuenta de Ahorros',1.50,'PEN','S0001','U0001','2025-11-18 10:31:55',NULL,NULL),('TC002','Cuenta Corriente',0.00,'PEN','S0001','U0001','2025-11-18 10:31:55',NULL,NULL),('TC003','Cuenta a Plazo Fijo',4.50,'PEN','S0001','U0001','2025-11-18 10:31:55',NULL,NULL),('TC004','Cuenta de Ahorros USD',0.50,'USD','S0001','U0001','2025-11-18 10:31:55',NULL,NULL),('TC005','Cuenta Corriente Dolares',3.50,'USD','S0001',NULL,NULL,NULL,NULL);
+INSERT INTO `t_tipocuenta` VALUES ('TC001','Cuenta de Ahorros',1.50,'PEN','S0001','U0001','2025-11-18 10:31:55',NULL,NULL,0.00),('TC002','Cuenta Corriente',0.00,'PEN','S0001','U0001','2025-11-18 10:31:55',NULL,NULL,1000.00),('TC003','Cuenta a Plazo Fijo',4.50,'PEN','S0001','U0001','2025-11-18 10:31:55',NULL,NULL,0.00),('TC004','Cuenta de Ahorros USD',0.50,'USD','S0001','U0001','2025-11-18 10:31:55',NULL,NULL,0.00),('TC005','Cuenta Corriente Dolares',3.50,'USD','S0001',NULL,NULL,NULL,NULL,500.00);
 /*!40000 ALTER TABLE `t_tipocuenta` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -59,4 +60,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-11-18 14:35:28
+-- Dump completed on 2025-11-18 19:52:18

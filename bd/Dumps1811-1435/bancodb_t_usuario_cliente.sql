@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 8.0.43, for Win64 (x86_64)
 --
--- Host: localhost    Database: bancodb
+-- Host: 127.0.0.1    Database: bancodb
 -- ------------------------------------------------------
 -- Server version	8.0.43
 
@@ -34,7 +34,7 @@ CREATE TABLE `t_usuario_cliente` (
   UNIQUE KEY `unique_nomUsuario` (`nomUsuario`),
   UNIQUE KEY `unique_cliente` (`codCliente`),
   CONSTRAINT `fk_web_cliente` FOREIGN KEY (`codCliente`) REFERENCES `t_cliente` (`codCliente`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -43,7 +43,7 @@ CREATE TABLE `t_usuario_cliente` (
 
 LOCK TABLES `t_usuario_cliente` WRITE;
 /*!40000 ALTER TABLE `t_usuario_cliente` DISABLE KEYS */;
-INSERT INTO `t_usuario_cliente` VALUES (1,'C0003','crios','$2a$10$nDYchPTavhUfonmpfSa/WeFzD.RXKhtClDq7qlCo6hVsGjfEn4rPK','$2a$10$T5jht5giEgU8GL/D.8JT6.vQHZGk8imUcsjjmhUOXe/MwWlvS48k2','ACTIVO','2025-11-18 12:40:28');
+INSERT INTO `t_usuario_cliente` VALUES (1,'C0003','crios','$2a$10$nDYchPTavhUfonmpfSa/WeFzD.RXKhtClDq7qlCo6hVsGjfEn4rPK','$2a$10$T5jht5giEgU8GL/D.8JT6.vQHZGk8imUcsjjmhUOXe/MwWlvS48k2','ACTIVO','2025-11-18 12:40:28'),(2,'C0001','kevinb','$2a$10$VLgrFKKYf5F.MshNxiXt2eaOjAkoVJCeN05j39.UH5DV576gnIc7.','$2a$10$Geax1o.3REbLVq8YJnBW/enhuYqPPOBWLh.XuvCUycCzfDdICvoXS','ACTIVO','2025-11-18 16:23:44');
 /*!40000 ALTER TABLE `t_usuario_cliente` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -56,4 +56,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-11-18 14:53:32
+-- Dump completed on 2025-11-18 19:52:19

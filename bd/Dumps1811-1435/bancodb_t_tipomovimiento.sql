@@ -43,7 +43,7 @@ CREATE TABLE `t_tipomovimiento` (
 
 LOCK TABLES `t_tipomovimiento` WRITE;
 /*!40000 ALTER TABLE `t_tipomovimiento` DISABLE KEYS */;
-INSERT INTO `t_tipomovimiento` VALUES ('T0001','Depósito','S0001',NULL,NULL,NULL,NULL,'+'),('T0002','Retiro','S0001',NULL,NULL,NULL,NULL,'-'),('T0003','Transferencia Salida','S0001',NULL,NULL,NULL,NULL,'-'),('T0004','Transferencia Entrada','S0001',NULL,NULL,NULL,NULL,'+');
+INSERT INTO `t_tipomovimiento` VALUES ('TM001','Depósito','S0001',NULL,NULL,NULL,NULL,'+'),('TM002','Retiro','S0001',NULL,NULL,NULL,NULL,'-'),('TM003','Transferencia Salida','S0001',NULL,NULL,NULL,NULL,'-'),('TM004','Transferencia Entrada','S0001',NULL,NULL,NULL,NULL,'+');
 /*!40000 ALTER TABLE `t_tipomovimiento` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -56,4 +56,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-11-18 14:35:29
+-- Dump completed on 2025-11-18 19:52:18
